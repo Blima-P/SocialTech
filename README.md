@@ -1,0 +1,2 @@
+# SocialTech
+Projeto acadêmico SocialTech
