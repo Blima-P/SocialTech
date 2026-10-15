@@ -1,0 +1,9 @@
+# Gerados
+dist/
+.astro/
+package-lock.json
+
+# Documentação e configuração do GitHub ficam fora da formatação automática
+*.md
+docs/
+.github/
