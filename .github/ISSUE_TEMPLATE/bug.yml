@@ -1,0 +1,50 @@
+name: 🐞 Bug
+description: Algo não funciona como deveria no site.
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: descricao
+    attributes:
+      label: O que aconteceu?
+      description: Descreva o problema de forma clara.
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: Como reproduzir
+      placeholder: |
+        1. Acesse a página '...'
+        2. Toque em '...'
+        3. Veja o erro
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Comportamento esperado
+    validations:
+      required: true
+  - type: dropdown
+    id: dispositivo
+    attributes:
+      label: Dispositivo
+      multiple: true
+      options:
+        - Celular Android
+        - iPhone
+        - Computador
+        - Tablet
+    validations:
+      required: true
+  - type: input
+    id: navegador
+    attributes:
+      label: Navegador e versão
+      placeholder: "Ex.: Chrome 140, Safari iOS 19"
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: Capturas de tela / vídeo
+      description: Não inclua dados pessoais nas imagens.
