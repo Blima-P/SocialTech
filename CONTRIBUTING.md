@@ -8,8 +8,8 @@ feature/*, fix/*, docs/*  ──PR──▶  develop  ──PR──▶  main  �
 
 | Branch | Função | Regras |
 |---|---|---|
-| `main` | Produção (o que está publicado no GitHub Pages / QR Code) | Só recebe PR vindo de `develop` (ou `fix/*` urgente). 2 aprovações, sendo uma obrigatoriamente de **@Blima-P** ou **@alber-th**. CI verde. |
-| `develop` | Integração (branch padrão) | Só recebe PR. 1 aprovação, CI verde. |
+| `main` | Produção (o que está publicado no GitHub Pages / QR Code) | Só recebe PR vindo de `develop` (ou `fix/*` urgente). Aprovação obrigatória de **@Blima-P** (code owner). CI verde. |
+| `develop` | Integração (branch padrão) | Só recebe PR. Aprovação obrigatória de **@Blima-P** (code owner). CI verde. |
 | `feature/<descricao>` | Nova funcionalidade | Criada a partir de `develop`. |
 | `fix/<descricao>` | Correção de bug | Criada a partir de `develop`. |
 | `docs/<descricao>` | Documentação / conteúdo textual | Criada a partir de `develop`. |
@@ -43,7 +43,7 @@ git commit -m "feat(guia): adiciona lista de itens permitidos"
 git push -u origin feature/12-guia-pode-nao-pode
 ```
 
-Depois, abra um Pull Request para **`develop`** no GitHub, preencha o template e peça revisão.
+Depois, abra um Pull Request para **`develop`** no GitHub, preencha o template e peça revisão a **@Blima-P** (ele é adicionado automaticamente como revisor).
 
 ## Padrão de commits (Conventional Commits)
 

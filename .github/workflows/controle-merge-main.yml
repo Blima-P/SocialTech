@@ -2,7 +2,8 @@ name: Controle de merge na main
 
 # Check obrigatório para PRs com destino à main:
 #  1. A branch de origem precisa ser `develop` ou `fix/*` deste repositório.
-#  2. O PR precisa ter uma aprovação vigente de um dos mantenedores abaixo.
+#  2. O PR precisa ter uma aprovação vigente de um dos mantenedores abaixo
+#     (exceto quando aberto por um mantenedor).
 # Não faz checkout do código do PR.
 
 on:
@@ -35,6 +36,13 @@ jobs:
             const mesmoRepo = pr.head.repo && pr.head.repo.full_name === pr.base.repo.full_name;
             if (!mesmoRepo || !(head === "develop" || head.startsWith("fix/"))) {
               core.setFailed(`PRs para a main só podem vir de 'develop' ou 'fix/*' deste repositório (origem: '${head}').`);
+              return;
+            }
+
+            // Mantenedores podem mesclar os próprios PRs (o GitHub não permite autoaprovação).
+            const autor = pr.user.login.toLowerCase();
+            if (mantenedores.includes(autor)) {
+              core.info(`PR aberto pelo mantenedor ${pr.user.login}.`);
               return;
             }
 
