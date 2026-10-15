@@ -1,2 +1,16 @@
 # Revisores padrão de todo o repositório
 * @Blima-P @LuizDev1 @Nicole21carvalho
+
+# Configurações do repositório, CI e regras de IA: somente mantenedores.
+# Adicione @alber-th nas linhas abaixo depois que ele aceitar o convite de colaborador.
+/.github/ @Blima-P
+/eslint.config.mjs @Blima-P
+/.prettierrc.json @Blima-P
+/.prettierignore @Blima-P
+/astro.config.mjs @Blima-P
+/tsconfig.json @Blima-P
+/package.json @Blima-P
+/package-lock.json @Blima-P
+/AGENTS.md @Blima-P
+/CLAUDE.md @Blima-P
+/.gemini/ @Blima-P
