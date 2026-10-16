@@ -1,0 +1,31 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+
+type Link = CollectionEntry<"links">["data"];
+
+const links = await getCollection("links");
+
+function hrefDo(link: Link): string {
+  switch (link.tipo) {
+    case "email":
+      return `mailto:${link.endereco}`;
+    case "whatsapp":
+      return `https://wa.me/${link.endereco}`;
+    default:
+      return link.endereco;
+  }
+}
+---
+
+{links.length > 0 && (
+  <nav aria-labelledby="titulo-links">
+    <h2 id="titulo-links">Contatos e links</h2>
+    <ul>
+      {links.map(({ data }) => (
+        <li>
+          <a href={hrefDo(data)}>{data.nome}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

@@ -45,7 +45,7 @@ Decisão registrada no **ADR-001** (aprovado pela equipe em 15/10/2026): **Astro
 | Framework | **Astro** (componentes `.astro`, saída estática, sem servidor) |
 | Linguagem | **TypeScript** em modo `strict` (componentes, scripts e schemas de conteúdo) |
 | Estilos | **CSS puro** com escopo por componente (`<style>` no `.astro`) e tokens em variáveis CSS |
-| Conteúdo | **Content Collections** do Astro (JSON/Markdown validados por schema `zod`) |
+| Conteúdo | **Content Collections** do Astro (JSON/Markdown validados por schema `zod`), editadas pelo professor no painel **Pages CMS** (ADR-002) |
 | Qualidade | ESLint (com regras de acessibilidade), Prettier e `astro check` |
 | Hospedagem | GitHub Pages, build via GitHub Actions a partir da branch `main` |
 | URL | `https://blima-p.github.io/SocialTech/` (`base: "/SocialTech"` no `astro.config.mjs`) |
@@ -59,16 +59,16 @@ src/
 ├── pages/            # rotas; index.astro é a página inicial
 ├── layouts/          # estrutura HTML comum (BaseLayout.astro)
 ├── components/       # componentes reutilizáveis (ex.: GuiaPodeNaoPode.astro, Quiz.astro)
-├── content/          # conteúdo editável pela equipe (JSON/Markdown), separado da lógica
+├── content/          # conteúdo editável pelo painel (secoes/*.md, links.json), separado da lógica
 ├── content.config.ts # schemas zod das coleções de conteúdo
 ├── scripts/          # TypeScript de interatividade no navegador
-├── assets/           # imagens otimizadas pelo Astro (astro:assets)
+├── assets/           # imagens otimizadas pelo Astro (astro:assets); assets/conteudo/ recebe os uploads do painel
 └── styles/           # CSS global e tokens do design system
 public/               # arquivos copiados sem processamento (favicon, imagem do QR Code)
 docs/                 # especificação SDD: requisitos, arquitetura, ADRs, plano de tarefas
 ```
 
-Configuração na raiz: `astro.config.mjs`, `tsconfig.json`, `eslint.config.mjs`, `.prettierrc.json`, `.editorconfig`, `package.json` e `package-lock.json`.
+Configuração na raiz: `astro.config.mjs`, `tsconfig.json`, `eslint.config.mjs`, `.prettierrc.json`, `.editorconfig`, `.pages.yml` (painel de conteúdo), `package.json` e `package-lock.json`.
 CI em `.github/workflows/` (`ci.yml`, `deploy-pages.yml`, `controle-merge-main.yml`).
 
 ## 3. Como validar suas mudanças
@@ -141,6 +141,13 @@ Rode `npm run verify` antes de propor qualquer commit. O CI também verifica lin
 - **Não altere** requisitos, ADRs aprovados ou respostas da equipe sem aprovação. Se uma mudança no código alterar o comportamento especificado, proponha também a atualização em `docs/`.
 - Se um ADR aprovado conflitar com este arquivo, avise o desenvolvedor: **este arquivo precisa ser atualizado antes** de qualquer código seguir a nova decisão.
 
+### 4.9 Conteúdo editado pelo painel (Pages CMS)
+- O professor responsável edita textos, imagens e links pelo painel **Pages CMS**, que grava direto na `main` (ADR-002). Os arquivos dele são `src/content/` e `src/assets/conteudo/`.
+- **Não altere** textos, imagens ou links desses arquivos sem pedido explícito: a versão do professor na `main` é a oficial e mudanças paralelas geram conflito.
+- Ao mudar um campo de schema em `src/content.config.ts`, **atualize o `.pages.yml` no mesmo PR** (e vice-versa). Campo novo deve ter `label` e `description` em português simples, pensando em quem não programa.
+- O texto vindo do painel é Markdown renderizado pelo Astro (`render()`/`<Content />`). Não use `set:html` para exibi-lo.
+- Imagens do painel usam o campo `imagem` (otimizado com `<Image />`) e exigem `descricaoImagem` (texto alternativo); o build falha sem ela.
+
 ---
 
 ## 5. Padrões de código
@@ -148,7 +155,7 @@ Rode `npm run verify` antes de propor qualquer commit. O CI também verifica lin
 - Código **simples e legível**, para ser revisado por estudantes. Prefira clareza a "esperteza".
 - TypeScript `strict`: tipe as props de cada componente com `interface Props`; evite `any`; use `const`/`let` (nunca `var`) e `===`.
 - **Um componente por responsabilidade** em `src/components/`, com nome em PascalCase (ex.: `CardImpacto.astro`). Páginas apenas compõem componentes.
-- **Conteúdo separado da lógica:** itens do guia, perguntas do quiz, etapas do ciclo e números de impacto ficam em `src/content/`, com schema em `src/content.config.ts`. A equipe de conteúdo edita sem mexer no código, e o build falha se faltar um campo obrigatório.
+- **Conteúdo separado da lógica:** itens do guia, perguntas do quiz, etapas do ciclo e números de impacto ficam em `src/content/`, com schema em `src/content.config.ts` e campos no `.pages.yml`. O professor edita pelo painel sem mexer no código, e o build falha se faltar um campo obrigatório.
 - **Links e arquivos internos** sempre com `import.meta.env.BASE_URL` (ex.: `` `${import.meta.env.BASE_URL}guia/` ``). Nunca use caminhos absolutos como `"/guia"`: quebram no GitHub Pages.
 - CSS no `<style>` do próprio componente (escopo automático); tokens globais (cores, espaçamentos, fontes) como variáveis em `src/styles/global.css`. Evite `!important`.
 - Imagens em `src/assets/` com o componente `<Image />` de `astro:assets` (gera WebP e dimensões). Sempre com `alt`.

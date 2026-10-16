@@ -7,7 +7,7 @@
 
 1. **Git:** nunca faça commit, push, merge, rebase ou force push, nem crie, aprove ou faça merge de PRs, sem aprovação explícita do desenvolvedor. Nunca trabalhe direto em `main` ou `develop`; use `feature/*`, `fix/*` ou `docs/*` a partir de `develop`. O coding agent, quando tiver uma tarefa atribuída, só pode abrir **PR em rascunho** para `develop`.
 2. **Idioma:** português do Brasil em respostas, comentários, docs, commits (Conventional Commits) e PRs.
-3. **Stack:** Astro + TypeScript (`strict`) + CSS puro, saída estática no GitHub Pages (ADR-001). Links internos com `import.meta.env.BASE_URL`; conteúdo em `src/content/` com schema. Rode `npm run verify` antes de propor commit.
+3. **Stack:** Astro + TypeScript (`strict`) + CSS puro, saída estática no GitHub Pages (ADR-001). Links internos com `import.meta.env.BASE_URL`; conteúdo em `src/content/` com schema, editado pelo professor no Pages CMS (ADR-002): não altere esse conteúdo sem pedido, e mude `src/content.config.ts` e `.pages.yml` juntos. Rode `npm run verify` antes de propor commit.
 4. **Dependências:** nenhum pacote npm, framework de UI, CDN ou fonte externa sem aprovação; `package-lock.json` sempre junto.
 5. **Mobile-first e WCAG 2.1 AA:** HTML semântico, `alt`, contraste 4.5:1, teclado e foco visível, alvos de 44px, nunca informação só por cor.
 6. **Conteúdo:** nunca invente regras de descarte, itens, etapas ou dados. Use só conteúdo validado pelo Projeto Enactus; se faltar, deixe `TODO` e avise.

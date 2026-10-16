@@ -16,11 +16,26 @@ feature/*, fix/*, docs/*  ──PR──▶  develop  ──PR──▶  main  �
 
 Use nomes curtos, em minúsculas e com hífens. Inclua o número da issue quando houver: `feature/12-guia-pode-nao-pode`.
 
-Commits diretos em `main` e `develop` são bloqueados.
+Commits diretos em `main` e `develop` são bloqueados. **Exceção:** o painel de conteúdo (Pages CMS) grava direto na `main` as edições do professor (veja abaixo).
+
+## Conteúdo editado pelo professor (Pages CMS)
+
+O professor edita textos, imagens e links pelo painel ([guia](docs/guia-edicao-conteudo.md)). Cada edição vira um commit `content: ... pelo painel` na `main` e o site é republicado.
+
+- Os arquivos do painel são `src/content/` e `src/assets/conteudo/`. Não mude textos, imagens ou links neles sem combinar com o professor.
+- Mudou um campo em `src/content.config.ts`? Atualize o `.pages.yml` no mesmo PR (e vice-versa).
+- **Antes de abrir o PR `develop` → `main`**, @Blima-P traz as edições do professor para a `develop`:
+
+  ```bash
+  git switch develop
+  git pull
+  git merge origin/main
+  git push
+  ```
 
 ## Preparar o ambiente (uma vez)
 
-Requisitos: [Node.js](https://nodejs.org/) 22.22 ou superior e Git. No VS Code, instale as extensões recomendadas (Astro, ESLint, Prettier) quando o editor sugerir.
+Requisitos: [Node.js](https://nodejs.org/) 22.22 ou superior e Git. No VS Code, instale as extensões recomendadas (Astro, ESLint, Prettier) quando o editor sugerir. O Explorer agrupa os arquivos de configuração da raiz sob o `package.json` e esconde as pastas geradas (`node_modules`, `dist`, `.astro`); veja `.vscode/settings.json`.
 
 ```bash
 git clone https://github.com/Blima-P/SocialTech.git

@@ -7,3 +7,6 @@ package-lock.json
 *.md
 docs/
 .github/
+
+# Conteúdo salvo pelo painel (Pages CMS); o schema em src/content.config.ts valida no build
+src/content/
