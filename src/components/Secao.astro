@@ -1,0 +1,26 @@
+---
+import { Image } from "astro:assets";
+import { render, type CollectionEntry } from "astro:content";
+
+interface Props {
+  secao: CollectionEntry<"secoes">;
+}
+
+const { secao } = Astro.props;
+const { titulo, imagem, descricaoImagem } = secao.data;
+const { Content } = await render(secao);
+const idTitulo = `secao-${secao.id}`;
+---
+
+<section aria-labelledby={idTitulo}>
+  <h2 id={idTitulo}>{titulo}</h2>
+  {imagem && (
+    <Image
+      src={imagem}
+      alt={descricaoImagem ?? ""}
+      widths={[360, 720, 1080]}
+      sizes="(min-width: 48rem) 720px, 100vw"
+    />
+  )}
+  <Content />
+</section>

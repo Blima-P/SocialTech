@@ -1,5 +1,12 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ListaLinks from "../components/ListaLinks.astro";
+import Secao from "../components/Secao.astro";
+
+const secoes = (
+  await getCollection("secoes", ({ data }) => data.publicada)
+).sort((a, b) => a.data.ordem - b.data.ordem);
 ---
 
 <BaseLayout
@@ -8,7 +15,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 >
   <main>
     <h1>SocialTech</h1>
-    <p>Descarte correto de resíduos orgânicos: página em construção.</p>
-    <!-- TODO: seções definidas em docs/arquitetura.md (conteúdo pendente de validação Enactus). -->
+    <p>Descarte correto de resíduos orgânicos.</p>
+    {secoes.map((secao) => (
+      <Secao secao={secao} />
+    ))}
   </main>
+  <footer>
+    <ListaLinks />
+  </footer>
 </BaseLayout>
