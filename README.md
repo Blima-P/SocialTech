@@ -23,6 +23,10 @@ npm ci
 npm run dev   # http://localhost:4321/SocialTech/
 ```
 
+## Editar o conteúdo sem programar
+
+Textos, imagens e links do site são editados pelo painel [Pages CMS](https://app.pagescms.org) (decisão ADR-002). Veja o [guia de edição](docs/guia-edicao-conteudo.md).
+
 ## Especificação
 
 O projeto segue Spec-Driven Development (SDD). O processo está em [docs/sdd/PROMPT-SDD.md](docs/sdd/PROMPT-SDD.md); os requisitos e a arquitetura ficarão em `docs/requisitos.md` e `docs/arquitetura.md`.

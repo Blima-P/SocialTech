@@ -111,7 +111,16 @@ A decisão já foi tomada pela equipe em **15/10/2026**. **Não reabra a discuss
 
 - **Consequências:** etapa de build e `package.json`/`package-lock.json`; Node.js 22.22+ para desenvolver; CI com Prettier, ESLint (regras de acessibilidade), `astro check` e build; o roteiro (Fase 3) cita HTML/CSS/JS, o que continua verdadeiro no resultado final (o Astro gera HTML/CSS/JS), mas deve ser mencionado no relatório.
 
-Outros ADRs esperados (proponha, não decida sozinho os que dependem da equipe): mecanismo de contagem de acessos sem cookies (ex.: parâmetro `?origem=qr` na URL do QR Code + ferramenta de analytics sem cookies); formato dos arquivos de conteúdo (JSON ou Markdown nas Content Collections); fontes (Roboto auto-hospedada vs. fontes do sistema); página única vs. múltiplas páginas; estratégia de imagens (`astro:assets`); geração e versionamento do QR Code; necessidade de framework de UI (Preact/Svelte) para o quiz, se o TypeScript puro não bastar.
+### ADR-002 Edição de conteúdo pelo professor: **decidido**
+
+Decidido em **16/10/2026**. Registre também em `docs/arquitetura.md`.
+
+- **Contexto:** o professor responsável quer editar o site sozinho, pela tela, sem mexer em código, e ver a mudança publicada sem depender da equipe.
+- **Decisão:** painel **Pages CMS** (open source, gratuito), configurado em `.pages.yml`. Ele edita seções (`src/content/secoes/*.md`: título, ordem, mostrar/esconder, imagem com descrição, texto) e contatos/links (`src/content/links.json`). O professor entra por convite de e-mail, sem conta no GitHub. Cada "Salvar" vira um commit **direto na `main`** (ruleset com bypass para o app) e o site é republicado em ~2 minutos.
+- **Opções consideradas:** editar Markdown no próprio GitHub (exige conta e familiaridade); Decap/Sveltia CMS (exigem servidor de autenticação OAuth); planilha Google lida no build (sem validação nem imagens); **Pages CMS (escolhida)**.
+- **Consequências:** o schema `zod` em `src/content.config.ts` e o `.pages.yml` devem mudar juntos; dado inválido faz o build falhar e o site continua na versão anterior; antes de cada release, a `develop` precisa receber as edições da `main`; edições do professor não passam por revisão (aceito pela equipe).
+
+Outros ADRs esperados (proponha, não decida sozinho os que dependem da equipe): mecanismo de contagem de acessos sem cookies (ex.: parâmetro `?origem=qr` na URL do QR Code + ferramenta de analytics sem cookies); fontes (Roboto auto-hospedada vs. fontes do sistema); página única vs. múltiplas páginas; geração e versionamento do QR Code; necessidade de framework de UI (Preact/Svelte) para o quiz, se o TypeScript puro não bastar.
 
 ---
 
