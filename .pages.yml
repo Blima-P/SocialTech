@@ -1,0 +1,94 @@
+# Painel de edição de conteúdo (Pages CMS: https://app.pagescms.org).
+# O professor edita textos, imagens e links pela tela; cada "Salvar" vira um commit na main
+# e o deploy publica o site em ~2 minutos.
+# Os campos aqui precisam bater com os schemas em src/content.config.ts.
+
+media:
+  input: src/assets/conteudo
+  # Caminho relativo aos arquivos de src/content/secoes/, para o Astro otimizar a imagem.
+  output: ../../assets/conteudo
+  categories: [image]
+  extensions: [jpg, jpeg, png, webp]
+  rename: safe
+
+content:
+  - name: secoes
+    label: Seções da página
+    type: collection
+    path: src/content/secoes
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: titulo
+      fields: [titulo, ordem, publicada]
+      sort: [ordem, titulo]
+      default:
+        sort: ordem
+        order: asc
+    fields:
+      - name: titulo
+        label: Título
+        type: string
+        required: true
+      - name: ordem
+        label: Ordem na página
+        description: 1 aparece primeiro, 2 em seguida, e assim por diante.
+        type: number
+        required: true
+      - name: publicada
+        label: Mostrar no site
+        description: Desmarque para esconder a seção sem apagá-la.
+        type: boolean
+        default: true
+      - name: imagem
+        label: Imagem (opcional)
+        type: image
+      - name: descricaoImagem
+        label: Descrição da imagem
+        description: Obrigatória se houver imagem. Descreva o que a imagem mostra, para pessoas que usam leitor de tela.
+        type: string
+      - name: body
+        label: Texto
+        type: rich-text
+        options:
+          format: markdown
+          media: false
+          switcher: false
+
+  - name: links
+    label: Contatos e links
+    type: file
+    path: src/content/links.json
+    format: json
+    list: true
+    fields:
+      - name: nome
+        label: Texto do link
+        description: "Ex.: Instagram da Enactus UCB"
+        type: string
+        required: true
+      - name: tipo
+        label: Tipo
+        type: select
+        required: true
+        options:
+          values:
+            - name: site
+              label: Site ou rede social
+            - name: email
+              label: E-mail
+            - name: whatsapp
+              label: WhatsApp
+      - name: endereco
+        label: Endereço
+        description: "Site: endereço completo começando com https://. E-mail: nome@exemplo.com. WhatsApp: só números, com 55 e DDD (ex.: 5561999999999)."
+        type: string
+        required: true
+
+settings:
+  commit:
+    templates:
+      create: "content: cria {path} pelo painel ({userName})"
+      update: "content: atualiza {path} pelo painel ({userName})"
+      delete: "content: remove {path} pelo painel ({userName})"
+      rename: "content: renomeia {oldPath} para {newPath} pelo painel ({userName})"
