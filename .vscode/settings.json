@@ -1,12 +1,12 @@
 {
   // Organização do Explorer: os arquivos continuam na raiz (as ferramentas exigem),
-  // mas aparecem agrupados. Clique na setinha ao lado do arquivo principal para ver os demais.
+  // mas aparecem agrupados sob dois "pais": README.md (documentação) e package.json
+  // (configuração). Clique na setinha ao lado deles para ver os demais.
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "package.json": "package-lock.json, astro.config.mjs, tsconfig.json, eslint.config.mjs, .prettierrc.json, .prettierignore, .editorconfig, .gitattributes, .gitignore",
-    "README.md": "CONTRIBUTING.md",
-    "AGENTS.md": "CLAUDE.md"
+    "package.json": "package-lock.json, astro.config.mjs, tsconfig.json, eslint.config.mjs, .prettierrc.json, .prettierignore, .editorconfig, .gitattributes, .gitignore, .pages.yml",
+    "README.md": "AGENTS.md, CLAUDE.md, CONTRIBUTING.md"
   },
 
   // Pastas geradas automaticamente: escondidas no Explorer (continuam no disco).
