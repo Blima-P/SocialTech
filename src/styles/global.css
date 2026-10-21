@@ -1,0 +1,44 @@
+/* Estilos globais. Os tokens definitivos (cores, fontes) virão do design system em docs/arquitetura.md. */
+
+:root {
+  /* TODO: substituir pelos tokens aprovados no design system. */
+  --cor-texto: #1a1a1a;
+  --cor-fundo: #ffffff;
+  --espaco: 1rem;
+  --fonte-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte-base);
+  line-height: 1.5;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+:focus-visible {
+  outline: 3px solid currentcolor;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

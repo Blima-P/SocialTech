@@ -1,0 +1,92 @@
+name: ✅ Tarefa
+description: Nova funcionalidade, conteúdo, documentação ou atividade do projeto.
+labels: ["tarefa"]
+body:
+  - type: input
+    id: tarefa-sdd
+    attributes:
+      label: ID da tarefa no plano (SDD)
+      description: ID em docs/sdd/03-plano-tarefas.md. Deixe em branco se não vier do plano.
+      placeholder: "Ex.: T-04"
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo
+      options:
+        - Funcionalidade (feat)
+        - Conteúdo educativo (content)
+        - Documentação (docs)
+        - Design / UI
+        - Configuração / manutenção (chore)
+    validations:
+      required: true
+  - type: textarea
+    id: descricao
+    attributes:
+      label: Descrição
+      description: O que precisa ser feito e por quê?
+    validations:
+      required: true
+  - type: input
+    id: requisitos
+    attributes:
+      label: Requisitos atendidos
+      description: IDs de docs/requisitos.md.
+      placeholder: "Ex.: RF-02, RNF-03, RC-05"
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Critérios de aceite
+      placeholder: |
+        - [ ] Funciona no celular (360px)
+        - [ ] Navegável por teclado
+        - [ ] ...
+    validations:
+      required: true
+  - type: dropdown
+    id: componente
+    attributes:
+      label: Componente
+      multiple: true
+      options:
+        - Infográfico do ciclo do resíduo
+        - Guia "Pode / Não Pode"
+        - Números de impacto
+        - Quiz
+        - Formulário de avaliação
+        - Ponto de coleta
+        - Seção Enactus / sobre o projeto
+        - QR Code
+        - Contagem de acessos
+        - Design system / layout geral
+        - Especificação (docs/SDD)
+  - type: textarea
+    id: arquivos
+    attributes:
+      label: Arquivos previstos
+      placeholder: |
+        src/components/GuiaPodeNaoPode.astro
+        src/content/guia/itens.json
+  - type: input
+    id: dependencias
+    attributes:
+      label: Depende de
+      description: Tarefas ou issues que precisam estar concluídas antes.
+      placeholder: "Ex.: T-01, #12"
+  - type: textarea
+    id: prompt-ia
+    attributes:
+      label: Prompt de implementação (IA)
+      description: Prompt pronto do plano de tarefas, para colar no agente de IA. Opcional.
+      render: markdown
+  - type: checkboxes
+    id: validacao
+    attributes:
+      label: Conteúdo
+      options:
+        - label: Esta tarefa envolve regras de descarte ou informações que precisam ser validadas pela Enactus.
+  - type: input
+    id: prazo
+    attributes:
+      label: Prazo
+      placeholder: "Ex.: 22/10/2026 (Semana 6)"

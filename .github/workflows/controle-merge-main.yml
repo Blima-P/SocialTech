@@ -1,0 +1,70 @@
+name: Controle de merge na main
+
+# Check obrigatório para PRs com destino à main:
+#  1. A branch de origem precisa ser `develop` ou `fix/*` deste repositório.
+#  2. O PR precisa ter uma aprovação vigente de um dos mantenedores abaixo
+#     (exceto quando aberto por um mantenedor).
+# Não faz checkout do código do PR.
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+  pull_request_review:
+    types: [submitted, dismissed, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  aprovacao-main:
+    name: aprovacao-main
+    if: github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/github-script@v9
+        env:
+          MANTENEDORES: "Blima-P,alber-th"
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const mantenedores = process.env.MANTENEDORES.split(",").map((u) => u.trim().toLowerCase());
+
+            const head = pr.head.ref;
+            const mesmoRepo = pr.head.repo && pr.head.repo.full_name === pr.base.repo.full_name;
+            if (!mesmoRepo || !(head === "develop" || head.startsWith("fix/"))) {
+              core.setFailed(`PRs para a main só podem vir de 'develop' ou 'fix/*' deste repositório (origem: '${head}').`);
+              return;
+            }
+
+            // Mantenedores podem mesclar os próprios PRs (o GitHub não permite autoaprovação).
+            const autor = pr.user.login.toLowerCase();
+            if (mantenedores.includes(autor)) {
+              core.info(`PR aberto pelo mantenedor ${pr.user.login}.`);
+              return;
+            }
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+
+            // Considera apenas o estado mais recente de cada revisor (ignora comentários).
+            const ultimoEstado = new Map();
+            for (const r of reviews) {
+              if (!r.user || r.state === "COMMENTED") continue;
+              ultimoEstado.set(r.user.login.toLowerCase(), r.state);
+            }
+
+            const aprovadores = [...ultimoEstado]
+              .filter(([login, estado]) => estado === "APPROVED" && mantenedores.includes(login))
+              .map(([login]) => login);
+
+            if (aprovadores.length === 0) {
+              core.setFailed(`É necessária a aprovação de um mantenedor (${process.env.MANTENEDORES}) para fazer merge na main.`);
+              return;
+            }
+            core.info(`Aprovado por mantenedor(es): ${aprovadores.join(", ")}`);

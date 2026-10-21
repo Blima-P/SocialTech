@@ -1,0 +1,12 @@
+# Gerados
+dist/
+.astro/
+package-lock.json
+
+# Documentação e configuração do GitHub ficam fora da formatação automática
+*.md
+docs/
+.github/
+
+# Conteúdo salvo pelo painel (Pages CMS); o schema em src/content.config.ts valida no build
+src/content/
