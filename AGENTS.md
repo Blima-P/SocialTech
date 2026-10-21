@@ -30,6 +30,7 @@ O projeto segue **SDD**: primeiro a especificação, depois o código. A especif
 |---|---|
 | [`docs/sdd/PROMPT-SDD.md`](docs/sdd/PROMPT-SDD.md) | Processo para gerar a especificação (fases e portões de aprovação 🚦) |
 | [`docs/sdd/00-constituicao.md`](docs/sdd/00-constituicao.md) | Princípios, calendário, papéis, Definição de Preparado/Pronto e homologação |
+| [`docs/sdd/01-especificacao.md`](docs/sdd/01-especificacao.md) | Visão, personas, jornadas, capacidades (MoSCoW), métricas e conflitos entre fontes |
 | `docs/requisitos.md` | Requisitos (`RF-XX`, `RNF-XX`, `RN-XX`, `RC-XX`) com critérios de aceite |
 | `docs/arquitetura.md` | Arquitetura, design system, modelo de dados e decisões (`ADR-XXX`) |
 | `docs/sdd/02-clarificacoes.md` | Perguntas em aberto (`Q-XX`) e respostas da equipe |
