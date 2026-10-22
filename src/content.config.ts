@@ -58,4 +58,23 @@ const links = defineCollection({
   ]),
 });
 
-export const collections = { secoes, links };
+// Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
+// T-03: coleção "ciclo" (docs/equipe/nicole.md)
+
+// T-05: coleção "guia" (docs/equipe/luiz.md)
+
+// T-06: coleção "pontoColeta" (docs/equipe/luiz.md)
+
+// T-07: coleção "avaliacao" (docs/equipe/luiz.md)
+
+export const collections = {
+  secoes,
+  links,
+  // T-03: ciclo,
+
+  // T-05: guia,
+
+  // T-06: pontoColeta,
+
+  // T-07: avaliacao,
+};
