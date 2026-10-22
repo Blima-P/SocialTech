@@ -33,8 +33,8 @@ O projeto segue **SDD**: primeiro a especificação, depois o código. A especif
 | [`docs/sdd/01-especificacao.md`](docs/sdd/01-especificacao.md) | Visão, personas, jornadas, capacidades (MoSCoW), métricas e conflitos entre fontes |
 | `docs/requisitos.md` | Requisitos (`RF-XX`, `RNF-XX`, `RN-XX`, `RC-XX`) com critérios de aceite |
 | `docs/arquitetura.md` | Arquitetura, design system, modelo de dados e decisões (`ADR-XXX`) |
-| `docs/sdd/02-clarificacoes.md` | Perguntas em aberto (`Q-XX`) e respostas da equipe |
-| `docs/sdd/03-plano-tarefas.md` | Tarefas de implementação (`T-XX`) para vibecoding |
+| [`docs/sdd/02-clarificacoes.md`](docs/sdd/02-clarificacoes.md) | Perguntas em aberto (`Q-XX`) e respostas da equipe |
+| [`docs/sdd/03-plano-tarefas.md`](docs/sdd/03-plano-tarefas.md) | Tarefas de implementação (`T-XX`) para vibecoding |
 
 Enquanto esses documentos não existirem ou não estiverem aprovados, siga as seções 2 e 4 deste arquivo e **não implemente funcionalidades** além do que o desenvolvedor pedir explicitamente.
 
