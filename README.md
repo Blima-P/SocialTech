@@ -54,11 +54,17 @@ npm run verify   # formatação, lint, tipos e build (o mesmo que o CI)
 
 ## Equipe
 
-- Mantenedores: [Pedro Braga de Lima](https://github.com/Blima-P) e [Alberth Durães Cavalcanti](https://github.com/alber-th)
-- Coordenador: Prof. Marcus Vinicius Vasconcelos Cerqueira
-- Professora da UC: Profa. Juliana Olinda Martins Pequeno
-- Desenvolvimento: estudantes da UCB
+| Estudante                                                     | Curso                   |
+| ------------------------------------------------------------- | ----------------------- |
+| [Pedro Braga de Lima](https://github.com/Blima-P) (mantenedor) | Engenharia de Software  |
+| [Alberth Durães Cavalcanti](https://github.com/alber-th) (mantenedor) | Engenharia de Software |
+| [Nicole Reinaldo de Carvalho](https://github.com/nicole21carvalho) | Engenharia de Software |
+| [Luiz Fernando Gomes de Almeida](https://github.com/LuizDev1) | Engenharia de Software  |
+| Lívia Fernandes Ribeiro Bezerra                               | Engenharia de Software  |
+| Lucas de Souza Martins Araújo                                 | Engenharia de Software  |
+| Maria Clara Ferreira dos Santos                               | Engenharia de Software  |
+| Maria Clara Paiva Oliveira Camelo                             |                         |
+| Wemerson Conceição Silva                                      | Engenharia de Software  |
+| Marcos Gabriel de Albuquerque da Silva                        | Ciência da Computação   |
 
-<a href="https://github.com/Blima-P/SocialTech/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Blima-P/SocialTech" alt="Contribuidores" />
-</a>
+Coordenador: Prof. Marcus Vinicius Vasconcelos Cerqueira · Professora da UC: Profa. Juliana Olinda Martins Pequeno
