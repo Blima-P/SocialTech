@@ -29,7 +29,7 @@ Textos, imagens e links do site são editados pelo painel [Pages CMS](https://ap
 
 ## Especificação
 
-O projeto segue Spec-Driven Development (SDD). O processo está em [docs/sdd/PROMPT-SDD.md](docs/sdd/PROMPT-SDD.md); os requisitos e a arquitetura ficarão em `docs/requisitos.md` e `docs/arquitetura.md`.
+O projeto segue Spec-Driven Development (SDD). O processo está em [docs/sdd/PROMPT-SDD.md](docs/sdd/PROMPT-SDD.md) e as regras gerais (calendário, Definição de Pronto e homologação) em [docs/sdd/00-constituicao.md](docs/sdd/00-constituicao.md); os requisitos e a arquitetura ficarão em `docs/requisitos.md` e `docs/arquitetura.md`.
 
 ## Como contribuir
 
