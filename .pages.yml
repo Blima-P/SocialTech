@@ -85,6 +85,15 @@ content:
         type: string
         required: true
 
+  # Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
+  # T-03: bloco "ciclo" (docs/equipe/nicole.md)
+
+  # T-05: bloco "guia" (docs/equipe/luiz.md)
+
+  # T-06: bloco "pontoColeta" (docs/equipe/luiz.md)
+
+  # T-07: bloco "avaliacao" (docs/equipe/luiz.md)
+
 settings:
   commit:
     templates:
