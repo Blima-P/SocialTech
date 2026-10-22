@@ -3,6 +3,16 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ListaLinks from "../components/ListaLinks.astro";
 import Secao from "../components/Secao.astro";
+// Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.2): cada tarefa troca só o seu.
+// T-02: import Cabecalho e Rodape
+
+// T-03: import CicloResiduo
+
+// T-05: import GuiaPodeNaoPode
+
+// T-06: import PontoColeta
+
+// T-07: import Avaliacao
 
 const secoes = (
   await getCollection("secoes", ({ data }) => data.publicada)
@@ -13,13 +23,24 @@ const secoes = (
   title="SocialTech: descarte correto de resíduos orgânicos"
   description="Projeto de extensão da UCB em parceria com o Projeto Enactus."
 >
+  {/* T-02: <Cabecalho /> */}
   <main>
     <h1>SocialTech</h1>
     <p>Descarte correto de resíduos orgânicos.</p>
+
+    {/* T-05: <GuiaPodeNaoPode /> */}
+
+    {/* T-06: <PontoColeta /> */}
+
+    {/* T-03: <CicloResiduo /> */}
+
+    {/* T-07: <Avaliacao /> */}
+
     {secoes.map((secao) => (
       <Secao secao={secao} />
     ))}
   </main>
+  {/* T-02: <Rodape /> no lugar do <footer> abaixo */}
   <footer>
     <ListaLinks />
   </footer>

@@ -37,12 +37,36 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
      - WhatsApp: só números, com 55 e o DDD (ex.: `5561999999999`).
 3. Clique em **Save** (Salvar).
 
-## 4. Quando a mudança aparece no site?
+## 4. Guia pode / não pode
+
+<!-- T-05: preencher esta seção (docs/equipe/luiz.md) -->
+
+Em breve.
+
+## 5. Onde está a lixeira
+
+<!-- T-06: preencher esta seção (docs/equipe/luiz.md) -->
+
+Em breve.
+
+## 6. Ciclo do resíduo
+
+<!-- T-03: preencher esta seção (docs/equipe/nicole.md) -->
+
+Em breve.
+
+## 7. Formulário de avaliação
+
+<!-- T-07: preencher esta seção (docs/equipe/luiz.md) -->
+
+Em breve.
+
+## 8. Quando a mudança aparece no site?
 
 Cerca de **2 minutos** depois de salvar. Recarregue a página do site: **https://blima-p.github.io/SocialTech/**
 
 Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto). Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
 
-## 5. Dúvidas
+## 9. Dúvidas
 
 Fale com o Pedro, responsável técnico do projeto.
