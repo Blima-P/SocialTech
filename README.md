@@ -14,6 +14,8 @@ Página educativa sobre descarte correto de resíduos orgânicos, acessada pelo 
 
 **[Acessar o site](https://blima-p.github.io/SocialTech/)**
 
+Gostou do projeto? Deixe uma ⭐ aqui no repositório.
+
 </div>
 
 ## Sobre
