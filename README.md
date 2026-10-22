@@ -63,7 +63,7 @@ npm run verify   # formatação, lint, tipos e build (o mesmo que o CI)
 | Lívia Fernandes Ribeiro Bezerra                               | Engenharia de Software  |
 | Lucas de Souza Martins Araújo                                 | Engenharia de Software  |
 | Maria Clara Ferreira dos Santos                               | Engenharia de Software  |
-| Maria Clara Paiva Oliveira Camelo                             |                         |
+| Maria Clara Paiva Oliveira Camelo                             | Engenharia de Software |
 | Wemerson Conceição Silva                                      | Engenharia de Software  |
 | Marcos Gabriel de Albuquerque da Silva                        | Ciência da Computação   |
 
