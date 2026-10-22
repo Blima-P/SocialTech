@@ -5,8 +5,8 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.0 (21/10/2026) |
-| Status | Em revisão pela equipe |
+| Versão | 1.1 (22/10/2026) |
+| Status | **Aprovada** pela equipe em 22/10/2026 |
 | Fontes | Roteiro do projeto de extensão (PDF), `AGENTS.md`, repositório, respostas da equipe em 21/10/2026 |
 
 ---
@@ -48,7 +48,7 @@ Dados de contexto citados no roteiro, com fonte:
 
 ---
 
-## 2. Personas [SUPOSIÇÃO]
+## 2. Personas [CONFIRMADO pela equipe em 22/10/2026]
 
 Arquétipos baseados no público descrito no roteiro (item 2.4). Não representam pessoas reais.
 
@@ -155,19 +155,20 @@ Regra da constituição: **Must** = sem isso o MVP de 23/10 não pode ser divulg
 | S-02 | Formulários de avaliação respondidos até 29/10 | ≥ 80 | Planilha do Google Forms | Roteiro 2.6 |
 | S-03 | Pessoas alcançadas diretamente na ação | > 300 | Lista de presença ou contagem documentada | Roteiro 2.6 (fora do site) |
 | S-04 | Compreensão imediata: % de acertos no quiz | [PENDENTE] meta a definir | Depende da forma de registro (conflito C8) | Roteiro, Fase 5 |
-| S-05 | Pessoas que decidem "pode/não pode" em até 10 s na homologação | ≥ 4 de 5 testadores [SUPOSIÇÃO] | Teste cronometrado na Homologação 1 | Jornada J1 |
+| S-05 | Pessoas que decidem "pode/não pode" em até 10 s na homologação | ≥ 4 de 5 testadores [CONFIRMADO em 22/10/2026] | Teste cronometrado na Homologação 1 | Jornada J1 |
 
 **Limite declarado (roteiro, Fase 5):** quiz e formulário indicam compreensão imediata, percepção e **intenção** declarada. Eles **não** permitem afirmar retenção de conhecimento nem mudança duradoura de comportamento, e os números só podem ser apresentados como alcançados depois de consolidadas as evidências.
 
 ---
 
-## 6. Premissas [SUPOSIÇÃO]
+## 6. Premissas
 
-1. A maioria dos acessos será por celular, com dados móveis e em pé, ao lado da lixeira.
-2. Uma única página com seções atende às jornadas J1 a J6 (a decisão técnica fica para a arquitetura).
-3. O guia "Pode / Não Pode" do MVP terá uma lista curta (dezenas de itens, não centenas).
-4. A Enactus consegue validar a lista de itens até **22/10/2026** para caber na Homologação 1 (23/10).
-5. O QR Code aponta para a URL atual do GitHub Pages; não haverá domínio próprio.
+1. [SUPOSIÇÃO] A maioria dos acessos será por celular, com dados móveis e em pé, ao lado da lixeira.
+2. [CONFIRMADO em 22/10/2026] Uma única página com seções atende às jornadas J1 a J6 (a decisão técnica fica para a arquitetura).
+3. [SUPOSIÇÃO] O guia "Pode / Não Pode" do MVP terá uma lista curta (dezenas de itens, não centenas).
+4. [SUPOSIÇÃO, **em risco**] A Enactus consegue validar a lista de itens até **22/10/2026** para caber na Homologação 1 (23/10). Até 22/10 às 12h nenhum conteúdo tinha chegado (ver R-01 e Q-01).
+5. [CONFIRMADO em 22/10/2026] O QR Code aponta para a URL atual do GitHub Pages; não haverá domínio próprio.
+6. [CONFIRMADO em 22/10/2026] Quiz e ciclo interativo ficam fora do MVP (Should); o MVP leva o ciclo em versão simples.
 
 ## 7. Riscos de produto
 
