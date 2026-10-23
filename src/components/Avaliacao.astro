@@ -1,0 +1,43 @@
+---
+import { getEntry } from "astro:content";
+
+const formulario = await getEntry("avaliacao", "formulario");
+const endereco = formulario?.data.endereco;
+---
+
+{endereco && (
+  <section id="avaliacao" aria-labelledby="titulo-avaliacao">
+    <h2 id="titulo-avaliacao">Avalie o projeto</h2>
+    <p>{formulario.data.texto}</p>
+    <a class="botao" href={endereco} target="_blank" rel="noopener">
+      Responder o formulário
+      <span class="visualmente-oculto"> (abre em nova aba)</span>
+    </a>
+  </section>
+)}
+
+<style>
+  section {
+    margin-block: var(--espaco);
+  }
+
+  .botao {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-toque);
+    padding-inline: var(--espaco);
+    border-radius: var(--raio);
+    background: var(--cor-destaque);
+    color: var(--cor-texto);
+    font-weight: 700;
+  }
+
+  .visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

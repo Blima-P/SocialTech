@@ -64,9 +64,10 @@ Em breve.
 
 ## 7. Formulário de avaliação
 
-<!-- T-07: preencher esta seção (docs/equipe/luiz.md) -->
-
-Em breve.
+1. No menu do painel, abra **Formulário de avaliação**.
+2. Para mostrar ou atualizar o formulário, cole o link do Google Forms no campo **Link do Google Forms**. O endereço deve começar com `https://`.
+3. Para esconder a seção, deixe o campo **Link do Google Forms** vazio.
+4. Clique em **Save** (Salvar).
 
 ## 8. Quando a mudança aparece no site?
 

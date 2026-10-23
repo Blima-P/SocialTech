@@ -140,7 +140,21 @@ content:
         options:
           format: yyyy-MM-dd
 
-  # T-07: bloco "avaliacao" (docs/equipe/luiz.md)
+  - name: avaliacao
+    label: Formulário de avaliação
+    type: file
+    path: src/content/avaliacao.json
+    format: json
+    fields:
+      - name: texto
+        label: Texto antes do botão
+        description: "Uma ou duas frases convidando a pessoa a responder."
+        type: text
+        required: true
+      - name: endereco
+        label: Link do Google Forms
+        description: "Começa com https://. Deixe vazio para esconder a seção."
+        type: string
 
 settings:
   commit:
