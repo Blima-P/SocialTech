@@ -58,6 +58,20 @@ const links = defineCollection({
   ]),
 });
 
+const pontoColeta = defineCollection({
+  loader: file("src/content/ponto-coleta.json", {
+    // O arquivo é um objeto único; o Astro exige uma lista com id.
+    parser: (texto) => [
+      { id: "atual", ...(JSON.parse(texto) as Record<string, unknown>) },
+    ],
+  }),
+  schema: z.object({
+    local: z.string().trim().min(1),
+    comoReconhecer: z.string().trim().min(1),
+    atualizadoEm: z.coerce.date(),
+  }),
+});
+
 // Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
 // T-03: coleção "ciclo" (docs/equipe/nicole.md)
 
@@ -74,7 +88,7 @@ export const collections = {
 
   // T-05: guia,
 
-  // T-06: pontoColeta,
+  pontoColeta,
 
   // T-07: avaliacao,
 };
