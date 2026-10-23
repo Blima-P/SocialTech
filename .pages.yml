@@ -148,6 +148,7 @@ content:
     fields:
       - name: texto
         label: Texto antes do botão
+        description: "Uma ou duas frases convidando a pessoa a responder."
         type: text
         required: true
       - name: endereco
