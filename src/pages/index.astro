@@ -1,14 +1,13 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import GuiaPodeNaoPode from "../components/GuiaPodeNaoPode.astro";
 import ListaLinks from "../components/ListaLinks.astro";
 import Secao from "../components/Secao.astro";
 // Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.2): cada tarefa troca só o seu.
 // T-02: import Cabecalho e Rodape
 
 // T-03: import CicloResiduo
-
-// T-05: import GuiaPodeNaoPode
 
 // T-06: import PontoColeta
 
@@ -28,7 +27,7 @@ const secoes = (
     <h1>SocialTech</h1>
     <p>Descarte correto de resíduos orgânicos.</p>
 
-    {/* T-05: <GuiaPodeNaoPode /> */}
+    <GuiaPodeNaoPode />
 
     {/* T-06: <PontoColeta /> */}
 
