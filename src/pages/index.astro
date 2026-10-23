@@ -9,7 +9,7 @@ import Secao from "../components/Secao.astro";
 // Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.2): cada tarefa troca só o seu.
 // T-02: import Cabecalho e Rodape
 
-// T-03: import CicloResiduo
+import CicloResiduo from "../components/CicloResiduo.astro";
 
 const secoes = (
   await getCollection("secoes", ({ data }) => data.publicada)
@@ -29,7 +29,7 @@ const secoes = (
 
     <PontoColeta />
 
-    {/* T-03: <CicloResiduo /> */}
+    <CicloResiduo />
 
     <Avaliacao />
 

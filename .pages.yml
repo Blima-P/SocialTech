@@ -86,7 +86,22 @@ content:
         required: true
 
   # Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
-  # T-03: bloco "ciclo" (docs/equipe/nicole.md)
+  - name: ciclo
+    label: Ciclo do resíduo
+    type: file
+    path: src/content/ciclo.json
+    format: json
+    list: true
+    fields:
+      - name: nome
+        label: Nome da etapa
+        description: "Ex.: Compostagem. A ordem da lista é a ordem no site."
+        type: string
+        required: true
+      - name: descricao
+        label: Frase curta (opcional)
+        description: Uma frase explicando a etapa. Combine o texto com a Enactus.
+        type: text
 
   - name: guia
     label: "Guia: pode / não pode"
