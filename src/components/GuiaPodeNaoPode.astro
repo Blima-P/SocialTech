@@ -1,0 +1,105 @@
+---
+import { getCollection } from "astro:content";
+
+const itens = (await getCollection("guia")).sort(
+  (a, b) => Number(a.id) - Number(b.id),
+);
+const pode = itens.filter(({ data }) => data.classificacao === "pode");
+const naoPode = itens.filter(({ data }) => data.classificacao === "nao-pode");
+---
+
+<section id="guia" aria-labelledby="titulo-guia">
+  <h2 id="titulo-guia">O que pode ir nesta lixeira?</h2>
+  <div class="grupos">
+    <div class="grupo grupo--pode">
+      <h3>
+        <span aria-hidden="true">✓</span> Pode
+      </h3>
+      {pode.length > 0 ? (
+        <ul>
+          {pode.map(({ data }) => (
+            <li class="cartao">
+              <strong>{data.nome}</strong>
+              <p>{data.motivo}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Lista do que pode ir na lixeira em validação com a Enactus.</p>
+      )}
+    </div>
+    <div class="grupo grupo--nao-pode">
+      <h3>
+        <span aria-hidden="true">✕</span> Não pode
+      </h3>
+      <ul>
+        {naoPode.map(({ data }) => (
+          <li class="cartao">
+            <strong>{data.nome}</strong>
+            <p>{data.motivo}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    margin-block: 0.75rem;
+  }
+
+  h2 {
+    margin: 0 0 0.5rem;
+  }
+
+  .grupos {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .grupo h3 {
+    margin: 0 0 0.375rem;
+  }
+
+  .grupo--pode h3 {
+    color: var(--cor-pode);
+  }
+
+  .grupo--nao-pode h3 {
+    color: var(--cor-nao-pode);
+  }
+
+  ul {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cartao {
+    border-left: 0.25rem solid var(--cor-pode);
+    border-radius: var(--raio);
+    padding: 0.5rem 0.75rem;
+    background: var(--cor-pode-fundo);
+  }
+
+  .grupo--nao-pode .cartao {
+    border-left-color: var(--cor-nao-pode);
+    background: var(--cor-nao-pode-fundo);
+  }
+
+  .cartao p,
+  .grupo > p {
+    margin: 0.125rem 0 0;
+    color: var(--cor-texto-suave);
+  }
+
+  @media (min-width: 48rem) {
+    .grupos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--espaco);
+    }
+  }
+</style>

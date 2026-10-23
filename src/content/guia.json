@@ -1,0 +1,37 @@
+[
+  {
+    "nome": "Frutas cítricas",
+    "classificacao": "nao-pode",
+    "motivo": "Pode contaminar o composto"
+  },
+  {
+    "nome": "Cinzas",
+    "classificacao": "nao-pode",
+    "motivo": "Pode contaminar o composto"
+  },
+  {
+    "nome": "Gorduras",
+    "classificacao": "nao-pode",
+    "motivo": "Pode contaminar o composto"
+  },
+  {
+    "nome": "Carnes",
+    "classificacao": "nao-pode",
+    "motivo": "Pode contaminar o composto"
+  },
+  {
+    "nome": "Isopor",
+    "classificacao": "nao-pode",
+    "motivo": "Não é compostável"
+  },
+  {
+    "nome": "Sacolas plásticas",
+    "classificacao": "nao-pode",
+    "motivo": "Não é compostável"
+  },
+  {
+    "nome": "Outras embalagens",
+    "classificacao": "nao-pode",
+    "motivo": "Não é compostável"
+  }
+]

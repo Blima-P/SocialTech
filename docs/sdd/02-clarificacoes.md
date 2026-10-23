@@ -5,11 +5,11 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.1 (22/10/2026) |
+| Versão | 1.2 (23/10/2026): H1 adiada para 25/10 às 20h |
 | Status | Decisões da equipe respondidas em 22/10/2026; conteúdo da Enactus e do Prof. Marcus pendente (vale a suposição da seção 5) |
 | Caminho do MVP | Aprovado em 22/10/2026: plano de tarefas só do MVP logo após esta fase; as Fases 4 a 7 completas continuam depois |
 
-**Legenda de prioridade:** 🔴 bloqueia o MVP de 23/10 · 🟡 necessário até 29/10 · ⚪ não bloqueia.
+**Legenda de prioridade:** 🔴 bloqueia o MVP de 25/10 · 🟡 necessário até 29/10 · ⚪ não bloqueia.
 
 ---
 
@@ -37,7 +37,7 @@
 | ID | Pergunta | Por que importa | Opções sugeridas | Impacto se não respondida | Responsável | Prioridade | Status |
 |---|---|---|---|---|---|---|---|
 | Q-13 | Qual o **texto do adesivo/cartaz**, o tamanho, quantos e quem imprime? | QR Code na lixeira (C-09, OE-3) | Ex.: "Pode jogar aqui? Aponte a câmera ♻️" + QR de no mínimo 4 × 4 cm + URL curta escrita | QR não é impresso a tempo da H1 | Equipe | 🔴 | Aberta |
-| Q-14 | Quem testa na **Homologação 1 (23/10, 23h)**: 5 testadores (meta S-05) e 2 celulares? O Prof. Marcus e a Enactus estarão disponíveis nesse horário? | Sem H1 aprovada, o MVP não é divulgado (constituição §7) | Horário definido: 23/10 às 23h. Falta confirmar testadores e aprovadores | MVP atrasa | Pedro | 🔴 | Parcial: horário definido em 22/10 |
+| Q-14 | Quem testa na **Homologação 1 (25/10, 20h)**: 5 testadores (meta S-05) e 2 celulares? O Prof. Marcus e a Enactus estarão disponíveis nesse horário? | Sem H1 aprovada, o MVP não é divulgado (constituição §7) | Horário definido: 25/10 às 20h. Falta confirmar testadores e aprovadores | MVP atrasa | Pedro | 🔴 | Parcial: horário definido em 22/10 (23/10, 23h) e adiado em 23/10 para 25/10, 20h |
 | Q-15 | O Enactus UCB usa a mesma identidade da Enactus Brasil? O logo diz "Enactus Brasil" | Identidade visual (C-12) | a) usar o logo Enactus Brasil; b) logo próprio do time UCB | Suposição: opção a | Enactus | 🟡 | Aberta |
 | Q-17 | Quando será a **ação de conscientização** no campus? | Formulário e alcance direto (S-02, S-03) dependem dela | Uma data entre 26/10 e 28/10 | Pouco tempo para coletar 80 formulários | Equipe | 🟡 | Aberta |
 | Q-18 | Como os 6 estudantes sem acesso ao GitHub participam (conflito C7)? | Divisão de tarefas e registro da participação | Conteúdo, Forms, impressão, ação presencial, relatório | Tarefas concentradas em 4 pessoas | Pedro | ⚪ | Aberta |
@@ -50,7 +50,7 @@
 | Q-20 | Qual a URL final do QR Code? | `https://blima-p.github.io/SocialTech/` (sem domínio próprio), com os parâmetros de Q-11 | 22/10/2026 |
 | Q-21 | Como funciona o ponto de coleta? | Lixeira itinerante, rodízio aleatório sem agenda; o Prof. Marcus atualiza o local pelo painel | 21/10/2026 |
 | Q-22 | Identidade visual e uso da marca | Usar cores, fonte e logo de `enactus.org.br`; uso autorizado | 21/10/2026 |
-| Q-23 | Como homologar? | Modelo leve: H1 em 23/10 e H2 em 29/10 (constituição §8) | 21/10/2026 |
+| Q-23 | Como homologar? | Modelo leve: H1 em 25/10, 20h (marcada para 23/10 e adiada em 23/10) e H2 em 29/10 (constituição §8) | 21/10/2026 |
 | Q-08 | O formulário será aplicado antes e depois da ação, ou só depois? | **Um único formulário**, aplicado depois, com a pergunta "antes de hoje, você sabia…?" (resolve o conflito C4) | 22/10/2026 |
 | Q-10 | Qual ferramenta faz a contagem de acessos sem cookies? | **GoatCounter** (gratuito para uso não comercial, sem cookies). Exige ADR na arquitetura (`AGENTS.md` §4.4) | 22/10/2026 |
 | Q-11 | Como separar os acessos vindos do QR Code? | Parâmetros na URL: QR da lixeira `…/SocialTech/?campaign=lixeira&ref=qr`; cartazes `ref=cartaz` (resolve o conflito C3) | 22/10/2026 |
@@ -76,4 +76,4 @@
 | Enactus | Q-01 lista Pode/Não Pode · Q-02 item não listado · Q-03 nomes e frases do ciclo |
 | Prof. Marcus | Q-03 (se a Enactus não souber) · Q-04 local inicial e foto da lixeira · Q-14 disponibilidade na H1 |
 | Equipe | Q-07 Google Forms · Q-13 adesivo e impressão |
-| Pedro | Criar a conta no GoatCounter (Q-10) · Q-14 confirmar testadores e aprovadores para 23/10 às 23h · Q-12 definição do quiz |
+| Pedro | Criar a conta no GoatCounter (Q-10) · Q-14 confirmar testadores e aprovadores para 25/10 às 20h · Q-12 definição do quiz |

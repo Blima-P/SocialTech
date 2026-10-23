@@ -72,10 +72,23 @@ const pontoColeta = defineCollection({
   }),
 });
 
+const guia = defineCollection({
+  loader: file("src/content/guia.json", {
+    parser: (texto) =>
+      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
+        id: String(indice),
+        ...item,
+      })),
+  }),
+  schema: z.object({
+    nome: z.string().trim().min(1),
+    classificacao: z.enum(["pode", "nao-pode"]),
+    motivo: z.string().trim().min(1),
+  }),
+});
+
 // Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
 // T-03: coleção "ciclo" (docs/equipe/nicole.md)
-
-// T-05: coleção "guia" (docs/equipe/luiz.md)
 
 // T-06: coleção "pontoColeta" (docs/equipe/luiz.md)
 
@@ -86,7 +99,7 @@ export const collections = {
   links,
   // T-03: ciclo,
 
-  // T-05: guia,
+  guia,
 
   pontoColeta,
 
