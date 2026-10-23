@@ -39,9 +39,14 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 
 ## 4. Guia pode / não pode
 
-<!-- T-05: preencher esta seção (docs/equipe/luiz.md) -->
+1. No menu do painel, abra **Guia: pode / não pode**.
+2. Para incluir um item, clique em **Add** e preencha o nome, a classificação (**Pode** ou **Não pode**) e o motivo.
+3. Para editar, abra o item e altere os campos necessários.
+4. Para remover, abra o item e use a opção de excluir.
+5. Para reordenar, arraste os itens para a ordem desejada.
+6. Clique em **Save** (Salvar).
 
-Em breve.
+> **Antes de mudar uma regra de descarte, combine com a Enactus.**
 
 ## 5. Onde está a lixeira
 
