@@ -40,6 +40,27 @@ img {
   height: auto;
 }
 
+main {
+  max-width: var(--largura-conteudo);
+  margin-inline: auto;
+  padding-inline: var(--espaco);
+}
+
+main > section + section {
+  margin-top: calc(var(--espaco) * 2);
+}
+
+h2 {
+  margin-bottom: calc(var(--espaco) / 2);
+  font-size: 1.375rem;
+  line-height: 1.25;
+}
+
+h3 {
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
 :focus-visible {
   outline: 3px solid currentcolor;
   outline-offset: 2px;

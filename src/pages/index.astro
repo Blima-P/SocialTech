@@ -4,10 +4,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PontoColeta from "../components/PontoColeta.astro";
 import GuiaPodeNaoPode from "../components/GuiaPodeNaoPode.astro";
 import Avaliacao from "../components/Avaliacao.astro";
-import ListaLinks from "../components/ListaLinks.astro";
 import Secao from "../components/Secao.astro";
 // Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.2): cada tarefa troca só o seu.
-// T-02: import Cabecalho e Rodape
+import Cabecalho from "../components/Cabecalho.astro";
+import Rodape from "../components/Rodape.astro";
 
 // T-03: import CicloResiduo
 
@@ -20,11 +20,8 @@ const secoes = (
   title="SocialTech: descarte correto de resíduos orgânicos"
   description="Projeto de extensão da UCB em parceria com o Projeto Enactus."
 >
-  {/* T-02: <Cabecalho /> */}
+  <Cabecalho />
   <main>
-    <h1>SocialTech</h1>
-    <p>Descarte correto de resíduos orgânicos.</p>
-
     <GuiaPodeNaoPode />
 
     <PontoColeta />
@@ -37,8 +34,5 @@ const secoes = (
       <Secao secao={secao} />
     ))}
   </main>
-  {/* T-02: <Rodape /> no lugar do <footer> abaixo */}
-  <footer>
-    <ListaLinks />
-  </footer>
+  <Rodape />
 </BaseLayout>
