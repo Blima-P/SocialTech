@@ -15,15 +15,16 @@ const naoPode = itens.filter(({ data }) => data.classificacao === "nao-pode");
       <h3>
         <span aria-hidden="true">✓</span> Pode
       </h3>
-      <ul>
-        {pode.map(({ data }) => (
-          <li class="cartao">
-            <strong>{data.nome}</strong>
-            <p>{data.motivo}</p>
-          </li>
-        ))}
-      </ul>
-      {pode.length === 0 && (
+      {pode.length > 0 ? (
+        <ul>
+          {pode.map(({ data }) => (
+            <li class="cartao">
+              <strong>{data.nome}</strong>
+              <p>{data.motivo}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
         <p>Lista do que pode ir na lixeira em validação com a Enactus.</p>
       )}
     </div>
