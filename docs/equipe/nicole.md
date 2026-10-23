@@ -22,7 +22,7 @@ preenchido, mais uma sugestão de mensagem de commit.
 
 - **O que é:** uma página para celular, aberta por um **QR Code colado numa lixeira de compostagem** que circula pelo campus da UCB. Quem escaneia precisa descobrir **em até 10 segundos** se o resto de comida pode ir naquela lixeira.
 - **Quem faz:** projeto de extensão da UCB com o **Projeto Enactus**. A identidade visual é a da Enactus (logo e cores de `enactus.org.br`, uso autorizado).
-- **Prazo:** o MVP é homologado em **23/10/2026 às 23h**. Seus PRs precisam estar abertos até **23/10, 12h**.
+- **Prazo:** o MVP é homologado em **25/10/2026 (domingo) às 20h**. Seus PRs precisam estar abertos até **25/10, 12h**.
 - **Site no ar:** `https://blima-p.github.io/SocialTech/`. Local: `http://localhost:4321/SocialTech/`.
 - **Quem edita o conteúdo:** o Prof. Marcus, pelo painel **Pages CMS** (sem programar). Por isso textos e listas ficam em `src/content/`, nunca escritos direto no componente.
 

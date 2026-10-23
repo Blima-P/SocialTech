@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.0 (21/10/2026) |
+| Versão | 1.1 (23/10/2026): Homologação 1 adiada para 25/10 |
 | Status | Em revisão pela equipe |
 | Responsável | Pedro Braga de Lima (mantenedor do repositório) |
 
@@ -17,16 +17,16 @@
 |---|---|---|
 | Início do projeto | 11/09/2026 | [CONFIRMADO] |
 | Página, QR Code e ação no campus (Semanas 3 a 5 do roteiro) | até 16/10/2026 | **Atrasado**: QR Code não existe e a ação não aconteceu |
-| **Homologação 1, MVP publicado e impressão do QR Code** | **23/10/2026 (sexta)** | Meta definida pela equipe em 21/10/2026 |
+| **Homologação 1, MVP publicado e impressão do QR Code** | **25/10/2026 (domingo), 20h** | Meta definida em 21/10/2026 para 23/10; adiada em 23/10/2026 porque as tarefas da equipe não ficaram prontas |
 | Ação de conscientização no campus e aplicação do formulário | entre 26/10 e 28/10/2026 | [PENDENTE] data a definir pela equipe |
 | Homologação 2 e entrega final | **29/10/2026 (quinta)** | [CONFIRMADO] |
 
-Consequência: tudo que não for necessário para o MVP de 23/10 é, no máximo, **Should** ou **Could** (ver princípio 2).
+Consequência: tudo que não for necessário para o MVP de 25/10 é, no máximo, **Should** ou **Could** (ver princípio 2).
 
 ## 2. Princípios inegociáveis
 
 1. **Não inventar conteúdo.** Regras de descarte, itens, nomes de espaços, etapas do ciclo, horários, locais, estatísticas e referências só entram se estiverem no roteiro ou no repositório, ou se forem fornecidos pela equipe ou pelo Projeto Enactus. Lacunas viram `TODO: conteúdo pendente de validação Enactus` e entram em `docs/sdd/02-clarificacoes.md`.
-2. **Simplicidade e prazo.** Sempre a solução mais simples que cumpra o requisito até 23/10 (MVP) e 29/10 (final). Toda funcionalidade é classificada em **MoSCoW**:
+2. **Simplicidade e prazo.** Sempre a solução mais simples que cumpra o requisito até 25/10 (MVP) e 29/10 (final). Toda funcionalidade é classificada em **MoSCoW**:
    - **Must**: sem isso o MVP não pode ser divulgado;
    - **Should**: importante, entra se couber até 29/10;
    - **Could**: desejável, só se sobrar tempo;
@@ -107,7 +107,7 @@ Uma tarefa só é concluída quando **todos** os itens forem verdadeiros:
 - [ ] Código gerado por IA foi revisado por um humano.
 - [ ] PR para `develop` com template preenchido (tarefa e requisitos), aprovado pelo code owner e com merge feito.
 
-## 7. Definição de Pronto do MVP (23/10/2026)
+## 7. Definição de Pronto do MVP (25/10/2026)
 
 O MVP pode ser divulgado pelo QR Code quando estes passos forem cumpridos, **nesta ordem**:
 
@@ -123,7 +123,7 @@ Decidido pela equipe em 21/10/2026: **modelo leve**, sem ambiente separado. O Gi
 
 | Período | Onde se homologa | Como |
 |---|---|---|
-| Até a impressão do QR Code (23/10) | Site oficial (`https://blima-p.github.io/SocialTech/`) | O endereço ainda não foi divulgado, então ele serve de homologação: releases `develop` → `main` frequentes, e os validadores conferem no link real |
+| Até a impressão do QR Code (25/10) | Site oficial (`https://blima-p.github.io/SocialTech/`) | O endereço ainda não foi divulgado, então ele serve de homologação: releases `develop` → `main` frequentes, e os validadores conferem no link real |
 | Depois do QR Code impresso | Celular do desenvolvedor, antes do PR | `npm run dev -- --host` na mesma rede Wi-Fi. Toda release `develop` → `main` precisa do teste da equipe em 2 celulares; se mudar conteúdo educativo, também do aceite do Prof. Marcus (e da Enactus, se for regra de descarte) registrado no PR |
 
 **Edições pelo painel (Pages CMS):** vão direto para a `main` sem homologação (ADR-002). O Prof. Marcus é o próprio validador de textos; se ele alterar regras de descarte ou itens "Pode / Não Pode", a mudança deve ser combinada antes com a Enactus.
@@ -132,7 +132,7 @@ Decidido pela equipe em 21/10/2026: **modelo leve**, sem ambiente separado. O Gi
 
 | ID | Data | Gatilho |
 |---|---|---|
-| H1 | 23/10/2026 (sexta) | Antes de imprimir o QR Code (libera o MVP) |
+| H1 | 25/10/2026 (domingo), 20h | Antes de imprimir o QR Code (libera o MVP) |
 | H2 | 29/10/2026 (quinta) | Antes da entrega final |
 
 Cada homologação formal só é aprovada quando **todos** dão o aceite:
