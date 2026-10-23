@@ -87,12 +87,25 @@ const guia = defineCollection({
   }),
 });
 
+const avaliacao = defineCollection({
+  loader: file("src/content/avaliacao.json", {
+    parser: (texto) => [
+      { id: "formulario", ...(JSON.parse(texto) as Record<string, unknown>) },
+    ],
+  }),
+  schema: z.object({
+    texto: z.string().trim().min(1),
+    endereco: z.preprocess(
+      vazioParaUndefined,
+      z.url({ protocol: /^https$/ }).optional(),
+    ),
+  }),
+});
+
 // Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
 // T-03: coleção "ciclo" (docs/equipe/nicole.md)
 
 // T-06: coleção "pontoColeta" (docs/equipe/luiz.md)
-
-// T-07: coleção "avaliacao" (docs/equipe/luiz.md)
 
 export const collections = {
   secoes,
@@ -103,5 +116,5 @@ export const collections = {
 
   pontoColeta,
 
-  // T-07: avaliacao,
+  avaliacao,
 };
