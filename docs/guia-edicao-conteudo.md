@@ -50,9 +50,11 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 
 ## 5. Onde está a lixeira
 
-<!-- T-06: preencher esta seção (docs/equipe/luiz.md) -->
-
-Em breve.
+1. No menu do painel, abra **Onde está a lixeira**.
+2. Troque o campo **Local atual** pelo local onde a lixeira está agora.
+3. Atualize **Data da atualização** para a data de hoje.
+4. Clique em **Save** (Salvar).
+5. Aguarde cerca de **2 minutos** para a mudança aparecer no site.
 
 ## 6. Ciclo do resíduo
 

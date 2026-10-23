@@ -58,6 +58,20 @@ const links = defineCollection({
   ]),
 });
 
+const pontoColeta = defineCollection({
+  loader: file("src/content/ponto-coleta.json", {
+    // O arquivo é um objeto único; o Astro exige uma lista com id.
+    parser: (texto) => [
+      { id: "atual", ...(JSON.parse(texto) as Record<string, unknown>) },
+    ],
+  }),
+  schema: z.object({
+    local: z.string().trim().min(1),
+    comoReconhecer: z.string().trim().min(1),
+    atualizadoEm: z.coerce.date(),
+  }),
+});
+
 const guia = defineCollection({
   loader: file("src/content/guia.json", {
     parser: (texto) =>
@@ -87,7 +101,7 @@ export const collections = {
 
   guia,
 
-  // T-06: pontoColeta,
+  pontoColeta,
 
   // T-07: avaliacao,
 };

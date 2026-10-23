@@ -1,0 +1,41 @@
+---
+import { getEntry } from "astro:content";
+
+const ponto = await getEntry("pontoColeta", "atual");
+if (!ponto) {
+  throw new Error("src/content/ponto-coleta.json não encontrado.");
+}
+const { local, comoReconhecer, atualizadoEm } = ponto.data;
+const dataFormatada = new Intl.DateTimeFormat("pt-BR", {
+  timeZone: "UTC",
+}).format(atualizadoEm);
+const dataIso = atualizadoEm.toISOString().slice(0, 10);
+---
+
+<section id="ponto-de-coleta" aria-labelledby="titulo-ponto">
+  <h2 id="titulo-ponto">Onde está a lixeira agora</h2>
+  <p class="local">{local}</p>
+  <p>{comoReconhecer}</p>
+  <p class="atualizacao">
+    Atualizado em <time datetime={dataIso}>{dataFormatada}</time>
+  </p>
+</section>
+
+<style>
+  section {
+    margin-block: var(--espaco);
+  }
+
+  .local {
+    margin: 0;
+    border-radius: var(--raio);
+    padding: var(--espaco);
+    background: var(--cor-fundo-suave);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .atualizacao {
+    color: var(--cor-texto-suave);
+  }
+</style>

@@ -116,7 +116,29 @@ content:
         type: string
         required: true
 
-  # T-06: bloco "pontoColeta" (docs/equipe/luiz.md)
+  - name: pontoColeta
+    label: Onde está a lixeira
+    type: file
+    path: src/content/ponto-coleta.json
+    format: json
+    fields:
+      - name: local
+        label: Local atual
+        description: "Onde a lixeira está agora. Ex.: Bloco K, perto da cantina."
+        type: string
+        required: true
+      - name: comoReconhecer
+        label: Como reconhecer a lixeira
+        description: "Uma frase curta para a pessoa achar a lixeira. Ex.: lixeira verde com o adesivo do QR Code."
+        type: text
+        required: true
+      - name: atualizadoEm
+        label: Data da atualização
+        description: Sempre que mudar o local, atualize esta data para o dia de hoje.
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
 
   # T-07: bloco "avaliacao" (docs/equipe/luiz.md)
 
