@@ -1,6 +1,9 @@
 ---
 import "../styles/global.css";
 
+// Código do site no GoatCounter (ADR-003). Não é segredo.
+const CODIGO_GOATCOUNTER = "socialtech-ucb";
+
 interface Props {
   title: string;
   description?: string;
@@ -17,6 +20,15 @@ const { title, description } = Astro.props;
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    {/* Contagem de acessos sem cookies, só no site publicado (ADR-003). */}
+    {import.meta.env.PROD && (
+      <script
+        is:inline
+        async
+        data-goatcounter={`https://${CODIGO_GOATCOUNTER}.goatcounter.com/count`}
+        src="https://gc.zgo.at/count.js"
+      ></script>
+    )}
   </head>
   <body>
     <slot />
