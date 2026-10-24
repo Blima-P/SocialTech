@@ -32,7 +32,7 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     margin-block: var(--espaco);
   }
 
-  /* Mobile: uma etapa abaixo da outra, com seta ↓ entre elas. */
+  /* Uma etapa abaixo da outra em todas as telas, com seta ↓ entre elas. */
   ol {
     display: flex;
     flex-direction: column;
@@ -88,31 +88,5 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
 
   .seta::before {
     content: "↓";
-  }
-
-  /* Computador: etapas em linha, com seta → entre elas. */
-  @media (min-width: 48rem) {
-    ol {
-      flex-direction: row;
-      gap: calc(var(--espaco) * 1.5);
-    }
-
-    li {
-      flex: 1;
-      flex-direction: column;
-      text-align: center;
-    }
-
-    .seta {
-      top: 50%;
-      left: 100%;
-      width: calc(var(--espaco) * 1.5);
-      transform: translateY(-50%);
-      text-align: center;
-    }
-
-    .seta::before {
-      content: "→";
-    }
   }
 </style>
