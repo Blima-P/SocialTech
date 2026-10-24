@@ -1,0 +1,64 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/marca/logo-enactus-brasil-footer.svg";
+import ListaLinks from "./ListaLinks.astro";
+---
+
+<footer>
+  <div class="conteudo">
+    <ListaLinks />
+    <Image src={logo} alt="Enactus Brasil" height={48} />
+    <p>Projeto de extensão da UCB em parceria com o Projeto Enactus</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    margin-top: calc(var(--espaco) * 2);
+    border-top: 0.25rem solid var(--cor-destaque);
+    padding-block: calc(var(--espaco) * 1.5);
+    background: var(--cor-escura);
+    color: var(--cor-fundo);
+  }
+
+  .conteudo {
+    max-width: var(--largura-conteudo);
+    margin-inline: auto;
+    padding-inline: var(--espaco);
+  }
+
+  /* ListaLinks é de outro componente: :global() aplica o estilo só dentro do rodapé. */
+  .conteudo :global(h2) {
+    margin-top: 0;
+    font-size: 1.125rem;
+  }
+
+  .conteudo :global(ul) {
+    margin: 0 0 var(--espaco);
+    padding: 0;
+    list-style: none;
+  }
+
+  .conteudo :global(a) {
+    display: inline-flex;
+    align-items: center;
+    min-width: var(--alvo-toque);
+    min-height: var(--alvo-toque);
+    color: var(--cor-fundo);
+    text-decoration: underline;
+  }
+
+  .conteudo :global(a:focus-visible) {
+    outline-color: var(--cor-destaque);
+  }
+
+  img {
+    width: auto;
+    height: 3rem;
+  }
+
+  p {
+    margin: calc(var(--espaco) / 2) 0 0;
+    font-size: 0.875rem;
+  }
+</style>

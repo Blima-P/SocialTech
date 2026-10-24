@@ -1,0 +1,49 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/marca/logo-enactus-brasil-footer.svg";
+---
+
+<header>
+  <div class="conteudo">
+    <Image src={logo} alt="Enactus Brasil" height={40} loading="eager" />
+    <div>
+      <h1>SocialTech</h1>
+      <p>Descarte correto de resíduos orgânicos</p>
+    </div>
+  </div>
+</header>
+
+<style>
+  header {
+    border-bottom: 0.25rem solid var(--cor-destaque);
+    padding-block: var(--espaco);
+    background: var(--cor-escura);
+    color: var(--cor-fundo);
+  }
+
+  /* Mesma largura do <main>, para o logo alinhar com o texto da página. */
+  .conteudo {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco);
+    max-width: var(--largura-conteudo);
+    margin-inline: auto;
+    padding-inline: var(--espaco);
+  }
+
+  img {
+    width: auto;
+    height: 2.5rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+</style>
