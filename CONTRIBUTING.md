@@ -8,8 +8,8 @@ feature/*, fix/*, docs/*  ──PR──▶  develop  ──PR──▶  main  �
 
 | Branch | Função | Regras |
 |---|---|---|
-| `main` | Produção (o que está publicado no GitHub Pages / QR Code) | Só recebe PR vindo de `develop` (ou `fix/*` urgente). Aprovação obrigatória de **@Blima-P** (code owner). CI verde. |
-| `develop` | Integração (branch padrão) | Só recebe PR. Aprovação obrigatória de **@Blima-P** (code owner). CI verde. |
+| `main` | Produção (o que está publicado no GitHub Pages / QR Code) | Só recebe PR vindo de `develop` (ou `fix/*` urgente). Aprovação obrigatória de **@Blima-P** ou **@alber-th** (code owners). CI verde. |
+| `develop` | Integração (branch padrão) | Só recebe PR. Aprovação obrigatória de **@Blima-P** ou **@alber-th** (code owners). CI verde. |
 | `feature/<descricao>` | Nova funcionalidade | Criada a partir de `develop`. |
 | `fix/<descricao>` | Correção de bug | Criada a partir de `develop`. |
 | `docs/<descricao>` | Documentação / conteúdo textual | Criada a partir de `develop`. |
