@@ -1,0 +1,92 @@
+---
+import { getCollection } from "astro:content";
+
+// O id é a posição na lista do painel; ordenar por ele mantém a ordem definida lá.
+const etapas = (await getCollection("ciclo")).sort(
+  (a, b) => Number(a.id) - Number(b.id),
+);
+const semDescricao = etapas.every(({ data }) => !data.descricao);
+---
+
+<section id="ciclo" aria-labelledby="titulo-ciclo">
+  <h2 id="titulo-ciclo">Do resto de comida à horta</h2>
+  {semDescricao && <p>Textos do ciclo em validação com a Enactus.</p>}
+  <ol>
+    {etapas.map(({ data }, indice) => (
+      <li>
+        <span class="numero" aria-hidden="true">
+          {indice + 1}
+        </span>
+        <div>
+          <p class="nome">{data.nome}</p>
+          {data.descricao && <p class="descricao">{data.descricao}</p>}
+        </div>
+        {indice < etapas.length - 1 && <span class="seta" aria-hidden="true" />}
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  section {
+    margin-block: var(--espaco);
+  }
+
+  /* Uma etapa abaixo da outra em todas as telas, com seta ↓ entre elas. */
+  ol {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--espaco) * 2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--espaco);
+    border-radius: var(--raio);
+    padding: var(--espaco);
+    background: var(--cor-fundo-suave);
+  }
+
+  /* O número é repetido visualmente; o leitor de tela já anuncia a posição pela <ol>. */
+  .numero {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--cor-destaque);
+    color: var(--cor-texto);
+    font-weight: 700;
+  }
+
+  .nome {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .descricao {
+    margin: calc(var(--espaco) / 4) 0 0;
+    color: var(--cor-texto-suave);
+  }
+
+  .seta {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--cor-texto-suave);
+    font-size: 1.5rem;
+    line-height: calc(var(--espaco) * 2);
+  }
+
+  .seta::before {
+    content: "↓";
+  }
+</style>

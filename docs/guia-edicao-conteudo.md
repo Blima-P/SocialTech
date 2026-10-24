@@ -58,9 +58,14 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 
 ## 6. Ciclo do resíduo
 
-<!-- T-03: preencher esta seção (docs/equipe/nicole.md) -->
+1. No menu do painel, abra **Ciclo do resíduo**.
+2. Cada item é uma etapa do caminho do resto de comida. Para cada uma, preencha:
+   - **Nome da etapa**: o nome que aparece no site (ex.: "Compostagem").
+   - **Frase curta (opcional)**: uma frase explicando a etapa. Se deixar vazio, aparece só o nome.
+3. Para mudar a ordem, arraste as etapas. A ordem da lista é a ordem no site.
+4. Clique em **Save** (Salvar).
 
-Em breve.
+> **Combine as frases com a Enactus antes de publicar.** Enquanto nenhuma etapa tiver frase, o site mostra o aviso "Textos do ciclo em validação com a Enactus."
 
 ## 7. Formulário de avaliação
 
