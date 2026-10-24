@@ -9,6 +9,9 @@
     "README.md": "AGENTS.md, CLAUDE.md, CONTRIBUTING.md"
   },
 
+  // Não adiciona "Co-authored-by: Copilot" nos commits feitos pelo VS Code.
+  "git.addAICoAuthor": "off",
+
   // Pastas geradas automaticamente: escondidas no Explorer (continuam no disco).
   "files.exclude": {
     "dist": true,

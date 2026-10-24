@@ -93,6 +93,7 @@ Rode `npm run verify` antes de propor qualquer commit. O CI também verifica lin
 - **Nunca** crie, aprove, faça merge ou feche Pull Requests e Issues, nem altere configurações do repositório (branch protection, Pages, colaboradores, secrets), sem aprovação explícita.
 - **Nunca** trabalhe diretamente em `main` ou `develop`. Use uma branch própria (`feature/*`, `fix/*`, `docs/*`) criada a partir de `develop`. PRs vão para `develop`.
 - Ao concluir, **proponha** a mensagem de commit no padrão Conventional Commits (ex.: `feat(quiz): adiciona feedback por pergunta`) e **aguarde**.
+- **Não inclua** o trailer de coautoria de IA (ex.: `Co-authored-by: Copilot`) em commits nem em mensagens de squash.
 - **Exceção, agentes autônomos em nuvem** (ex.: Copilot coding agent, Codex cloud): quando uma tarefa for **atribuída explicitamente** a você por um humano, você pode commitar e abrir um PR **somente na sua própria branch**, como **rascunho (draft)**, para `develop`. Nunca faça merge.
 
 ### 4.2 Idioma
