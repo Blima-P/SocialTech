@@ -74,12 +74,19 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 3. Para esconder a seção, deixe o campo **Link do Google Forms** vazio.
 4. Clique em **Save** (Salvar).
 
-## 8. Quando a mudança aparece no site?
+<!-- Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu. -->
+<!-- T-13: seção "8. Números de impacto" -->
+
+<!-- T-14: seção "9. Item fora da lista do guia" -->
+
+<!-- T-15: seção "10. Quiz" -->
+
+## 11. Quando a mudança aparece no site?
 
 Cerca de **2 minutos** depois de salvar. Recarregue a página do site: **https://blima-p.github.io/SocialTech/**
 
 Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto). Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
 
-## 9. Dúvidas
+## 12. Dúvidas
 
 Fale com o Pedro, responsável técnico do projeto.

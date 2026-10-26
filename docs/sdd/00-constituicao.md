@@ -61,7 +61,7 @@ Consequência: tudo que não for necessário para o MVP de 26/10 é, no máximo,
 | `RN-XX` | Regra de negócio ou de conteúdo | `docs/requisitos.md` |
 | `RC-XX` | Requisito de conteúdo (texto, imagem, dado e quem fornece) | `docs/requisitos.md` |
 | `ADR-XXX` | Decisão de arquitetura | `docs/arquitetura.md` |
-| `T-XX` | Tarefa de implementação | `docs/sdd/03-plano-tarefas.md` |
+| `T-XX` | Tarefa de implementação | `docs/sdd/03-plano-tarefas.md` (MVP) e `docs/sdd/05-plano-entrega-final.md` (entrega final) |
 
 IDs são **estáveis**: um requisito removido fica marcado como "Removido" e seu número não é reutilizado.
 
@@ -84,7 +84,7 @@ IDs são **estáveis**: um requisito removido fica marcado como "Removido" e seu
 
 Uma tarefa `T-XX` só pode ser iniciada quando **todos** os itens forem verdadeiros:
 
-- [ ] Está em `docs/sdd/03-plano-tarefas.md` e virou issue com o template **Tarefa** e o rótulo `tarefa`.
+- [ ] Está em `docs/sdd/03-plano-tarefas.md` ou `docs/sdd/05-plano-entrega-final.md` e virou issue com o template **Tarefa** e o rótulo `tarefa`.
 - [ ] Aponta para pelo menos um `RF`/`RNF` aprovado em `docs/requisitos.md`.
 - [ ] Tem critérios de aceite verificáveis no celular (360 px).
 - [ ] Lista os arquivos previstos e as dependências (`T-XX`), e as dependências estão concluídas.

@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.3 (26/10/2026): H1 remarcada para 26/10 às 20h |
+| Versão | 1.4 (26/10/2026): Q-12 respondida e Q-16 revista para a entrega final |
 | Status | Decisões da equipe respondidas em 22/10/2026; conteúdo da Enactus e do Prof. Marcus pendente (vale a suposição da seção 5) |
 | Caminho do MVP | Aprovado em 22/10/2026: plano de tarefas só do MVP logo após esta fase; as Fases 4 a 7 completas continuam depois |
 
@@ -30,7 +30,6 @@
 |---|---|---|---|---|---|---|---|
 | Q-07 | Qual o **link do Google Forms** e quais as perguntas finais? | Botão de avaliação (C-06); meta de 80 respostas (S-02) | Forms sem pedir nome, e-mail nem matrícula; perguntas fechadas + 1 aberta | Botão de avaliação fica oculto; meta S-02 em risco | Equipe | 🔴 | Aberta |
 | Q-09 | Como o relatório vai tratar "retenção" (roteiro 2.6), se a Fase 5 diz que não é possível afirmá-la? | Coerência do relatório (conflito C2) | Usar "percepção e intenção declarada", como na Fase 5 | Relatório com afirmação que o próprio roteiro desaconselha | Equipe (relatório) | ⚪ | Aberta |
-| Q-12 | Como o quiz vira evidência de compreensão (roteiro, Fase 5), se ele não envia respostas (conflito C8)? | Métrica S-04 | a) evento anônimo no GoatCounter (ex.: "quiz: 4 de 5"), sem dado pessoal; b) quiz dentro do Google Forms; c) não medir pelo quiz, só pelo formulário | Sem evidência de compreensão pelo quiz (o quiz não está no MVP) | Pedro | 🟡 | Aberta: Pedro vai trazer a definição do quiz |
 
 ## 3. QR Code, identidade visual e operação
 
@@ -54,7 +53,8 @@
 | Q-08 | O formulário será aplicado antes e depois da ação, ou só depois? | **Um único formulário**, aplicado depois, com a pergunta "antes de hoje, você sabia…?" (resolve o conflito C4) | 22/10/2026 |
 | Q-10 | Qual ferramenta faz a contagem de acessos sem cookies? | **GoatCounter** (gratuito para uso não comercial, sem cookies). Exige ADR na arquitetura (`AGENTS.md` §4.4) | 22/10/2026 |
 | Q-11 | Como separar os acessos vindos do QR Code? | Parâmetros na URL: QR da lixeira `…/SocialTech/?campaign=lixeira&ref=qr`; cartazes `ref=cartaz` (resolve o conflito C3) | 22/10/2026 |
-| Q-16 | Qual fonte usar no site? | **Fontes do sistema** no MVP (0 KB); Roboto auto-hospedada pode entrar depois | 22/10/2026 |
+| Q-16 | Qual fonte usar no site? | **Fontes do sistema** no MVP (0 KB). Revista em 26/10/2026: **Roboto auto-hospedada** (WOFF2, pesos 400 e 700, só caracteres latinos, cerca de 44 KB, licença SIL OFL 1.1), sem CDN e sem pacote npm. ADR-004 revisado em [`05-plano-entrega-final.md`](05-plano-entrega-final.md) | 22/10/2026 e 26/10/2026 |
+| Q-12 | Como o quiz vira evidência de compreensão, se ele não envia respostas (conflito C8)? | **c) Não medir pelo quiz.** O quiz é só educativo: não envia, não grava e não manda evento ao GoatCounter. A compreensão é medida pelo Google Forms | 26/10/2026 |
 
 ---
 
@@ -76,4 +76,4 @@
 | Enactus | Q-01 lista Pode/Não Pode · Q-02 item não listado · Q-03 nomes e frases do ciclo |
 | Prof. Marcus | Q-03 (se a Enactus não souber) · Q-04 local inicial e foto da lixeira · Q-14 disponibilidade na H1 |
 | Equipe | Q-07 Google Forms · Q-13 adesivo e impressão |
-| Pedro | Criar a conta no GoatCounter (Q-10) · Q-14 confirmar testadores e aprovadores para 26/10 às 20h · Q-12 definição do quiz |
+| Pedro | Criar a conta no GoatCounter (Q-10) · Q-14 confirmar testadores e aprovadores para 26/10 às 20h |

@@ -102,7 +102,6 @@ const avaliacao = defineCollection({
   }),
 });
 
-// Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
 const ciclo = defineCollection({
   loader: file("src/content/ciclo.json", {
     // Lista simples; o id é a posição, para manter a ordem definida no painel.
@@ -121,7 +120,12 @@ const ciclo = defineCollection({
   }),
 });
 
-// T-06: coleção "pontoColeta" (docs/equipe/luiz.md)
+// Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
+// T-13: coleção "impacto"
+
+// T-14: coleção "guiaOrientacao"
+
+// T-15: coleção "quiz"
 
 export const collections = {
   secoes,
@@ -133,4 +137,10 @@ export const collections = {
   pontoColeta,
 
   avaliacao,
+
+  // T-13: impacto,
+
+  // T-14: guiaOrientacao,
+
+  // T-15: quiz,
 };

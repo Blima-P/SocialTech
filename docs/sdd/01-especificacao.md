@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.3 (26/10/2026): datas do MVP atualizadas após o segundo adiamento da H1 |
+| Versão | 1.4 (26/10/2026): quiz sem medição (Q-12) |
 | Status | **Aprovada** pela equipe em 22/10/2026 |
 | Fontes | Roteiro do projeto de extensão (PDF), `AGENTS.md`, repositório, respostas da equipe em 21/10/2026 |
 
@@ -82,7 +82,7 @@ P2 rola até o ciclo e vê as etapas, da lixeira até a Gastronomia/Nutrição, 
 
 ### J3. Fazer o quiz
 
-P1 ou P2 responde a poucas perguntas sobre descarte e recebe a resposta certa e uma explicação após cada pergunta, além do resultado final. Nenhum dado pessoal é pedido. **[PENDENTE]**: como o resultado do quiz vira evidência para a avaliação (conflito C8, seção 8).
+P1 ou P2 responde a poucas perguntas sobre descarte e recebe a resposta certa e uma explicação após cada pergunta, além do resultado final. Nenhum dado pessoal é pedido. [CONFIRMADO em 26/10/2026] O quiz não envia nem grava respostas; a compreensão é medida pelo formulário de avaliação (Q-12, opção c).
 
 ### J4. Responder o formulário de avaliação
 
@@ -154,7 +154,7 @@ Regra da constituição: **Must** = sem isso o MVP de 26/10 não pode ser divulg
 | S-01 | Acessos à página **vindos do QR Code** até 29/10 | ≥ 150 | Ferramenta de contagem de acessos (C-08), separando origem | Roteiro 2.6 |
 | S-02 | Formulários de avaliação respondidos até 29/10 | ≥ 80 | Planilha do Google Forms | Roteiro 2.6 |
 | S-03 | Pessoas alcançadas diretamente na ação | > 300 | Lista de presença ou contagem documentada | Roteiro 2.6 (fora do site) |
-| S-04 | Compreensão imediata: % de acertos no quiz | [PENDENTE] meta a definir | Depende da forma de registro (conflito C8) | Roteiro, Fase 5 |
+| S-04 | Compreensão imediata | Medida pelas perguntas do formulário de avaliação [CONFIRMADO em 26/10/2026] | Planilha do Google Forms; o quiz não registra acertos (Q-12, opção c) | Roteiro, Fase 5 |
 | S-05 | Pessoas que decidem "pode/não pode" em até 10 s na homologação | ≥ 4 de 5 testadores [CONFIRMADO em 22/10/2026] | Teste cronometrado na Homologação 1 | Jornada J1 |
 
 **Limite declarado (roteiro, Fase 5):** quiz e formulário indicam compreensão imediata, percepção e **intenção** declarada. Eles **não** permitem afirmar retenção de conhecimento nem mudança duradoura de comportamento, e os números só podem ser apresentados como alcançados depois de consolidadas as evidências.
@@ -196,6 +196,6 @@ Levantado em 21/10/2026. Cada conflito vira pergunta em `docs/sdd/02-clarificaco
 | C5 | Lixeira do **Enactus UCB** × identidade visual de referência da **Enactus Brasil** | Roteiro 2.7 × `PROMPT-SDD.md` §4. **Resolvido em 21/10/2026:** usar a identidade publicada em `enactus.org.br` (uso autorizado) |
 | C6 | Cronograma previa página, QR Code e ação até 16/10; nada disso aconteceu | Roteiro 2.5 × situação em 21/10 (tratado na constituição) |
 | C7 | 10 estudantes no roteiro, 4 com acesso ao repositório | Roteiro, item 6 × GitHub |
-| C8 | Fase 5 mede compreensão "pelas respostas do quiz", mas o quiz roda só no navegador e não envia respostas | Roteiro, Fase 5 × `AGENTS.md` §4.7 |
+| C8 | Fase 5 mede compreensão "pelas respostas do quiz", mas o quiz roda só no navegador e não envia respostas | Roteiro, Fase 5 × `AGENTS.md` §4.7. **Resolvido em 26/10/2026 (Q-12):** o quiz não mede; a compreensão é medida pelo formulário |
 
 Conteúdos ausentes: lista "Pode / Não Pode", regra do item não listado, nomes dos espaços do ciclo como devem aparecer no site (ex.: "Horta" ou "Horto" Botânico) e fotos, local inicial e foto da lixeira, link do Google Forms, perguntas do quiz, ferramenta de contagem de acessos, texto do adesivo do QR Code.
