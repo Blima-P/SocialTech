@@ -143,7 +143,7 @@ Cada homologação formal só é aprovada quando **todos** dão o aceite:
 | Projeto Enactus (UCB) | Regras de descarte, itens "Pode / Não Pode", nomes dos espaços e uso da marca |
 | Equipe | Teste do **roteiro de homologação** em **2 celulares reais** (1 Android e 1 iPhone, se houver) |
 
-O roteiro de homologação (passo a passo do que testar) será definido em `docs/arquitetura.md`, na seção de Qualidade (Fase 5 do SDD).
+O roteiro de homologação (passo a passo do que testar, RH-01 a RH-12) está na [arquitetura §10.2](../arquitetura.md#102-roteiro-de-homologação).
 
 O registro (data, quem aprovou, celulares usados, problemas encontrados) fica na descrição do PR de release `develop` → `main` e serve de evidência para o relatório (roteiro, item 2.9).
 
