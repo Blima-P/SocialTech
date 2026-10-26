@@ -1,15 +1,21 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 
 const itens = (await getCollection("guia")).sort(
   (a, b) => Number(a.id) - Number(b.id),
 );
 const pode = itens.filter(({ data }) => data.classificacao === "pode");
 const naoPode = itens.filter(({ data }) => data.classificacao === "nao-pode");
+const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
 ---
 
-<section id="guia" aria-labelledby="titulo-guia">
+<section id="guia" aria-labelledby="titulo-guia" data-guia>
   <h2 id="titulo-guia">O que pode ir nesta lixeira?</h2>
+  <div class="busca" hidden data-busca>
+    <label for="busca-guia">Procure um item</label>
+    <input id="busca-guia" type="search" autocomplete="off" />
+    <p class="contagem" aria-live="polite" data-contagem></p>
+  </div>
   <div class="grupos">
     <div class="grupo grupo--pode">
       <h3>
@@ -42,7 +48,50 @@ const naoPode = itens.filter(({ data }) => data.classificacao === "nao-pode");
       </ul>
     </div>
   </div>
+  <aside class="nao-listado" aria-labelledby="titulo-nao-listado">
+    <h3 id="titulo-nao-listado">Não achou seu item?</h3>
+    <p>
+      {naoListado ??
+        "Orientação para itens fora da lista em validação com a Enactus."}
+    </p>
+  </aside>
 </section>
+
+<script>
+  // Busca local: o que é digitado não é guardado nem enviado.
+  const semAcento = (texto: string) =>
+    texto
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase()
+      .trim();
+
+  for (const guia of document.querySelectorAll<HTMLElement>("[data-guia]")) {
+    const busca = guia.querySelector<HTMLElement>("[data-busca]")!;
+    const campo = busca.querySelector("input")!;
+    const contagem = guia.querySelector<HTMLElement>("[data-contagem]")!;
+    const cartoes = [...guia.querySelectorAll<HTMLElement>(".cartao")];
+    const textos = cartoes.map((cartao) => semAcento(cartao.textContent ?? ""));
+    busca.hidden = false;
+
+    campo.addEventListener("input", () => {
+      const termo = semAcento(campo.value);
+      let achados = 0;
+      cartoes.forEach((cartao, indice) => {
+        const mostra = textos[indice].includes(termo);
+        cartao.hidden = !mostra;
+        if (mostra) achados += 1;
+      });
+      if (!termo) contagem.textContent = "";
+      else if (achados === 0) contagem.textContent = "Nenhum item encontrado.";
+      else
+        contagem.textContent =
+          achados === 1
+            ? "1 item encontrado."
+            : `${achados} itens encontrados.`;
+    });
+  }
+</script>
 
 <style>
   section {
@@ -56,6 +105,51 @@ const naoPode = itens.filter(({ data }) => data.classificacao === "nao-pode");
   .grupos {
     display: grid;
     gap: 0.75rem;
+  }
+
+  .busca {
+    max-width: var(--largura-conteudo);
+    margin-bottom: var(--espaco);
+  }
+
+  .busca label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+  }
+
+  .busca input {
+    width: 100%;
+    min-height: var(--alvo-toque);
+    border: 2px solid var(--cor-texto-suave);
+    border-radius: var(--raio);
+    padding-inline: 0.75rem;
+    font: inherit;
+  }
+
+  .contagem {
+    margin: 0.25rem 0 0;
+    color: var(--cor-texto-suave);
+  }
+
+  .contagem:empty {
+    display: none;
+  }
+
+  .nao-listado {
+    max-width: var(--largura-conteudo);
+    margin-top: var(--espaco);
+    border-radius: var(--raio);
+    padding: 0.75rem var(--espaco);
+    background: var(--cor-fundo-suave);
+  }
+
+  .nao-listado h3 {
+    margin: 0;
+  }
+
+  .nao-listado p {
+    margin: 0.25rem 0 0;
   }
 
   .grupo h3 {

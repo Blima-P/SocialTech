@@ -173,7 +173,16 @@ content:
   # Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
   # T-13: coleção "impacto"
 
-  # T-14: coleção "guiaOrientacao"
+  - name: guiaOrientacao
+    label: "Guia: item fora da lista"
+    type: file
+    path: src/content/guia-orientacao.json
+    format: json
+    fields:
+      - name: naoListado
+        label: Orientação para item fora da lista
+        description: 'Aparece na caixa "Não achou seu item?". Combine o texto com a Enactus. Deixe vazio para mostrar o aviso de pendência.'
+        type: text
 
   # T-15: coleção "quiz"
 

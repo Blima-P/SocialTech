@@ -77,7 +77,12 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 <!-- Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu. -->
 <!-- T-13: seção "8. Números de impacto" -->
 
-<!-- T-14: seção "9. Item fora da lista do guia" -->
+## 9. Item fora da lista do guia
+
+1. No menu do painel, abra **Guia: item fora da lista**.
+2. No campo **Orientação para item fora da lista**, escreva o que a pessoa deve fazer quando não encontra o item no guia. Use o texto combinado com a Enactus.
+3. Esse texto aparece na caixa "Não achou seu item?", embaixo do guia. Com o campo vazio, a caixa mostra "Orientação para itens fora da lista em validação com a Enactus."
+4. Clique em **Save** (Salvar).
 
 <!-- T-15: seção "10. Quiz" -->
 
