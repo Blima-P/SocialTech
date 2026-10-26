@@ -8,8 +8,8 @@ feature/*, fix/*, docs/*  ──PR──▶  develop  ──PR──▶  main  �
 
 | Branch | Função | Regras |
 |---|---|---|
-| `main` | Produção (o que está publicado no GitHub Pages / QR Code) | Só recebe PR vindo de `develop` (ou `fix/*` urgente). Aprovação obrigatória de **@Blima-P** (code owner). CI verde. |
-| `develop` | Integração (branch padrão) | Só recebe PR. Aprovação obrigatória de **@Blima-P** (code owner). CI verde. |
+| `main` | Produção (o que está publicado no GitHub Pages / QR Code) | Só recebe PR vindo de `develop` (ou `fix/*` urgente). Aprovação obrigatória de **@Blima-P** ou **@alber-th** (code owners). CI verde. |
+| `develop` | Integração (branch padrão) | Só recebe PR. Aprovação obrigatória de **@Blima-P** ou **@alber-th** (code owners). CI verde. |
 | `feature/<descricao>` | Nova funcionalidade | Criada a partir de `develop`. |
 | `fix/<descricao>` | Correção de bug | Criada a partir de `develop`. |
 | `docs/<descricao>` | Documentação / conteúdo textual | Criada a partir de `develop`. |
@@ -92,11 +92,12 @@ Exemplos:
 
 ## Especificação (SDD)
 
-Antes de implementar, consulte a especificação em `docs/` (processo em [`docs/sdd/PROMPT-SDD.md`](docs/sdd/PROMPT-SDD.md)):
+Antes de implementar, consulte a especificação em `docs/` (processo em [`docs/sdd/PROMPT-SDD.md`](docs/sdd/PROMPT-SDD.md); regras gerais, Definição de Pronto e homologação em [`docs/sdd/00-constituicao.md`](docs/sdd/00-constituicao.md)):
 
 - Cada issue de implementação corresponde a uma tarefa `T-XX` do `docs/sdd/03-plano-tarefas.md` e indica os requisitos (`RF-XX`, `RNF-XX`) que atende.
 - Cite os IDs no PR. Se o código mudar um comportamento especificado, atualize também `docs/` no mesmo PR (commit `docs`).
 - Mudanças de requisito ou de arquitetura (ADR) só com aprovação da equipe.
+- Releases `develop` → `main` seguem a homologação da constituição (§8): teste da equipe em 2 celulares e, se mudar conteúdo educativo, aceite do Prof. Marcus (e da Enactus, para regras de descarte), registrados na descrição do PR.
 
 ## Uso de IA
 

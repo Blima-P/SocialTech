@@ -1,6 +1,4 @@
 # Code owners: a aprovação de um code owner é obrigatória para merge em develop e main.
-# No momento, somente @Blima-P aprova. PRs do próprio @Blima-P são mesclados como admin
-# (GitHub não permite aprovar o próprio PR).
-# Quando @alber-th aceitar o convite, adicione-o ao lado: "* @Blima-P @alber-th"
-# (basta a aprovação de um dos dois).
-* @Blima-P
+# Basta a aprovação de um dos dois. Quem fez o último push no PR não pode aprovar:
+# PRs de um são aprovados pelo outro.
+* @Blima-P @alber-th

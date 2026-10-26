@@ -29,10 +29,12 @@ O projeto segue **SDD**: primeiro a especificação, depois o código. A especif
 | Documento | Papel |
 |---|---|
 | [`docs/sdd/PROMPT-SDD.md`](docs/sdd/PROMPT-SDD.md) | Processo para gerar a especificação (fases e portões de aprovação 🚦) |
+| [`docs/sdd/00-constituicao.md`](docs/sdd/00-constituicao.md) | Princípios, calendário, papéis, Definição de Preparado/Pronto e homologação |
+| [`docs/sdd/01-especificacao.md`](docs/sdd/01-especificacao.md) | Visão, personas, jornadas, capacidades (MoSCoW), métricas e conflitos entre fontes |
 | `docs/requisitos.md` | Requisitos (`RF-XX`, `RNF-XX`, `RN-XX`, `RC-XX`) com critérios de aceite |
 | `docs/arquitetura.md` | Arquitetura, design system, modelo de dados e decisões (`ADR-XXX`) |
-| `docs/sdd/02-clarificacoes.md` | Perguntas em aberto (`Q-XX`) e respostas da equipe |
-| `docs/sdd/03-plano-tarefas.md` | Tarefas de implementação (`T-XX`) para vibecoding |
+| [`docs/sdd/02-clarificacoes.md`](docs/sdd/02-clarificacoes.md) | Perguntas em aberto (`Q-XX`) e respostas da equipe |
+| [`docs/sdd/03-plano-tarefas.md`](docs/sdd/03-plano-tarefas.md) | Tarefas de implementação (`T-XX`) para vibecoding |
 
 Enquanto esses documentos não existirem ou não estiverem aprovados, siga as seções 2 e 4 deste arquivo e **não implemente funcionalidades** além do que o desenvolvedor pedir explicitamente.
 
@@ -91,6 +93,7 @@ Rode `npm run verify` antes de propor qualquer commit. O CI também verifica lin
 - **Nunca** crie, aprove, faça merge ou feche Pull Requests e Issues, nem altere configurações do repositório (branch protection, Pages, colaboradores, secrets), sem aprovação explícita.
 - **Nunca** trabalhe diretamente em `main` ou `develop`. Use uma branch própria (`feature/*`, `fix/*`, `docs/*`) criada a partir de `develop`. PRs vão para `develop`.
 - Ao concluir, **proponha** a mensagem de commit no padrão Conventional Commits (ex.: `feat(quiz): adiciona feedback por pergunta`) e **aguarde**.
+- **Não inclua** o trailer de coautoria de IA (ex.: `Co-authored-by: Copilot`) em commits nem em mensagens de squash.
 - **Exceção, agentes autônomos em nuvem** (ex.: Copilot coding agent, Codex cloud): quando uma tarefa for **atribuída explicitamente** a você por um humano, você pode commitar e abrir um PR **somente na sua própria branch**, como **rascunho (draft)**, para `develop`. Nunca faça merge.
 
 ### 4.2 Idioma

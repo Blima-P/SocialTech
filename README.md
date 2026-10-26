@@ -1,37 +1,72 @@
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="src/assets/marca/logo-enactus-brasil-footer.svg" />
+  <img src="src/assets/marca/logo-enactus-brasil.svg" alt="Logo Enactus Brasil" width="220" />
+</picture>
+
 # SocialTech
 
-**Educação e Comunicação Digital para o Descarte Correto de Resíduos Orgânicos e Produção de Insumos para a Comunidade**
+Página educativa sobre descarte correto de resíduos orgânicos, acessada pelo QR Code da lixeira de compostagem da UCB.
 
-Projeto de extensão da Universidade Católica de Brasília (UCB, Campus Taguatinga), em parceria com o Projeto Enactus, na unidade curricular *Extensão - Cooperação: Humanismo Solidário, Redes e Comunidades* (2026/2).
+[![CI](https://github.com/Blima-P/SocialTech/actions/workflows/ci.yml/badge.svg)](https://github.com/Blima-P/SocialTech/actions/workflows/ci.yml)
+[![Deploy](https://github.com/Blima-P/SocialTech/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/Blima-P/SocialTech/actions/workflows/deploy-pages.yml)
 
-Página web educativa acessada por **QR Code** na lixeira de compostagem, com:
+**[Acessar o site](https://blima-p.github.io/SocialTech/)**
 
-- infográfico interativo do ciclo do resíduo (Lixeira → Compostagem → Horta Botânica → Laboratório de Alimentos → Gastronomia/Nutrição);
-- guia interativo **"Pode / Não Pode"**;
-- quiz educativo;
-- formulário de avaliação;
-- informações sobre o ponto de coleta.
+Gostou do projeto? Deixe uma ⭐ aqui no repositório.
+
+</div>
+
+## Sobre
+
+Projeto de extensão da Universidade Católica de Brasília (Campus Taguatinga) em parceria com o Projeto Enactus, na UC _Extensão - Cooperação: Humanismo Solidário, Redes e Comunidades_ (2026/2).
+
+O descarte inadequado de resíduos orgânicos contamina materiais recicláveis e contribui para a superlotação dos aterros do Distrito Federal. A ideia é simples: quem está na frente da lixeira escaneia o QR Code e descobre, pelo celular, o que pode e o que não pode ser descartado ali.
+
+A página reúne:
+
+- guia "Pode / Não pode";
+- local atual da lixeira, que faz rodízio pelo campus;
+- ciclo do resíduo: lixeira → compostagem → Horta Botânica → Laboratório de Alimentos → Gastronomia e Nutrição;
+- formulário de avaliação do projeto.
 
 ODS trabalhados: 12 (principal), 11, 13 e 17.
 
 ## Tecnologias
 
-[Astro](https://astro.build) + TypeScript + CSS, gerando um site estático publicado no **GitHub Pages** a partir da branch `main` (decisão ADR-001). Para rodar localmente:
+[Astro](https://astro.build) e TypeScript, gerando um site estático publicado no GitHub Pages. O conteúdo fica em arquivos JSON e Markdown e pode ser editado sem programar pelo [Pages CMS](https://pagescms.org) ([guia de edição](docs/guia-edicao-conteudo.md)).
+
+## Rodando localmente
+
+Requer Node.js 22.22 ou superior.
 
 ```bash
 npm ci
-npm run dev   # http://localhost:4321/SocialTech/
+npm run dev      # http://localhost:4321/SocialTech/
+npm run verify   # formatação, lint, tipos e build (o mesmo que o CI)
 ```
 
-## Editar o conteúdo sem programar
+## Documentação
 
-Textos, imagens e links do site são editados pelo painel [Pages CMS](https://app.pagescms.org) (decisão ADR-002). Veja o [guia de edição](docs/guia-edicao-conteudo.md).
+- [Especificação e plano do MVP](docs/sdd/): o projeto segue Spec-Driven Development
+- [CONTRIBUTING.md](CONTRIBUTING.md): branches, commits e PRs
+- [AGENTS.md](AGENTS.md): regras para agentes de IA
+- [Tarefas em aberto](https://github.com/Blima-P/SocialTech/issues)
 
-## Especificação
+## Equipe
 
-O projeto segue Spec-Driven Development (SDD). O processo está em [docs/sdd/PROMPT-SDD.md](docs/sdd/PROMPT-SDD.md); os requisitos e a arquitetura ficarão em `docs/requisitos.md` e `docs/arquitetura.md`.
+| Estudante                                                     | Curso                   |
+| ------------------------------------------------------------- | ----------------------- |
+| [Pedro Braga de Lima](https://github.com/Blima-P) (mantenedor) | Engenharia de Software  |
+| [Alberth Durães Cavalcanti](https://github.com/alber-th) (mantenedor) | Engenharia de Software |
+| [Nicole Reinaldo de Carvalho](https://github.com/nicole21carvalho) | Engenharia de Software |
+| [Luiz Fernando Gomes de Almeida](https://github.com/LuizDev1) | Engenharia de Software  |
+| Lívia Fernandes Ribeiro Bezerra                               | Engenharia de Software  |
+| Lucas de Souza Martins Araújo                                 | Engenharia de Software  |
+| Maria Clara Ferreira dos Santos                               | Engenharia de Software  |
+| Maria Clara Paiva Oliveira Camelo                             | Engenharia de Software |
+| Wemerson Conceição Silva                                      | Engenharia de Software  |
+| Marcos Gabriel de Albuquerque da Silva                        | Ciência da Computação   |
 
-## Como contribuir
-
-Leia o [CONTRIBUTING.md](CONTRIBUTING.md): fluxo de branches, padrão de commits e regras de PR.
-As regras para agentes de IA (Copilot, Codex, Cursor, Claude, Gemini etc.) estão em [AGENTS.md](AGENTS.md).
+Coordenador: Prof. Marcus Vinicius Vasconcelos Cerqueira · Professora da UC: Profa. Juliana Olinda Martins Pequeno

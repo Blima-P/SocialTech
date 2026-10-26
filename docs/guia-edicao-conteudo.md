@@ -37,12 +37,49 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
      - WhatsApp: só números, com 55 e o DDD (ex.: `5561999999999`).
 3. Clique em **Save** (Salvar).
 
-## 4. Quando a mudança aparece no site?
+## 4. Guia pode / não pode
+
+1. No menu do painel, abra **Guia: pode / não pode**.
+2. Para incluir um item, clique em **Add** e preencha o nome, a classificação (**Pode** ou **Não pode**) e o motivo.
+3. Para editar, abra o item e altere os campos necessários.
+4. Para remover, abra o item e use a opção de excluir.
+5. Para reordenar, arraste os itens para a ordem desejada.
+6. Clique em **Save** (Salvar).
+
+> **Antes de mudar uma regra de descarte, combine com a Enactus.**
+
+## 5. Onde está a lixeira
+
+1. No menu do painel, abra **Onde está a lixeira**.
+2. Troque o campo **Local atual** pelo local onde a lixeira está agora.
+3. Atualize **Data da atualização** para a data de hoje.
+4. Clique em **Save** (Salvar).
+5. Aguarde cerca de **2 minutos** para a mudança aparecer no site.
+
+## 6. Ciclo do resíduo
+
+1. No menu do painel, abra **Ciclo do resíduo**.
+2. Cada item é uma etapa do caminho do resto de comida. Para cada uma, preencha:
+   - **Nome da etapa**: o nome que aparece no site (ex.: "Compostagem").
+   - **Frase curta (opcional)**: uma frase explicando a etapa. Se deixar vazio, aparece só o nome.
+3. Para mudar a ordem, arraste as etapas. A ordem da lista é a ordem no site.
+4. Clique em **Save** (Salvar).
+
+> **Combine as frases com a Enactus antes de publicar.** Enquanto nenhuma etapa tiver frase, o site mostra o aviso "Textos do ciclo em validação com a Enactus."
+
+## 7. Formulário de avaliação
+
+1. No menu do painel, abra **Formulário de avaliação**.
+2. Para mostrar ou atualizar o formulário, cole o link do Google Forms no campo **Link do Google Forms**. O endereço deve começar com `https://`.
+3. Para esconder a seção, deixe o campo **Link do Google Forms** vazio.
+4. Clique em **Save** (Salvar).
+
+## 8. Quando a mudança aparece no site?
 
 Cerca de **2 minutos** depois de salvar. Recarregue a página do site: **https://blima-p.github.io/SocialTech/**
 
 Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto). Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
 
-## 5. Dúvidas
+## 9. Dúvidas
 
 Fale com o Pedro, responsável técnico do projeto.

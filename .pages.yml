@@ -85,6 +85,92 @@ content:
         type: string
         required: true
 
+  # Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
+  - name: ciclo
+    label: Ciclo do resíduo
+    type: file
+    path: src/content/ciclo.json
+    format: json
+    list: true
+    fields:
+      - name: nome
+        label: Nome da etapa
+        description: "Ex.: Compostagem. A ordem da lista é a ordem no site."
+        type: string
+        required: true
+      - name: descricao
+        label: Frase curta (opcional)
+        description: Uma frase explicando a etapa. Combine o texto com a Enactus.
+        type: text
+
+  - name: guia
+    label: "Guia: pode / não pode"
+    type: file
+    path: src/content/guia.json
+    format: json
+    list: true
+    fields:
+      - name: nome
+        label: Item
+        description: "Ex.: Cascas de banana. Regras de descarte são combinadas com a Enactus antes de mudar."
+        type: string
+        required: true
+      - name: classificacao
+        label: Pode ir na lixeira?
+        type: select
+        required: true
+        options:
+          values:
+            - name: pode
+              label: Pode
+            - name: nao-pode
+              label: Não pode
+      - name: motivo
+        label: Motivo
+        description: Frase curta explicando o porquê.
+        type: string
+        required: true
+
+  - name: pontoColeta
+    label: Onde está a lixeira
+    type: file
+    path: src/content/ponto-coleta.json
+    format: json
+    fields:
+      - name: local
+        label: Local atual
+        description: "Onde a lixeira está agora. Ex.: Bloco K, perto da cantina."
+        type: string
+        required: true
+      - name: comoReconhecer
+        label: Como reconhecer a lixeira
+        description: "Uma frase curta para a pessoa achar a lixeira. Ex.: lixeira verde com o adesivo do QR Code."
+        type: text
+        required: true
+      - name: atualizadoEm
+        label: Data da atualização
+        description: Sempre que mudar o local, atualize esta data para o dia de hoje.
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+
+  - name: avaliacao
+    label: Formulário de avaliação
+    type: file
+    path: src/content/avaliacao.json
+    format: json
+    fields:
+      - name: texto
+        label: Texto antes do botão
+        description: "Uma ou duas frases convidando a pessoa a responder."
+        type: text
+        required: true
+      - name: endereco
+        label: Link do Google Forms
+        description: "Começa com https://. Deixe vazio para esconder a seção."
+        type: string
+
 settings:
   commit:
     templates:

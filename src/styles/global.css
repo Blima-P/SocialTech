@@ -1,10 +1,23 @@
-/* Estilos globais. Os tokens definitivos (cores, fontes) virão do design system em docs/arquitetura.md. */
+/* Estilos globais. Tokens do design system: docs/sdd/03-plano-tarefas.md, seção 1.1
+   (cores da Enactus, contraste verificado para WCAG 2.1 AA). Use sempre as variáveis. */
 
 :root {
-  /* TODO: substituir pelos tokens aprovados no design system. */
-  --cor-texto: #1a1a1a;
+  --cor-texto: #30333c;
+  --cor-texto-suave: #515356;
   --cor-fundo: #ffffff;
+  --cor-fundo-suave: #f2f2f2;
+  --cor-escura: #30333c;
+
+  /* Amarelo Enactus: só como fundo (com --cor-texto) ou como texto sobre --cor-escura. */
+  --cor-destaque: #ffc222;
+  --cor-pode: #1e6b34;
+  --cor-pode-fundo: #e8f5ec;
+  --cor-nao-pode: #b42318;
+  --cor-nao-pode-fundo: #fdecea;
+  --alvo-toque: 2.75rem;
   --espaco: 1rem;
+  --raio: 0.5rem;
+  --largura-conteudo: 40rem;
   --fonte-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -25,6 +38,27 @@ body {
 img {
   max-width: 100%;
   height: auto;
+}
+
+main {
+  max-width: var(--largura-conteudo);
+  margin-inline: auto;
+  padding-inline: var(--espaco);
+}
+
+main > section + section {
+  margin-top: calc(var(--espaco) * 2);
+}
+
+h2 {
+  margin-bottom: calc(var(--espaco) / 2);
+  font-size: 1.375rem;
+  line-height: 1.25;
+}
+
+h3 {
+  font-size: 1.125rem;
+  line-height: 1.3;
 }
 
 :focus-visible {

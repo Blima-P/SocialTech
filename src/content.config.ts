@@ -58,4 +58,79 @@ const links = defineCollection({
   ]),
 });
 
-export const collections = { secoes, links };
+const pontoColeta = defineCollection({
+  loader: file("src/content/ponto-coleta.json", {
+    // O arquivo é um objeto único; o Astro exige uma lista com id.
+    parser: (texto) => [
+      { id: "atual", ...(JSON.parse(texto) as Record<string, unknown>) },
+    ],
+  }),
+  schema: z.object({
+    local: z.string().trim().min(1),
+    comoReconhecer: z.string().trim().min(1),
+    atualizadoEm: z.coerce.date(),
+  }),
+});
+
+const guia = defineCollection({
+  loader: file("src/content/guia.json", {
+    parser: (texto) =>
+      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
+        id: String(indice),
+        ...item,
+      })),
+  }),
+  schema: z.object({
+    nome: z.string().trim().min(1),
+    classificacao: z.enum(["pode", "nao-pode"]),
+    motivo: z.string().trim().min(1),
+  }),
+});
+
+const avaliacao = defineCollection({
+  loader: file("src/content/avaliacao.json", {
+    parser: (texto) => [
+      { id: "formulario", ...(JSON.parse(texto) as Record<string, unknown>) },
+    ],
+  }),
+  schema: z.object({
+    texto: z.string().trim().min(1),
+    endereco: z.preprocess(
+      vazioParaUndefined,
+      z.url({ protocol: /^https$/ }).optional(),
+    ),
+  }),
+});
+
+// Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
+const ciclo = defineCollection({
+  loader: file("src/content/ciclo.json", {
+    // Lista simples; o id é a posição, para manter a ordem definida no painel.
+    parser: (texto) =>
+      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
+        id: String(indice),
+        ...item,
+      })),
+  }),
+  schema: z.object({
+    nome: z.string().trim().min(1),
+    descricao: z.preprocess(
+      vazioParaUndefined,
+      z.string().trim().min(1).optional(),
+    ),
+  }),
+});
+
+// T-06: coleção "pontoColeta" (docs/equipe/luiz.md)
+
+export const collections = {
+  secoes,
+  links,
+  ciclo,
+
+  guia,
+
+  pontoColeta,
+
+  avaliacao,
+};
