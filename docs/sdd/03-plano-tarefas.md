@@ -533,6 +533,4 @@ cookies. Explique como testar no site publicado com ?campaign=lixeira&ref=qr. N�
 
 ## 6. Depois do MVP
 
-- Fases 4 (requisitos), 5 (arquitetura, com ADR-003 a ADR-006) e 7 (revisão) do SDD.
-- Incrementos **Should**: busca no guia e item não listado (C-02), ciclo interativo (C-03b), quiz (C-07, depois da definição de Q-12), números de impacto (C-10).
-- Ação no campus (26 a 28/10) e Homologação 2 (29/10).
+O plano das capacidades **Should**, das Fases 4, 5 e 7 do SDD, da ação no campus e da Homologação 2 está em [`05-plano-entrega-final.md`](05-plano-entrega-final.md) (tarefas T-10 a T-17 e E-06 a E-10).

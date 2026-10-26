@@ -5,11 +5,13 @@ import PontoColeta from "../components/PontoColeta.astro";
 import GuiaPodeNaoPode from "../components/GuiaPodeNaoPode.astro";
 import Avaliacao from "../components/Avaliacao.astro";
 import Secao from "../components/Secao.astro";
-// Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.2): cada tarefa troca só o seu.
 import Cabecalho from "../components/Cabecalho.astro";
 import Rodape from "../components/Rodape.astro";
-
 import CicloResiduo from "../components/CicloResiduo.astro";
+// Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
+// T-13: import NumerosImpacto from "../components/NumerosImpacto.astro";
+
+// T-15: import Quiz from "../components/Quiz.astro";
 
 const secoes = (
   await getCollection("secoes", ({ data }) => data.publicada)
@@ -27,6 +29,10 @@ const secoes = (
     <PontoColeta />
 
     <CicloResiduo />
+
+    {/* T-13: <NumerosImpacto /> */}
+
+    {/* T-15: <Quiz /> */}
 
     <Avaliacao />
 

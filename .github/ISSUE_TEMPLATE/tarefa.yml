@@ -6,7 +6,7 @@ body:
     id: tarefa-sdd
     attributes:
       label: ID da tarefa no plano (SDD)
-      description: ID em docs/sdd/03-plano-tarefas.md. Deixe em branco se não vier do plano.
+      description: ID em docs/sdd/03-plano-tarefas.md ou docs/sdd/05-plano-entrega-final.md. Deixe em branco se não vier do plano.
       placeholder: "Ex.: T-04"
   - type: dropdown
     id: tipo
