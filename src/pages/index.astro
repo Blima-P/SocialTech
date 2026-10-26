@@ -9,7 +9,7 @@ import Secao from "../components/Secao.astro";
 import Cabecalho from "../components/Cabecalho.astro";
 import Rodape from "../components/Rodape.astro";
 
-// T-03: import CicloResiduo
+import CicloResiduo from "../components/CicloResiduo.astro";
 
 const secoes = (
   await getCollection("secoes", ({ data }) => data.publicada)
@@ -26,7 +26,7 @@ const secoes = (
 
     <PontoColeta />
 
-    {/* T-03: <CicloResiduo /> */}
+    <CicloResiduo />
 
     <Avaliacao />
 
