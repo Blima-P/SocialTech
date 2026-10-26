@@ -1,11 +1,11 @@
 # 01. Especificação do produto SocialTech
 
 > Fase 2 do [`PROMPT-SDD.md`](PROMPT-SDD.md). Descreve **o quê** e **por quê**, sem decisões de tecnologia (essas ficam em `docs/arquitetura.md`).
-> Segue as regras da [`00-constituicao.md`](00-constituicao.md): marcadores **[CONFIRMADO]**, **[SUPOSIÇÃO]** e **[PENDENTE]**, MoSCoW e calendário (MVP em 25/10/2026, entrega em 29/10/2026).
+> Segue as regras da [`00-constituicao.md`](00-constituicao.md): marcadores **[CONFIRMADO]**, **[SUPOSIÇÃO]** e **[PENDENTE]**, MoSCoW e calendário (MVP em 26/10/2026, entrega em 29/10/2026).
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.2 (23/10/2026): datas do MVP atualizadas após o adiamento da H1 |
+| Versão | 1.3 (26/10/2026): datas do MVP atualizadas após o segundo adiamento da H1 |
 | Status | **Aprovada** pela equipe em 22/10/2026 |
 | Fontes | Roteiro do projeto de extensão (PDF), `AGENTS.md`, repositório, respostas da equipe em 21/10/2026 |
 
@@ -104,7 +104,7 @@ P3 entra no painel de conteúdo, muda um texto, uma imagem ou um link, salva e v
 
 ## 4. Capacidades do produto e prioridade (MoSCoW)
 
-Regra da constituição: **Must** = sem isso o MVP de 25/10 não pode ser divulgado.
+Regra da constituição: **Must** = sem isso o MVP de 26/10 não pode ser divulgado.
 
 | ID | Capacidade | MoSCoW | OE | Jornada | Dependência de conteúdo |
 |---|---|---|---|---|---|
@@ -166,7 +166,7 @@ Regra da constituição: **Must** = sem isso o MVP de 25/10 não pode ser divulg
 1. [SUPOSIÇÃO] A maioria dos acessos será por celular, com dados móveis e em pé, ao lado da lixeira.
 2. [CONFIRMADO em 22/10/2026] Uma única página com seções atende às jornadas J1 a J6 (a decisão técnica fica para a arquitetura).
 3. [SUPOSIÇÃO] O guia "Pode / Não Pode" do MVP terá uma lista curta (dezenas de itens, não centenas).
-4. [SUPOSIÇÃO, **em risco**] A Enactus consegue validar a lista de itens até **24/10/2026** para caber na Homologação 1 (25/10). Até 22/10 às 12h nenhum conteúdo tinha chegado (ver R-01 e Q-01).
+4. [SUPOSIÇÃO, **em risco**] A Enactus consegue validar a lista de itens a tempo da Homologação 1 (**26/10/2026, 20h**). Até 26/10 às 12h a lista ainda não tinha chegado. Até 22/10 às 12h nenhum conteúdo tinha chegado (ver R-01 e Q-01).
 5. [CONFIRMADO em 22/10/2026] O QR Code aponta para a URL atual do GitHub Pages; não haverá domínio próprio.
 6. [CONFIRMADO em 22/10/2026] Quiz e ciclo interativo ficam fora do MVP (Should); o MVP leva o ciclo em versão simples.
 
@@ -177,7 +177,7 @@ Regra da constituição: **Must** = sem isso o MVP de 25/10 não pode ser divulg
 | R-01 | Lista "Pode / Não Pode" não validada a tempo | MVP sem a capacidade principal (C-01); QR Code não pode ser divulgado | Pedir a lista à Enactus hoje (21/10); se atrasar, publicar só os exemplos do roteiro após validação e marcar o restante como pendente |
 | R-02 | Nomes dos espaços do ciclo divergentes ("Horta" × "Horto") | Informação incorreta publicada | Validar antes da H1; o professor corrige pelo painel se mudar depois |
 | R-03 | Contagem de acessos não configurada antes da divulgação | Meta S-01 sem evidência | Tratar C-08 como Must e testar na H1 |
-| R-04 | Prazo curto até o MVP (H1 já adiada uma vez, de 23/10 para 25/10) | Funcionalidades incompletas | MoSCoW rígido; Should só depois de 25/10 |
+| R-04 | Prazo curto até o MVP (H1 já adiada duas vezes: 23/10 → 25/10 → 26/10) | Funcionalidades incompletas | MoSCoW rígido; Should só depois de 26/10 |
 | R-05 | QR Code impresso pequeno ou em local ruim | Poucos acessos | Testar o papel impresso a 1 m de distância na H1 |
 | R-06 | Local da lixeira desatualizado no site após um rodízio (aleatório e sem agenda) | Quem vem pelo cartaz não encontra a lixeira | O Prof. Marcus atualiza o local pelo painel a cada mudança (menos de 1 minuto); o site mostra a data da última atualização |
 

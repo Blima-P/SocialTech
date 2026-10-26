@@ -4,7 +4,7 @@
 |---|---|
 | Projeto | SocialTech (UCB + Projeto Enactus) |
 | Fase SDD | 6 (Plano de tarefas), somente o **MVP** |
-| Versão | 1.1 (23/10/2026): H1 adiada para 25/10 às 20h |
+| Versão | 1.2 (26/10/2026): H1 remarcada para 26/10 às 20h |
 | Status | 🚦 Em revisão pela equipe |
 | Base | [Constituição](00-constituicao.md), [Especificação](01-especificacao.md), [Clarificações](02-clarificacoes.md) |
 
@@ -13,7 +13,7 @@
 - Cada tarefa `T-XX` vira **uma issue** com o template **Tarefa** e **um PR** para `develop`.
 - O responsável cria a branch a partir de `develop` (`feature/<nº da issue>-<descrição>`), cola o **prompt de implementação** no agente de IA, revisa o código gerado, roda `npm run verify` e abre o PR com `Closes #<nº>`.
 - O agente de IA **não faz commit nem push**: quem faz é a pessoa responsável, depois de revisar.
-- Prazos em horário de Brasília. A Homologação 1 (H1) é em **25/10/2026 (domingo) às 20h** (Q-14). Ela estava marcada para 23/10 às 23h e foi adiada em 23/10 porque as tarefas da equipe não ficaram prontas.
+- Prazos em horário de Brasília. A Homologação 1 (H1) é em **26/10/2026 (segunda) às 20h** (Q-14). Ela estava marcada para 23/10 às 23h, foi adiada para 25/10 às 20h porque as tarefas da equipe não ficaram prontas e depois para 26/10, porque a T-03 ainda estava em revisão.
 
 ### 0.1 Exceção aprovada à Definição de Preparado
 
@@ -482,20 +482,20 @@ cookies. Explique como testar no site publicado com ?campaign=lixeira&ref=qr. N�
 | Componente | QR Code; Contagem de acessos |
 | Capacidades | Todas as **Must** (constituição §7) |
 | Depende de | T-02, T-03, T-05, T-06, T-07, T-08, T-04 e E-01 a E-05 |
-| Prazo | **25/10/2026**: publicação até 17h; H1 às 20h |
+| Prazo | **26/10/2026**: publicação até 17h; H1 às 20h |
 | Validação Enactus | Sim (aprovação do conteúdo de descarte na H1) |
 
 **Descrição.** Revisar e fazer merge dos PRs na `develop`, trazer a `main` para a `develop`, abrir o PR de release `develop` → `main`, conferir o deploy, testar o QR impresso e conduzir a H1.
 
 **Critérios de aceite**
 
-- [ ] Todos os PRs do MVP com merge na `develop` até **25/10, 15h**.
+- [ ] Todos os PRs do MVP com merge na `develop` até **26/10, 15h**.
 - [ ] `git merge origin/main` feito na `develop` antes do PR de release.
-- [ ] Release `develop` → `main` (merge commit) publicado até **25/10, 17h**.
+- [ ] Release `develop` → `main` (merge commit) publicado até **26/10, 17h**.
 - [ ] QR **impresso** escaneado em 2 celulares abre o site com os parâmetros; o acesso aparece no GoatCounter.
 - [ ] Checklist da H1 (abaixo) preenchido e aprovado pelos aprovadores da constituição §8.
 
-**Checklist da Homologação 1 (25/10, 20h)**
+**Checklist da Homologação 1 (26/10, 20h)**
 
 | # | Verificação | Quem aprova |
 |---|---|---|
@@ -511,11 +511,11 @@ cookies. Explique como testar no site publicado com ?campaign=lixeira&ref=qr. N�
 
 | ID | Tarefa | Responsável | Prazo | Ligada a |
 |---|---|---|---|---|
-| E-01 | Pedir à Enactus a **lista do que pode e do que não pode** ir na lixeira, com o motivo de cada item, e a regra para item não listado | A definir pelo Pedro | **24/10, 18h** | Q-01, Q-02, T-05, risco R-01 |
-| E-02 | Criar o **Google Forms** de avaliação: um só formulário, com a pergunta "Antes de hoje, você sabia…?"; **sem** pedir nome, e-mail ou matrícula; "coletar e-mails" desligado. Enviar o link ao Luiz | A definir pelo Pedro | **24/10, 18h** | Q-07, Q-08, T-07 |
-| E-03 | Aprovar o texto do adesivo, imprimir a arte da T-04 e fixar na lixeira | A definir pelo Pedro | **25/10, 19h** | Q-13, T-04 |
-| E-04 | Confirmar **5 testadores**, 2 celulares e a presença do Prof. Marcus e da Enactus na H1 (25/10, 20h) | Pedro | **24/10, 20h** | Q-14, T-09 |
-| E-05 | Prof. Marcus: aceitar o convite do Pages CMS e informar o **local inicial** da lixeira | Pedro (pede ao Prof. Marcus) | **24/10, 18h** | Q-04, T-06 |
+| E-01 | Pedir à Enactus a **lista do que pode e do que não pode** ir na lixeira, com o motivo de cada item, e a regra para item não listado | A definir pelo Pedro | **26/10, 18h** | Q-01, Q-02, T-05, risco R-01 |
+| E-02 | Criar o **Google Forms** de avaliação: um só formulário, com a pergunta "Antes de hoje, você sabia…?"; **sem** pedir nome, e-mail ou matrícula; "coletar e-mails" desligado. Enviar o link ao Luiz | A definir pelo Pedro | **26/10, 18h** | Q-07, Q-08, T-07 |
+| E-03 | Aprovar o texto do adesivo, imprimir a arte da T-04 e fixar na lixeira | A definir pelo Pedro | **26/10, 19h** | Q-13, T-04 |
+| E-04 | Confirmar **5 testadores**, 2 celulares e a presença do Prof. Marcus e da Enactus na H1 (26/10, 20h) | Pedro | **26/10, 18h** | Q-14, T-09 |
+| E-05 | Prof. Marcus: aceitar o convite do Pages CMS e informar o **local inicial** da lixeira | Pedro (pede ao Prof. Marcus) | **26/10, 18h** | Q-04, T-06 |
 
 ## 5. Cronograma até a Homologação 1
 
@@ -524,11 +524,12 @@ cookies. Explique como testar no site publicado com ?campaign=lixeira&ref=qr. N�
 | 22/10 até 16h | T-01 com merge na `develop`; issues criadas e atribuídas |
 | 22/10 16h → 25/10 12h | Nicole (T-02, T-03, T-04) e Luiz (T-05, T-06, T-07) trabalham em paralelo; Pedro faz a T-08 |
 | 23/10 | H1 adiada de 23/10 (23h) para 25/10 (20h): as tarefas T-02 a T-07 ainda não tinham PR |
-| até 24/10 18h | Pedro entrega ao Luiz a lista da Enactus, o link do Forms e o local inicial da lixeira (E-01, E-02, E-05) |
-| 25/10 até 15h | Revisão e merge dos PRs na `develop` |
-| 25/10 até 17h | Release `develop` → `main` e deploy |
-| 25/10 até 19h | Adesivo impresso e QR testado no papel |
-| 25/10 às 20h | **Homologação 1** |
+| 23/10 a 26/10 | PRs da T-02 à T-08 revisados e com merge na `develop` (a T-03 em 26/10, depois de ajuste) |
+| 26/10 | H1 remarcada para 26/10, 20h: em 25/10 a T-03 ainda estava em revisão e a release não tinha sido feita |
+| 26/10 até 17h | Release `develop` → `main` e deploy |
+| 26/10 até 18h | Lista da Enactus, link do Forms e local da lixeira (E-01, E-02, E-05): o Prof. Marcus ou o Pedro preenchem pelo painel |
+| 26/10 até 19h | Adesivo impresso e QR testado no papel |
+| 26/10 às 20h | **Homologação 1** |
 
 ## 6. Depois do MVP
 
