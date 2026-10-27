@@ -175,7 +175,35 @@ content:
 
   # T-14: coleção "guiaOrientacao"
 
-  # T-15: coleção "quiz"
+  - name: quiz
+    label: Quiz
+    type: file
+    path: src/content/quiz.json
+    format: json
+    list: true
+    fields:
+      - name: pergunta
+        label: Pergunta
+        type: text
+        required: true
+      - name: alternativas
+        label: Alternativas
+        description: De 2 a 4 alternativas.
+        type: string
+        required: true
+        list:
+          min: 2
+          max: 4
+      - name: correta
+        label: Número da alternativa certa
+        description: "1 para a primeira alternativa, 2 para a segunda, e assim por diante."
+        type: number
+        required: true
+      - name: explicacao
+        label: Explicação
+        description: Aparece depois da resposta, certa ou errada.
+        type: text
+        required: true
 
 settings:
   commit:
