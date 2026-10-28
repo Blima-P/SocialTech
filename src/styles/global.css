@@ -1,5 +1,31 @@
-/* Estilos globais. Tokens do design system: docs/sdd/03-plano-tarefas.md, seção 1.1
-   (cores da Enactus, contraste verificado para WCAG 2.1 AA). Use sempre as variáveis. */
+/* Estilos globais. Tokens do design system: docs/sdd/03-plano-tarefas.md, seção 1.1, e
+   docs/sdd/05-plano-entrega-final.md, seção 1.1 (cores da Enactus, contraste verificado para
+   WCAG 2.1 AA). Use sempre as variáveis. */
+
+/* Roboto auto-hospedada (ADR-004 revisto em 26/10/2026), só o subconjunto latino, licença OFL. */
+@font-face {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fontes/roboto-latin-400.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fontes/roboto-latin-700.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
 
 :root {
   --cor-texto: #30333c;
@@ -18,7 +44,11 @@
   --espaco: 1rem;
   --raio: 0.5rem;
   --largura-conteudo: 40rem;
-  --fonte-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --largura-pagina: 72rem;
+  /* Recuo lateral das faixas: centraliza o conteúdo em --largura-pagina sem <div> extra. */
+  --recuo-lateral: max(var(--espaco), calc((100% - var(--largura-pagina)) / 2));
+  --espaco-faixa: clamp(2.5rem, 6vw, 4.5rem);
+  --fonte-base: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 *,
@@ -40,20 +70,35 @@ img {
   height: auto;
 }
 
-main {
-  max-width: var(--largura-conteudo);
-  margin-inline: auto;
-  padding-inline: var(--espaco);
+/* Cada seção é uma faixa de largura total; o conteúdo fica centralizado. */
+main > section {
+  padding-block: var(--espaco-faixa);
+  padding-inline: var(--recuo-lateral);
 }
 
-main > section + section {
-  margin-top: calc(var(--espaco) * 2);
+/* Seções do painel ("Sobre o projeto" etc.): faixa cinza-clara. */
+main > section[aria-labelledby^="secao-"] {
+  background: var(--cor-fundo-suave);
+}
+
+main > section > p {
+  max-width: var(--largura-conteudo);
 }
 
 h2 {
-  margin-bottom: calc(var(--espaco) / 2);
-  font-size: 1.375rem;
-  line-height: 1.25;
+  margin: 0 0 calc(var(--espaco) * 1.5);
+  font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.25rem);
+  line-height: 1.2;
+}
+
+/* Traço amarelo sob o título, como no site da Enactus. */
+h2::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 0.25rem;
+  margin-top: 0.5rem;
+  background: var(--cor-destaque);
 }
 
 h3 {
@@ -64,6 +109,12 @@ h3 {
 :focus-visible {
   outline: 3px solid currentcolor;
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
