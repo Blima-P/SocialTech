@@ -75,7 +75,13 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 4. Clique em **Save** (Salvar).
 
 <!-- Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu. -->
-<!-- T-13: seção "8. Números de impacto" -->
+## 8. Números de impacto
+
+1. No menu do painel, abra **Números de impacto**.
+2. Cada item tem o **Número** (ex.: "81 milhões de toneladas"), a **Frase** que o completa e a **Fonte** (quem publicou o dado e o ano).
+3. Todo número precisa de fonte. Não publique dado sem fonte confiável.
+4. Para mudar a ordem, arraste os itens. Para esconder a seção, remova todos os itens.
+5. Clique em **Save** (Salvar).
 
 ## 9. Item fora da lista do guia
 

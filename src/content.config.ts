@@ -121,7 +121,20 @@ const ciclo = defineCollection({
 });
 
 // Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
-// T-13: coleção "impacto"
+const impacto = defineCollection({
+  loader: file("src/content/impacto.json", {
+    parser: (texto) =>
+      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
+        id: String(indice),
+        ...item,
+      })),
+  }),
+  schema: z.object({
+    numero: z.string().trim().min(1),
+    descricao: z.string().trim().min(1),
+    fonte: z.string().trim().min(1),
+  }),
+});
 
 const guiaOrientacao = defineCollection({
   loader: file("src/content/guia-orientacao.json", {
@@ -170,7 +183,7 @@ export const collections = {
 
   avaliacao,
 
-  // T-13: impacto,
+  impacto,
 
   guiaOrientacao,
 
