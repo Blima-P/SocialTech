@@ -120,6 +120,9 @@ const ciclo = defineCollection({
   }),
 });
 
+// Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
+// T-13: coleção "impacto"
+
 const guiaOrientacao = defineCollection({
   loader: file("src/content/guia-orientacao.json", {
     parser: (texto) => [
@@ -133,9 +136,6 @@ const guiaOrientacao = defineCollection({
     ),
   }),
 });
-
-// Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
-// T-13: coleção "impacto"
 
 // T-15: coleção "quiz"
 
