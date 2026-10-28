@@ -125,7 +125,27 @@ const ciclo = defineCollection({
 
 // T-14: coleção "guiaOrientacao"
 
-// T-15: coleção "quiz"
+const quiz = defineCollection({
+  loader: file("src/content/quiz.json", {
+    parser: (texto) =>
+      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
+        id: String(indice),
+        ...item,
+      })),
+  }),
+  schema: z
+    .object({
+      pergunta: z.string().trim().min(1),
+      alternativas: z.array(z.string().trim().min(1)).min(2).max(4),
+      // Número da alternativa certa, contando a partir de 1 (como aparece no painel).
+      correta: z.number().int().min(1),
+      explicacao: z.string().trim().min(1),
+    })
+    .refine((item) => item.correta <= item.alternativas.length, {
+      message: "A alternativa certa precisa existir na lista de alternativas.",
+      path: ["correta"],
+    }),
+});
 
 export const collections = {
   secoes,
@@ -142,5 +162,5 @@ export const collections = {
 
   // T-14: guiaOrientacao,
 
-  // T-15: quiz,
+  quiz,
 };

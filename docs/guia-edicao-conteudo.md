@@ -79,7 +79,18 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 
 <!-- T-14: seção "9. Item fora da lista do guia" -->
 
-<!-- T-15: seção "10. Quiz" -->
+## 10. Quiz
+
+1. No menu do painel, abra **Quiz**.
+2. Cada pergunta tem:
+   - **Pergunta**;
+   - **Alternativas**, de 2 a 4;
+   - **Número da alternativa certa**: 1 para a primeira alternativa, 2 para a segunda, e assim por diante;
+   - **Explicação**, que aparece depois da resposta, certa ou errada.
+3. Só publique perguntas validadas pela Enactus.
+4. Se o número da alternativa certa for maior que o número de alternativas, o site não é atualizado e continua com a versão anterior. Confira esse campo antes de salvar.
+5. Para mudar a ordem, arraste as perguntas. Para esconder o quiz, remova todas as perguntas.
+6. Clique em **Save** (Salvar).
 
 ## 11. Quando a mudança aparece no site?
 
