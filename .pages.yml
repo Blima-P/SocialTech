@@ -171,7 +171,28 @@ content:
         type: string
 
   # Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
-  # T-13: coleção "impacto"
+  - name: impacto
+    label: Números de impacto
+    type: file
+    path: src/content/impacto.json
+    format: json
+    list: true
+    fields:
+      - name: numero
+        label: Número
+        description: "Como deve aparecer em destaque. Ex.: 81 milhões de toneladas."
+        type: string
+        required: true
+      - name: descricao
+        label: Frase
+        description: Completa o número em uma frase curta.
+        type: text
+        required: true
+      - name: fonte
+        label: Fonte
+        description: "Quem publicou o dado e o ano. Ex.: ABREMA, 2025. Todo número precisa de fonte."
+        type: string
+        required: true
 
   - name: guiaOrientacao
     label: "Guia: item fora da lista"
