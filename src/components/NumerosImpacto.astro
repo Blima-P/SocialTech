@@ -1,0 +1,75 @@
+---
+import { getCollection } from "astro:content";
+
+const numeros = (await getCollection("impacto")).sort(
+  (a, b) => Number(a.id) - Number(b.id),
+);
+---
+
+{numeros.length > 0 && (
+  <section id="impacto" aria-labelledby="titulo-impacto">
+    <h2 id="titulo-impacto">Por que separar o lixo orgânico?</h2>
+    <ul>
+      {numeros.map(({ data }) => (
+        <li>
+          <p class="numero">{data.numero}</p>
+          <p class="descricao">{data.descricao}</p>
+          <p class="fonte">Fonte: {data.fonte}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  section {
+    background: var(--cor-escura);
+    color: var(--cor-fundo);
+  }
+
+  ul {
+    display: grid;
+    gap: calc(var(--espaco) * 1.5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    border-top: 0.25rem solid var(--cor-destaque);
+    padding-top: var(--espaco);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  /* Amarelo como texto só aqui, sobre o fundo escuro (7,8:1). */
+  .numero {
+    color: var(--cor-destaque);
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .descricao {
+    margin-top: 0.5rem;
+  }
+
+  .fonte {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 48rem) {
+    ul {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    ul {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>
