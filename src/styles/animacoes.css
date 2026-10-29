@@ -1,0 +1,190 @@
+/* Animações do site (T-24). Só CSS, só transform e opacity, sem dependência.
+   Tudo fica dentro de prefers-reduced-motion: no-preference (RNF-09). Sem suporte a
+   animation-timeline, o conteúdo aparece parado; nada fica escondido (RNF-10). */
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --saida: cubic-bezier(0.16, 1, 0.3, 1);
+    --mola: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes subir {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+  }
+
+  @keyframes descer {
+    from {
+      opacity: 0;
+      transform: translateY(-1rem);
+    }
+  }
+
+  @keyframes deslizar-direita {
+    from {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes crescer {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem) scale(0.85);
+    }
+  }
+
+  @keyframes estalar {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+
+  @keyframes traco {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes tremer {
+    20%,
+    60% {
+      transform: translateX(-0.375rem);
+    }
+
+    40%,
+    80% {
+      transform: translateX(0.375rem);
+    }
+  }
+
+  /* Topo: barra do logo, depois selo, título, frase e botão em cascata. */
+  header .barra {
+    animation: descer 0.6s var(--saida) both;
+  }
+
+  header .destaque > * {
+    animation: subir 0.8s var(--saida) both;
+  }
+
+  header .destaque > :nth-child(2) {
+    animation-delay: 0.1s;
+  }
+
+  header .destaque > :nth-child(3) {
+    animation-delay: 0.2s;
+  }
+
+  header .destaque > :nth-child(4) {
+    animation-delay: 0.3s;
+  }
+
+  header .destaque::before {
+    animation: deslizar-direita 1s var(--saida) both;
+  }
+
+  /* Botões: sobem no hover e afundam ao tocar. */
+  .botao,
+  button {
+    transition:
+      transform 0.25s var(--mola),
+      box-shadow 0.25s var(--saida),
+      background-color 0.25s;
+  }
+
+  @media (hover: hover) {
+    .botao:hover,
+    button:not(:disabled):hover {
+      transform: translateY(-0.1875rem);
+      box-shadow: 0 0.5rem 1.25rem rgb(48 51 60 / 0.3);
+    }
+  }
+
+  .botao:active,
+  button:not(:disabled):active {
+    transform: translateY(0.0625rem) scale(0.96);
+    box-shadow: none;
+    transition-duration: 0.08s;
+  }
+
+  nav a {
+    transition: box-shadow 0.2s var(--saida);
+  }
+
+  /* Ciclo: a etapa entra a cada troca (o hidden reinicia a animação). */
+  [data-ciclo].interativo .etapas > li {
+    animation: subir 0.5s var(--saida);
+  }
+
+  [data-ciclo].interativo .etapas .numero {
+    animation: estalar 0.5s var(--mola) 0.1s both;
+  }
+
+  [data-ciclo] .atalhos button[aria-current="step"] {
+    transform: scale(1.12);
+  }
+
+  /* Guia: os cartões entram ao carregar e ao reaparecer na busca. */
+  [data-guia] .cartao {
+    animation: subir 0.45s var(--saida) both;
+  }
+
+  /* Quiz: o resultado "estala"; o errado treme de leve. */
+  [data-quiz] .resultado p {
+    animation: estalar 0.4s var(--mola) both;
+  }
+
+  [data-quiz] .resultado .errado {
+    animation:
+      estalar 0.4s var(--mola) both,
+      tremer 0.4s ease-in-out 0.4s;
+  }
+
+  [data-quiz] .explicacao,
+  [data-quiz] [data-refazer] {
+    animation: subir 0.5s var(--saida) 0.15s both;
+  }
+
+  /* Rolagem: cada bloco surge quando entra na tela (sem JavaScript). */
+  @supports (animation-timeline: view()) {
+    /* A animação termina depois de 8rem de rolagem, mesmo em blocos altos. */
+    main > section > * {
+      animation: subir linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 8rem;
+    }
+
+    /* O traço amarelo do título cresce da esquerda. */
+    h2::after {
+      transform-origin: left;
+      animation: traco linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 35%;
+    }
+
+    /* Números de impacto: um depois do outro, crescendo. */
+    main > section#impacto > ul {
+      animation: none;
+    }
+
+    #impacto li {
+      animation: crescer linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
+    }
+
+    #impacto li:nth-child(2) {
+      animation-range: entry 25% cover 35%;
+    }
+
+    #impacto li:nth-child(3) {
+      animation-range: entry 40% cover 40%;
+    }
+
+    #impacto li:nth-child(4) {
+      animation-range: entry 55% cover 45%;
+    }
+  }
+}

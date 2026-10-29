@@ -4,7 +4,7 @@
 |---|---|
 | Projeto | SocialTech (UCB + Projeto Enactus) |
 | Fase SDD | 6 (Plano de tarefas): melhorias de código, acessibilidade e manutenção depois da release final (#47) |
-| Versão | 1.0 (29/10/2026) |
+| Versão | 1.1 (29/10/2026): inclui a T-24 |
 | Status | 🚦 Em revisão pela equipe |
 | Base | [Requisitos](../requisitos.md), [Arquitetura](../arquitetura.md), [Revisão](04-revisao.md), [Plano da entrega final](05-plano-entrega-final.md) |
 
@@ -48,8 +48,11 @@ Testado em 29/10: `image()` funciona com o `file()` loader do Astro (JSON em `sr
 | T-21 · Fotos no ciclo e nome da etapa no anúncio | Nicole | T-18 | `CicloResiduo`, `content.config.ts`, `.pages.yml`, guia de edição |
 | T-22 · Busca do guia só pelo nome | Luiz | — (pode começar já) | `GuiaPodeNaoPode`, `docs/requisitos.md` |
 | T-23 · Foto da lixeira | Luiz | T-18 | `PontoColeta`, `content.config.ts`, `.pages.yml`, guia de edição |
+| T-24 · Animações leves | Pedro | T-18 | `src/styles/animacoes.css` (novo), `BaseLayout`, docs |
 
 A T-21 e a T-23 mexem em blocos diferentes do `content.config.ts`, do `.pages.yml` e do guia de edição. Quem fizer o merge depois atualiza a branch com a `develop` (`git merge origin/develop`) antes de pedir a revisão.
+
+A T-24 fica toda em `src/styles/animacoes.css` e não mexe nos componentes. Na T-20, o `:hover` do `.botao` não usa `transform` nem `box-shadow` (use, por exemplo, o sublinhado), porque o movimento (subir, sombra e afundar ao tocar) já vem da T-24. A T-21 e a T-22 não precisam mudar nada por causa dela: a etapa do ciclo e os cartões do guia animam sozinhos ao reaparecer.
 
 ## 3. Tarefas
 
@@ -279,6 +282,32 @@ em docs/sdd/06-plano-melhorias.md. Faça só a T-23:
 Teste com uma imagem temporária e desfaça antes do commit. Sem dependência nova.
 Não faça commit. Rode npm run format e npm run verify.
 ```
+
+### T-24 · Animações leves
+
+| Campo | Valor |
+|---|---|
+| Tipo | Funcionalidade (feat) |
+| Responsável | Pedro |
+| Componente | Todos (só CSS) |
+| Requisitos | RNF-01, RNF-09, RNF-10, RNF-12; RF-10 (números sem contagem animada) |
+| Depende de | T-18 |
+| Validação Enactus | Não |
+
+**Descrição.** Pedido do Pedro em 29/10/2026: deixar o site mais dinâmico, com animações marcantes, sem pesar. Tudo é feito em CSS puro, num arquivo só, sem JavaScript e sem dependência.
+
+**Critérios de aceite**
+
+- [ ] `src/styles/animacoes.css`, importado no `BaseLayout.astro` depois do `global.css`, com todo o conteúdo dentro de `@media (prefers-reduced-motion: no-preference)` (RNF-09).
+- [ ] Só `transform` e `opacity` (e `box-shadow`/`background-color` em transição de botão). Nenhuma animação infinita.
+- [ ] Topo: barra do logo, selo, título, frase e botão entram em cascata; o recorte escuro desliza da direita.
+- [ ] Botões: sobem com sombra no *hover* (só em `@media (hover: hover)`) e afundam ao tocar; desabilitados não se mexem.
+- [ ] Rolagem: cada bloco das seções surge ao entrar na tela, e o traço amarelo do `<h2>` cresce. Feito com `animation-timeline: view()` dentro de `@supports`; sem suporte, o conteúdo aparece parado.
+- [ ] Números de impacto entram um depois do outro, crescendo. **Sem contagem animada** (RF-10).
+- [ ] Ciclo: a etapa entra a cada troca, e o número "estala"; o atalho da etapa atual fica maior. Guia: os cartões entram ao carregar e ao reaparecer na busca. Quiz: o resultado "estala", o "Errado" treme de leve e a explicação sobe.
+- [ ] Sem JavaScript, todo o conteúdo fica visível (RNF-10). Com "reduzir movimento", `document.getAnimations()` fica vazio.
+- [ ] O JS do site não muda; o CSS cresce menos de 3 KB (menos de 1 KB com gzip). Sem rolagem horizontal em 360 px e em 1366 px.
+- [ ] `docs/arquitetura.md` (§5.4, §5.5 e estrutura), `AGENTS.md` §5 e os mapas de arquivos dos guias da equipe citam o novo arquivo.
 
 ## 4. Fora deste plano (precisam de decisão antes)
 

@@ -246,7 +246,7 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 ### 5.4 Foco, movimento e semântica
 
 - Foco: `:focus-visible` com contorno de 3 px em `currentcolor` e afastamento de 2 px, visível em fundos claro, amarelo e escuro.
-- Movimento: com `prefers-reduced-motion: reduce`, animações e transições são zeradas; rolagem suave só com `no-preference` (RNF-09).
+- Movimento: animações e transições só em `src/styles/animacoes.css`, dentro de `prefers-reduced-motion: no-preference`; com `reduce`, nada se mexe e a rolagem não é suave (RNF-09). Só `transform` e `opacity`, nenhuma animação infinita; a entrada ao rolar usa `animation-timeline: view()` dentro de `@supports`, então sem suporte (ou sem JavaScript) o conteúdo aparece parado (RNF-10). Os tokens de curva (`--saida`, `--mola`) ficam no próprio arquivo (T-24).
 - Semântica: um único `<h1>` no cabeçalho; cada seção é `<section id="…" aria-labelledby="…">` com `<h2>`; listas com `<ul>`/`<ol>`; botões com `<button>`; links externos que abrem nova aba avisam "(abre em nova aba)" para leitor de tela.
 
 ### 5.5 Componentes de interface
@@ -258,7 +258,7 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 | Campo de busca | `<label>` visível "Procure um item" + `<input type="search">`; contagem de resultados em `aria-live="polite"` |
 | Etapa do ciclo | Número em círculo (`aria-hidden`), nome e frase; seta entre etapas (decorativa) |
 | Controles do ciclo | Botões numerados com `aria-label="Etapa X: <nome>"` e `aria-current="step"`; "Anterior" e "Próxima" desabilitados nas pontas |
-| Número de impacto | Número grande em `--cor-destaque` sobre `--cor-escura`; descrição e fonte em `--cor-fundo`; sem animação |
+| Número de impacto | Número grande em `--cor-destaque` sobre `--cor-escura`; descrição e fonte em `--cor-fundo`; entram um a um ao rolar, sem contagem animada |
 | Pergunta do quiz | `<fieldset>` com `<legend>`; alternativas em `<input type="radio">` + `<label>`; resultado "✓ Certo" / "✕ Errado" em `aria-live` |
 | Título de seção | `<h2>` com traço amarelo embaixo (escuro na faixa amarela e no rodapé) (T-11) |
 
@@ -325,6 +325,7 @@ SocialTech/
 │   ├── layouts/BaseLayout.astro    # <html>, <head>, GoatCounter
 │   ├── pages/index.astro           # página única: só compõe os componentes
 │   ├── styles/global.css           # tokens e estilos globais
+│   ├── styles/animacoes.css        # animações (só com movimento permitido, T-24)
 │   └── content.config.ts           # schemas zod das coleções
 ├── .pages.yml                      # campos do painel Pages CMS
 ├── astro.config.mjs                # site + base "/SocialTech/"

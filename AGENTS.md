@@ -163,7 +163,7 @@ Rode `npm run verify` antes de propor qualquer commit. O CI também verifica lin
 - **Um componente por responsabilidade** em `src/components/`, com nome em PascalCase (ex.: `CardImpacto.astro`). Páginas apenas compõem componentes.
 - **Conteúdo separado da lógica:** itens do guia, perguntas do quiz, etapas do ciclo e números de impacto ficam em `src/content/`, com schema em `src/content.config.ts` e campos no `.pages.yml`. O professor edita pelo painel sem mexer no código, e o build falha se faltar um campo obrigatório.
 - **Links e arquivos internos** sempre com `import.meta.env.BASE_URL` (ex.: `` `${import.meta.env.BASE_URL}guia/` ``). Nunca use caminhos absolutos como `"/guia"`: quebram no GitHub Pages.
-- CSS no `<style>` do próprio componente (escopo automático); tokens globais (cores, espaçamentos, fontes) como variáveis em `src/styles/global.css`. Evite `!important`.
+- CSS no `<style>` do próprio componente (escopo automático); tokens globais (cores, espaçamentos, fontes) como variáveis em `src/styles/global.css`. Animações só em `src/styles/animacoes.css` (dentro de `prefers-reduced-motion: no-preference`). Evite `!important`.
 - Imagens em `src/assets/` com o componente `<Image />` de `astro:assets` (gera WebP e dimensões). Sempre com `alt`.
 - JavaScript no navegador só onde houver interação (guia, quiz, carrossel). O restante deve ser HTML gerado no build.
 - Siga os linters do projeto. **Não desative regras** (`eslint-disable` etc.) sem justificar no código.
