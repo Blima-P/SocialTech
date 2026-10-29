@@ -1,49 +1,151 @@
 ---
 import { Image } from "astro:assets";
-import logo from "../assets/marca/logo-enactus-brasil-footer.svg";
+import logo from "../assets/marca/logo-enactus-brasil.svg";
+
+const atalhos = [
+  { texto: "O que pode", ancora: "#guia" },
+  { texto: "Onde está a lixeira", ancora: "#ponto-de-coleta" },
+  { texto: "Ciclo do resíduo", ancora: "#ciclo" },
+];
 ---
 
 <header>
-  <div class="conteudo">
+  <div class="barra">
     <Image src={logo} alt="Enactus Brasil" height={40} loading="eager" />
-    <div>
-      <h1>SocialTech</h1>
-      <p>Descarte correto de resíduos orgânicos</p>
-    </div>
+    <nav aria-label="Seções da página">
+      <ul>
+        {atalhos.map(({ texto, ancora }) => (
+          <li>
+            <a href={ancora}>{texto}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+  <div class="destaque">
+    <p class="selo">Projeto de extensão UCB + Enactus</p>
+    <h1>SocialTech</h1>
+    <p class="frase">Descarte correto de resíduos orgânicos</p>
+    <a class="botao" href="#guia">
+      O que pode ir na lixeira?
+    </a>
   </div>
 </header>
 
 <style>
   header {
-    border-bottom: 0.25rem solid var(--cor-destaque);
-    padding-block: var(--espaco);
-    background: var(--cor-escura);
-    color: var(--cor-fundo);
+    border-top: 0.25rem solid var(--cor-destaque);
+    background: var(--cor-fundo);
   }
 
-  /* Mesma largura do <main>, para o logo alinhar com o texto da página. */
-  .conteudo {
+  .barra {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: var(--espaco);
-    max-width: var(--largura-conteudo);
-    margin-inline: auto;
-    padding-inline: var(--espaco);
+    padding: 0.625rem var(--recuo-lateral);
   }
 
-  img {
+  .barra img {
     width: auto;
-    height: 2.5rem;
+    height: 2.25rem;
+  }
+
+  /* No celular o botão do destaque leva ao guia; o menu aparece a partir de 48rem. */
+  nav {
+    display: none;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-toque);
+    padding-inline: 0.75rem;
+    color: var(--cor-texto);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  nav a:hover {
+    box-shadow: inset 0 -0.1875rem 0 var(--cor-destaque);
+  }
+
+  /* Faixa amarela com o recorte diagonal escuro da identidade Enactus. */
+  .destaque {
+    position: relative;
+    overflow: hidden;
+    padding: calc(var(--espaco) * 1.5) var(--recuo-lateral);
+    background: var(--cor-destaque);
+    color: var(--cor-texto);
+  }
+
+  .destaque > * {
+    position: relative;
+    z-index: 1;
+    max-width: 34rem;
+  }
+
+  .selo {
+    margin: 0 0 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
   h1 {
     margin: 0;
-    font-size: 1.5rem;
-    line-height: 1.2;
+    font-size: clamp(2.25rem, 1.5rem + 4vw, 4rem);
+    line-height: 1.05;
   }
 
-  p {
-    margin: 0;
-    font-size: 0.9375rem;
+  .frase {
+    margin: 0.5rem 0 var(--espaco);
+    font-size: clamp(1.0625rem, 1rem + 0.6vw, 1.375rem);
+  }
+
+  .botao {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-toque);
+    padding-inline: 1.25rem;
+    border-radius: 0.25rem;
+    background: var(--cor-escura);
+    color: var(--cor-fundo);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .botao:focus-visible {
+    outline-color: var(--cor-escura);
+  }
+
+  @media (min-width: 48rem) {
+    nav {
+      display: block;
+    }
+
+    .destaque {
+      padding-block: calc(var(--espaco) * 4.5);
+    }
+
+    /* Recorte diagonal escuro à direita, só decorativo. */
+    .destaque::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 45%;
+      background: var(--cor-escura);
+      clip-path: polygon(35% 0, 100% 0, 100% 100%, 0 100%);
+    }
   }
 </style>
