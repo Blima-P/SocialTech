@@ -327,7 +327,7 @@ SocialTech/
 │   ├── styles/global.css           # tokens e estilos globais
 │   └── content.config.ts           # schemas zod das coleções
 ├── .pages.yml                      # campos do painel Pages CMS
-├── astro.config.mjs                # site + base "/SocialTech"
+├── astro.config.mjs                # site + base "/SocialTech/"
 └── AGENTS.md                       # regras para agentes de IA
 ```
 
@@ -433,7 +433,7 @@ flowchart LR
 
 ### 9.2 Publicação
 
-- **URL:** `https://blima-p.github.io/SocialTech/` (`site` e `base: "/SocialTech"` em `astro.config.mjs`).
+- **URL:** `https://blima-p.github.io/SocialTech/` (`site` e `base: "/SocialTech/"` em `astro.config.mjs`).
 - **Gatilho:** push na `main` (merge de release, `fix/*` ou edição do painel) ou execução manual do workflow.
 - **Passos:** `npm ci` → `npm run build` (gera `dist/`) → upload do artefato → `deploy-pages`. Tempo típico: cerca de 2 minutos.
 - **Contagem de acessos:** o script do GoatCounter só entra no build de produção (`import.meta.env.PROD`).
