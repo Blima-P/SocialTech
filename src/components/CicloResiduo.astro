@@ -8,10 +8,19 @@ const etapas = (await getCollection("ciclo")).sort(
 const semDescricao = etapas.every(({ data }) => !data.descricao);
 ---
 
-<section id="ciclo" aria-labelledby="titulo-ciclo">
+<section id="ciclo" aria-labelledby="titulo-ciclo" data-ciclo>
   <h2 id="titulo-ciclo">Do resto de comida à horta</h2>
   {semDescricao && <p>Textos do ciclo em validação com a Enactus.</p>}
-  <ol>
+  <ol class="atalhos" aria-label="Escolha uma etapa" hidden data-atalhos>
+    {etapas.map(({ data }, indice) => (
+      <li>
+        <button type="button" aria-label={`Etapa ${indice + 1}: ${data.nome}`}>
+          {indice + 1}
+        </button>
+      </li>
+    ))}
+  </ol>
+  <ol class="etapas">
     {etapas.map(({ data }, indice) => (
       <li>
         <span class="numero" aria-hidden="true">
@@ -25,15 +34,62 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
       </li>
     ))}
   </ol>
+  <div class="navegacao" hidden data-navegacao>
+    <button type="button" data-anterior>
+      Anterior
+    </button>
+    <p aria-live="polite" data-posicao></p>
+    <button type="button" data-proxima>
+      Próxima
+    </button>
+  </div>
 </section>
 
-<style>
-  section {
-    margin-block: var(--espaco);
-  }
+<script>
+  // Sem JavaScript, a lista mostra todas as etapas. Com JavaScript, uma etapa por vez.
+  for (const ciclo of document.querySelectorAll<HTMLElement>("[data-ciclo]")) {
+    const etapas = [...ciclo.querySelectorAll<HTMLElement>(".etapas > li")];
+    const atalhos = [
+      ...ciclo.querySelectorAll<HTMLButtonElement>("[data-atalhos] button"),
+    ];
+    const anterior = ciclo.querySelector<HTMLButtonElement>("[data-anterior]")!;
+    const proxima = ciclo.querySelector<HTMLButtonElement>("[data-proxima]")!;
+    const posicao = ciclo.querySelector<HTMLElement>("[data-posicao]")!;
+    if (etapas.length < 2) continue;
 
-  /* Uma etapa abaixo da outra em todas as telas, com seta ↓ entre elas. */
-  ol {
+    const mostrar = (ativa: number) => {
+      etapas.forEach((etapa, indice) => (etapa.hidden = indice !== ativa));
+      atalhos.forEach((botao, indice) =>
+        indice === ativa
+          ? botao.setAttribute("aria-current", "step")
+          : botao.removeAttribute("aria-current"),
+      );
+      anterior.disabled = ativa === 0;
+      proxima.disabled = ativa === etapas.length - 1;
+      posicao.textContent = `Etapa ${ativa + 1} de ${etapas.length}`;
+    };
+
+    let atual = 0;
+    const ir = (indice: number) => {
+      atual = Math.min(Math.max(indice, 0), etapas.length - 1);
+      mostrar(atual);
+    };
+
+    atalhos.forEach((botao, indice) =>
+      botao.addEventListener("click", () => ir(indice)),
+    );
+    anterior.addEventListener("click", () => ir(atual - 1));
+    proxima.addEventListener("click", () => ir(atual + 1));
+
+    ciclo.classList.add("interativo");
+    ciclo.querySelector<HTMLElement>("[data-atalhos]")!.hidden = false;
+    ciclo.querySelector<HTMLElement>("[data-navegacao]")!.hidden = false;
+    ir(0);
+  }
+</script>
+<style>
+  /* Celular e tablet: uma etapa abaixo da outra, com seta ↓. Computador: em linha, com seta →. */
+  .etapas {
     display: flex;
     flex-direction: column;
     gap: calc(var(--espaco) * 2);
@@ -42,7 +98,7 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     list-style: none;
   }
 
-  li {
+  .etapas > li {
     position: relative;
     display: flex;
     align-items: center;
@@ -88,5 +144,97 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
 
   .seta::before {
     content: "↓";
+  }
+
+  @media (min-width: 64rem) {
+    .etapas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    }
+
+    .etapas > li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .seta {
+      top: 50%;
+      left: 100%;
+      width: calc(var(--espaco) * 2);
+      transform: translateY(-50%);
+      text-align: center;
+    }
+
+    .seta::before {
+      content: "→";
+    }
+  }
+  /* Modo passo a passo (só com JavaScript). */
+  .etapas > li[hidden] {
+    display: none;
+  }
+
+  .interativo .etapas {
+    display: block;
+    max-width: var(--largura-conteudo);
+  }
+
+  .interativo .etapas > li {
+    min-height: 7rem;
+  }
+
+  .interativo .seta {
+    display: none;
+  }
+
+  .atalhos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 var(--espaco);
+    padding: 0;
+    list-style: none;
+  }
+
+  .atalhos[hidden],
+  .navegacao[hidden] {
+    display: none;
+  }
+
+  button {
+    min-width: var(--alvo-toque);
+    min-height: var(--alvo-toque);
+    border: 2px solid var(--cor-escura);
+    border-radius: var(--raio);
+    padding-inline: 0.75rem;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .atalhos button[aria-current="step"] {
+    background: var(--cor-destaque);
+  }
+
+  button:disabled {
+    border-color: var(--cor-fundo-suave);
+    color: var(--cor-texto-suave);
+    cursor: default;
+  }
+
+  .navegacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espaco);
+    max-width: var(--largura-conteudo);
+    margin-top: var(--espaco);
+  }
+
+  .navegacao p {
+    margin: 0;
+    color: var(--cor-texto-suave);
   }
 </style>

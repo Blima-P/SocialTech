@@ -1,0 +1,205 @@
+---
+import { getCollection } from "astro:content";
+
+const perguntas = (await getCollection("quiz")).sort(
+  (a, b) => Number(a.id) - Number(b.id),
+);
+---
+
+{perguntas.length > 0 && (
+  <section id="quiz" aria-labelledby="titulo-quiz" data-quiz>
+    <h2 id="titulo-quiz">Teste o que você aprendeu</h2>
+    <noscript>
+      <p>Para conferir as respostas, ative o JavaScript do navegador.</p>
+    </noscript>
+    <ol class="perguntas">
+      {perguntas.map(({ id, data }) => (
+        <li>
+          <fieldset data-pergunta data-correta={data.correta}>
+            <legend>{data.pergunta}</legend>
+            {data.alternativas.map((alternativa, indice) => (
+              <label>
+                <input type="radio" name={`quiz-${id}`} value={indice + 1} />
+                {alternativa}
+              </label>
+            ))}
+            <button type="button" class="botao" data-responder hidden>
+              Responder
+            </button>
+            <div class="feedback" aria-live="polite">
+              <div class="resultado" tabindex="-1" data-resultado />
+              <p class="explicacao" hidden data-explicacao>
+                {data.explicacao}
+              </p>
+            </div>
+          </fieldset>
+        </li>
+      ))}
+    </ol>
+    <div class="final" aria-live="polite">
+      <p data-placar />
+      <button type="button" class="botao" data-refazer hidden>
+        Refazer
+      </button>
+    </div>
+  </section>
+)}
+
+<script>
+  // O quiz só ensina: nada é enviado nem guardado (Q-12).
+  for (const quiz of document.querySelectorAll<HTMLElement>("[data-quiz]")) {
+    const perguntas = [
+      ...quiz.querySelectorAll<HTMLFieldSetElement>("[data-pergunta]"),
+    ];
+    const placar = quiz.querySelector<HTMLElement>("[data-placar]")!;
+    const refazer = quiz.querySelector<HTMLButtonElement>("[data-refazer]")!;
+    const acertos = new Map<HTMLFieldSetElement, boolean>();
+
+    const mostrarResultado = (
+      pergunta: HTMLFieldSetElement,
+      acertou: boolean,
+    ) => {
+      const resultado =
+        pergunta.querySelector<HTMLElement>("[data-resultado]")!;
+      const simbolo = document.createElement("span");
+      simbolo.setAttribute("aria-hidden", "true");
+      simbolo.textContent = acertou ? "✓ " : "✕ ";
+      const texto = document.createElement("p");
+      texto.className = acertou ? "certo" : "errado";
+      texto.append(simbolo, acertou ? "Certo." : "Errado.");
+      resultado.replaceChildren(texto);
+      pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = false;
+      resultado.focus();
+    };
+
+    for (const pergunta of perguntas) {
+      const responder =
+        pergunta.querySelector<HTMLButtonElement>("[data-responder]")!;
+      responder.hidden = false;
+      responder.addEventListener("click", () => {
+        const escolhida =
+          pergunta.querySelector<HTMLInputElement>("input:checked");
+        const resultado =
+          pergunta.querySelector<HTMLElement>("[data-resultado]")!;
+        if (!escolhida) {
+          resultado.textContent = "Escolha uma alternativa.";
+          return;
+        }
+        const acertou = escolhida.value === pergunta.dataset.correta;
+        acertos.set(pergunta, acertou);
+        for (const opcao of pergunta.querySelectorAll("input"))
+          opcao.disabled = true;
+        responder.hidden = true;
+        mostrarResultado(pergunta, acertou);
+
+        if (acertos.size === perguntas.length) {
+          const total = [...acertos.values()].filter(Boolean).length;
+          placar.textContent = `Você acertou ${total} de ${perguntas.length}.`;
+          refazer.hidden = false;
+        }
+      });
+    }
+
+    refazer.addEventListener("click", () => {
+      acertos.clear();
+      for (const pergunta of perguntas) {
+        for (const opcao of pergunta.querySelectorAll("input")) {
+          opcao.disabled = false;
+          opcao.checked = false;
+        }
+        pergunta
+          .querySelector<HTMLElement>("[data-resultado]")!
+          .replaceChildren();
+        pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = true;
+        pergunta.querySelector<HTMLElement>("[data-responder]")!.hidden = false;
+      }
+      placar.textContent = "";
+      refazer.hidden = true;
+      perguntas[0]?.querySelector("input")?.focus();
+    });
+  }
+</script>
+
+<style>
+  .perguntas {
+    display: grid;
+    gap: calc(var(--espaco) * 1.5);
+    max-width: var(--largura-conteudo);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  fieldset {
+    margin: 0;
+    border: 0;
+    border-radius: var(--raio);
+    padding: var(--espaco);
+    background: var(--cor-fundo-suave);
+  }
+
+  legend {
+    float: left;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0;
+    font-weight: 700;
+  }
+
+  label {
+    clear: both;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: var(--alvo-toque);
+  }
+
+  input {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+  }
+
+  .botao {
+    min-height: var(--alvo-toque);
+    margin-top: 0.5rem;
+    border: 0;
+    border-radius: var(--raio);
+    padding-inline: var(--espaco);
+    background: var(--cor-escura);
+    color: var(--cor-fundo);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .botao:focus-visible {
+    outline-color: var(--cor-escura);
+  }
+
+  .resultado p,
+  .explicacao,
+  .final p {
+    margin: 0.5rem 0 0;
+  }
+
+  .resultado:focus {
+    outline: none;
+  }
+
+  .certo {
+    color: var(--cor-pode);
+    font-weight: 700;
+  }
+
+  .errado {
+    color: var(--cor-nao-pode);
+    font-weight: 700;
+  }
+
+  .final p {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+</style>

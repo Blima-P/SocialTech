@@ -31,10 +31,12 @@ O projeto segue **SDD**: primeiro a especificação, depois o código. A especif
 | [`docs/sdd/PROMPT-SDD.md`](docs/sdd/PROMPT-SDD.md) | Processo para gerar a especificação (fases e portões de aprovação 🚦) |
 | [`docs/sdd/00-constituicao.md`](docs/sdd/00-constituicao.md) | Princípios, calendário, papéis, Definição de Preparado/Pronto e homologação |
 | [`docs/sdd/01-especificacao.md`](docs/sdd/01-especificacao.md) | Visão, personas, jornadas, capacidades (MoSCoW), métricas e conflitos entre fontes |
-| `docs/requisitos.md` | Requisitos (`RF-XX`, `RNF-XX`, `RN-XX`, `RC-XX`) com critérios de aceite |
-| `docs/arquitetura.md` | Arquitetura, design system, modelo de dados e decisões (`ADR-XXX`) |
+| [`docs/requisitos.md`](docs/requisitos.md) | Requisitos (`RF-XX`, `RNF-XX`, `RN-XX`, `RC-XX`) com critérios de aceite |
+| [`docs/arquitetura.md`](docs/arquitetura.md) | Arquitetura, design system, modelo de dados, roteiro de homologação e decisões (`ADR-XXX`) |
 | [`docs/sdd/02-clarificacoes.md`](docs/sdd/02-clarificacoes.md) | Perguntas em aberto (`Q-XX`) e respostas da equipe |
 | [`docs/sdd/03-plano-tarefas.md`](docs/sdd/03-plano-tarefas.md) | Tarefas de implementação (`T-XX`) para vibecoding |
+| [`docs/sdd/04-revisao.md`](docs/sdd/04-revisao.md) | Revisão da especificação (Fase 7): checklist, divergências e pendências |
+| [`docs/sdd/05-plano-entrega-final.md`](docs/sdd/05-plano-entrega-final.md) | Tarefas da entrega final (T-10 a T-17): visual Enactus, capacidades Should, Fases 4, 5 e 7 e H2 |
 
 Enquanto esses documentos não existirem ou não estiverem aprovados, siga as seções 2 e 4 deste arquivo e **não implemente funcionalidades** além do que o desenvolvedor pedir explicitamente.
 
@@ -61,7 +63,7 @@ src/
 ├── pages/            # rotas; index.astro é a página inicial
 ├── layouts/          # estrutura HTML comum (BaseLayout.astro)
 ├── components/       # componentes reutilizáveis (ex.: GuiaPodeNaoPode.astro, Quiz.astro)
-├── content/          # conteúdo editável pelo painel (secoes/*.md, links.json), separado da lógica
+├── content/          # conteúdo editável pelo painel (JSON e secoes/*.md), separado da lógica
 ├── content.config.ts # schemas zod das coleções de conteúdo
 ├── scripts/          # TypeScript de interatividade no navegador
 ├── assets/           # imagens otimizadas pelo Astro (astro:assets); assets/conteudo/ recebe os uploads do painel
@@ -138,7 +140,7 @@ Rode `npm run verify` antes de propor qualquer commit. O CI também verifica lin
 
 ### 4.8 Seguir a especificação
 - Ao executar o `PROMPT-SDD.md`, respeite as fases **na ordem** e **pare em cada portão 🚦** até um humano responder. Marque informações como **[CONFIRMADO]**, **[SUPOSIÇÃO]** ou **[PENDENTE]**.
-- Ao implementar, trabalhe em **uma tarefa `T-XX` por vez**, conforme `docs/sdd/03-plano-tarefas.md`, e cumpra os critérios de aceite dos requisitos ligados a ela.
+- Ao implementar, trabalhe em **uma tarefa `T-XX` por vez**, conforme `docs/sdd/03-plano-tarefas.md` (T-01 a T-09) e `docs/sdd/05-plano-entrega-final.md` (T-10 a T-17), e cumpra os critérios de aceite dos requisitos ligados a ela.
 - Cite os IDs no PR (ex.: `T-04`, `RF-02`). Na mensagem de commit, use o escopo do componente; os IDs podem ir no corpo.
 - **Não implemente** o que não está na especificação (sem *scope creep*). Se a especificação estiver ambígua, contraditória ou incompleta, **pare e pergunte**.
 - **Não altere** requisitos, ADRs aprovados ou respostas da equipe sem aprovação. Se uma mudança no código alterar o comportamento especificado, proponha também a atualização em `docs/`.

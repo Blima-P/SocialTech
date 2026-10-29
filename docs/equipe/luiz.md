@@ -1,6 +1,6 @@
-# Guia do Luiz para a IA (T-05, T-06 e T-07)
+# Guia do Luiz para a IA (T-14 e T-15)
 
-> **Luiz:** este arquivo é para a sua IA ler antes de programar. Para cada tarefa, abra o agente de IA na pasta do repositório, cole o **prompt inicial** abaixo (troque `T-XX` pela tarefa) e acompanhe. Você revisa tudo, testa no celular e faz o commit e o PR (a IA não faz).
+> **Luiz:** este arquivo é para a sua IA ler antes de programar. Para cada tarefa, abra o agente de IA na pasta do repositório, cole o **prompt inicial** abaixo (troque `T-XX` pela tarefa) e acompanhe. Você revisa tudo, testa no celular e faz o commit e o PR (a IA não faz). As tarefas do MVP (T-05, T-06 e T-07) já estão na `develop`; este guia é da entrega final.
 
 ## Prompt inicial (cole na IA, uma tarefa por vez)
 
@@ -8,11 +8,11 @@
 Você vai me ajudar no projeto SocialTech (Astro + TypeScript, site estático).
 Antes de escrever qualquer código, leia por completo, nesta ordem:
 1. AGENTS.md (regras obrigatórias do projeto);
-2. docs/equipe/luiz.md (este guia, com os padrões do código e o passo a passo);
-3. a tarefa T-XX em docs/sdd/03-plano-tarefas.md (critérios de aceite e prompt da tarefa).
+2. docs/equipe/luiz.md (este guia, com o código de referência e o passo a passo);
+3. a tarefa T-XX em docs/sdd/05-plano-entrega-final.md (critérios de aceite e prompt da tarefa).
 Trabalhe SOMENTE na tarefa T-XX e SOMENTE nos arquivos listados para ela no guia.
-Não instale pacotes, não use fontes ou scripts externos, não invente conteúdo de descarte,
-não faça commit nem push. Se algo estiver ambíguo, pare e me pergunte.
+Não instale pacotes, não use fontes ou scripts externos, não invente conteúdo de descarte
+nem perguntas do quiz, não faça commit nem push. Se algo estiver ambíguo, pare e me pergunte.
 Primeiro me mostre um plano curto (arquivos e passos). Depois de eu aprovar, implemente,
 rode "npm run format" e "npm run verify" e me entregue o checklist da seção 8 do guia
 preenchido, mais uma sugestão de mensagem de commit.
@@ -20,324 +20,550 @@ preenchido, mais uma sugestão de mensagem de commit.
 
 ## 1. O projeto em 1 minuto
 
-- **O que é:** uma página para celular, aberta por um **QR Code colado numa lixeira de compostagem** que circula pelo campus da UCB. Quem escaneia precisa descobrir **em até 10 segundos** se o resto de comida pode ir naquela lixeira. **O guia "Pode / Não pode" (T-05) é a parte mais importante do MVP.**
-- **Quem faz:** projeto de extensão da UCB com o **Projeto Enactus**, que valida as regras de descarte.
-- **Prazo:** o MVP é homologado em **25/10/2026 (domingo) às 20h**. Seus PRs precisam estar abertos até **25/10, 12h**.
+- **O que é:** uma página aberta por um **QR Code colado numa lixeira de compostagem** que circula pelo campus da UCB. Quem escaneia precisa descobrir **em até 10 segundos** se o resto de comida pode ir naquela lixeira. O MVP está no ar desde 26/10.
+- **O que muda agora:** a Nicole aplica o visual da Enactus (T-11). Você deixa o guia mais fácil de usar, com **busca** e a caixa **"Não achou seu item?"** (T-14), e cria o **quiz** educativo (T-15).
+- **Prazo:** **T-14 e T-15 com PR aberto até 28/10 (quarta), 12h.** Release em 28/10, 18h; Homologação 2 em 29/10.
 - **Site no ar:** `https://blima-p.github.io/SocialTech/`. Local: `http://localhost:4321/SocialTech/`.
-- **Quem edita o conteúdo:** o Prof. Marcus, pelo painel **Pages CMS** (sem programar). Por isso **todo texto e toda lista ficam em `src/content/`** e o componente só lê e mostra. Suas três tarefas seguem o mesmo padrão: **JSON + schema + campos do painel + componente + manual**.
+- **Quem edita o conteúdo:** o Prof. Marcus, pelo painel **Pages CMS**. Textos e listas ficam em `src/content/`, nunca escritos direto no componente.
 
 ## 2. Regras que mais derrubam um PR
 
-O [`AGENTS.md`](../../AGENTS.md) tem a lista completa e **prevalece** sobre este guia. As mais importantes para você:
+O [`AGENTS.md`](../../AGENTS.md) tem a lista completa e **prevalece** sobre este guia.
 
-1. **Não inventar conteúdo de descarte.** Só entram os itens listados na T-05. Nenhum item "Pode" até a Enactus enviar a lista: mostre o aviso de pendência.
-2. **Sem dependência nova:** nada de `npm install`, bibliotecas de ícones, CDN ou fonte externa. CSS puro com `<style>` dentro do componente.
+1. **Não inventar conteúdo:** regras de descarte, orientação para item fora da lista e perguntas do quiz vêm da Enactus. Sem o texto, mostre o aviso de pendência (T-14) ou deixe o `quiz.json` vazio (T-15).
+2. **Sem dependência nova:** nada de `npm install`, biblioteca de busca, de quiz ou de ícones, CDN ou fonte externa.
 3. **Só tokens de cor** (`var(--cor-...)`, seção 4). Nunca escreva a cor direto.
-4. **Cor nunca é a única indicação:** "Pode" e "Não pode" sempre com texto **e** símbolo.
-5. **Mobile-first** (360 px primeiro, `@media (min-width: 48rem)` para telas maiores).
-6. **Acessibilidade:** cada seção com `<section id aria-labelledby>` e `<h2>`; listas com `<ul>`/`<ol>`; datas com `<time datetime>`; links de ação com área ≥ 44×44 px (`var(--alvo-toque)`); símbolos decorativos com `aria-hidden="true"`.
-7. **Painel e schema andam juntos:** campo em `src/content.config.ts` ⇔ campo no `.pages.yml` ⇔ explicação em `docs/guia-edicao-conteudo.md`, no mesmo PR. Rótulos e descrições em português simples, para quem não programa.
-8. **Sem dado pessoal** (LGPD): nada de formulário dentro do site; a avaliação é um link para o Google Forms.
-9. **Não use `set:html`** (o ESLint bloqueia).
-10. **Português do Brasil** em textos, comentários e commits. A IA **não faz commit, push nem PR**.
+4. **Cor nunca é a única indicação:** "Certo" e "Errado" sempre com texto **e** símbolo.
+5. **Mobile-first:** CSS para 360 px primeiro; `@media (min-width: 48rem)` para telas maiores.
+6. **Acessibilidade:** campo com `<label>` visível; perguntas em `<fieldset>` + `<legend>`; alvos ≥ 44 px (`var(--alvo-toque)`); símbolos com `aria-hidden="true"`; mudanças anunciadas com `aria-live="polite"`.
+7. **Aprimoramento progressivo** (ADR-008): sem JavaScript, o guia e as perguntas continuam legíveis; o campo de busca e os botões começam com `hidden` e o `<script>` os mostra.
+8. **Privacidade:** nada do que é digitado na busca ou respondido no quiz vai para `localStorage`, cookie, URL, GoatCounter ou qualquer serviço (Q-12: o quiz não mede nada).
+9. **Painel e schema juntos:** campo novo em `src/content.config.ts` ⇔ `.pages.yml` ⇔ `docs/guia-edicao-conteudo.md`, no mesmo PR.
+10. **Não use `set:html` nem `innerHTML`** (o ESLint bloqueia); no script, use `textContent` e `createElement`. **Português do Brasil** em tudo. A IA **não faz commit, push nem PR**.
 
-## 3. Mapa do código (o que já existe)
+## 3. Mapa do código
 
-| Arquivo | O que faz | Você mexe? |
+| Arquivo | O que faz | Tarefa |
 |---|---|---|
-| `src/pages/index.astro` | A página única. Tem **marcadores** `T-XX` onde cada componente entra | Só nos marcadores `T-05`, `T-06` e `T-07` |
-| `src/content.config.ts` | Schemas `zod` do conteúdo. Já tem `vazioParaUndefined` e a coleção `links` (use como modelo) | Só nos seus marcadores |
-| `.pages.yml` | Campos do painel do professor. O bloco `links` é o modelo de lista | Só nos seus marcadores |
-| `docs/guia-edicao-conteudo.md` | Manual do painel para o Prof. Marcus | Só nas suas seções |
-| `src/content/links.json` | Exemplo de lista editada pelo painel | Não |
-| `src/components/ListaLinks.astro` | Exemplo de componente que lê uma coleção | Não; só consulte |
-| `src/styles/global.css` | Tokens e estilos gerais (da Nicole) | Não |
+| `src/components/GuiaPodeNaoPode.astro` | Guia "Pode / Não pode" | T-14 (a Nicole mexe **só** em duas regras do `<style>` na T-11) |
+| `src/content/guia-orientacao.json` (novo) | Texto da caixa "Não achou seu item?" | T-14 |
+| `src/components/Quiz.astro` (novo) | Quiz | T-15 |
+| `src/content/quiz.json` (novo) | Perguntas do quiz | T-15 |
+| `src/content.config.ts`, `.pages.yml`, `docs/guia-edicao-conteudo.md` | Schemas, painel e manual | Só os marcadores `T-14` e `T-15` |
+| `src/pages/index.astro` | A página | T-15: só os marcadores `T-15` |
+| `src/styles/global.css` | Tokens e estilos gerais (da Nicole) | Não mexa |
 
-**Marcadores:** a T-01 (do Pedro) deixou comentários como `{/* T-05: GuiaPodeNaoPode */}`, `// T-05: ...` e `# T-05: ...`. Troque **somente os seus** pelo código e não toque nos da Nicole (`T-02`, `T-03`). Assim os PRs de vocês dois não entram em conflito. Em `export const collections`, troque o seu marcador pelo nome da coleção (ex.: `guia,`).
+**Marcadores:** a T-10 deixou comentários `T-13`, `T-14` e `T-15`. Troque **só os seus** (`T-14` e `T-15`) e não toque nos da Nicole (`T-13`). Assim os PRs não entram em conflito.
 
-## 4. Tokens de design (já em `src/styles/global.css`)
+## 4. Tokens de design
 
 | Variável | Para quê |
 |---|---|
-| `--cor-pode` / `--cor-pode-fundo` | Texto e borda / fundo do cartão "Pode" (verde) |
-| `--cor-nao-pode` / `--cor-nao-pode-fundo` | Texto e borda / fundo do cartão "Não pode" (vermelho) |
-| `--cor-texto` / `--cor-texto-suave` | Texto principal / secundário (motivo, data) |
-| `--cor-fundo-suave` | Cartões neutros (ex.: ponto de coleta) |
-| `--cor-destaque` | Amarelo Enactus. **Só fundo** com `--cor-texto` (ex.: botão do formulário). Nunca como texto em fundo claro |
-| `--alvo-toque` | 44 px mínimos para links e botões |
-| `--espaco`, `--raio` | Espaçamento base e cantos arredondados |
+| `--cor-texto`, `--cor-texto-suave` | Texto principal e secundário (contagem, motivo) |
+| `--cor-fundo`, `--cor-fundo-suave` | Branco e cinza-claro (caixa "Não achou", fundo das perguntas) |
+| `--cor-escura` | Botões escuros ("Responder", "Refazer") |
+| `--cor-pode`, `--cor-nao-pode` | Verde e vermelho: cartões do guia e "✓ Certo" / "✕ Errado" do quiz |
+| `--alvo-toque` | 44 px mínimos para campo, alternativas e botões |
+| `--espaco`, `--raio` | Espaçamento base e cantos |
+| `--largura-conteudo` | `40rem`: largura máxima do campo de busca, da caixa e das perguntas |
 
-Todos os pares acima já passaram no contraste WCAG AA (ver seção 1.1 do plano). Não crie cor nova.
+## 5. T-14 · Busca no guia e item não listado
 
-## 5. T-05 · Guia "Pode / Não pode"
+**Arquivos:** `src/components/GuiaPodeNaoPode.astro`, `src/content/guia-orientacao.json` (novo), `src/content.config.ts`, `.pages.yml` e `docs/guia-edicao-conteudo.md` (marcadores `T-14`).
 
-**Arquivos:** `src/content/guia.json` (novo), `src/content.config.ts` (marcador `T-05`), `.pages.yml` (marcador `T-05`), `src/components/GuiaPodeNaoPode.astro` (novo), `src/pages/index.astro` (marcador `T-05`), `docs/guia-edicao-conteudo.md` (seção "Guia pode / não pode").
+**Como funciona:** com JavaScript, aparece o campo "Procure um item" acima do guia. Enquanto a pessoa digita, só ficam os cartões cujo nome ou motivo contém o texto, sem diferenciar acento e maiúscula ("citrica" acha "Frutas cítricas"), e uma linha diz quantos itens foram achados. Embaixo do guia, sempre aparece a caixa "Não achou seu item?". Sem JavaScript, o guia aparece inteiro, como hoje.
+
+O código abaixo foi **testado em 26/10** (`npm run verify` e teste automático: "CITRICA" acha 1 item, "zzz" mostra "Nenhum item encontrado.").
 
 **Passo a passo**
 
-1. `src/content/guia.json` com **exatamente** estes 7 itens (roteiro, item 2.1). Nenhum item "pode":
+1. `src/content.config.ts`: troque `// T-14: coleção "guiaOrientacao"` pelo schema `guiaOrientacao` da seção 1.3 do [plano](../sdd/05-plano-entrega-final.md) e `// T-14: guiaOrientacao,` por `guiaOrientacao,`.
+2. `src/content/guia-orientacao.json`, exatamente assim (o texto vem da Enactus pelo painel, Q-02):
 
    ```json
-   [
-     { "nome": "Frutas cítricas", "classificacao": "nao-pode", "motivo": "Pode contaminar o composto" },
-     { "nome": "Cinzas", "classificacao": "nao-pode", "motivo": "Pode contaminar o composto" },
-     { "nome": "Gorduras", "classificacao": "nao-pode", "motivo": "Pode contaminar o composto" },
-     { "nome": "Carnes", "classificacao": "nao-pode", "motivo": "Pode contaminar o composto" },
-     { "nome": "Isopor", "classificacao": "nao-pode", "motivo": "Não é compostável" },
-     { "nome": "Sacolas plásticas", "classificacao": "nao-pode", "motivo": "Não é compostável" },
-     { "nome": "Outras embalagens", "classificacao": "nao-pode", "motivo": "Não é compostável" }
-   ]
+   { "naoListado": "" }
    ```
 
-2. Em `src/content.config.ts`, no marcador `T-05` (código testado com `npm run verify`):
-
-   ```ts
-   const guia = defineCollection({
-     loader: file("src/content/guia.json", {
-       parser: (texto) =>
-         (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
-           id: String(indice),
-           ...item,
-         })),
-     }),
-     schema: z.object({
-       nome: z.string().trim().min(1),
-       classificacao: z.enum(["pode", "nao-pode"]),
-       motivo: z.string().trim().min(1),
-     }),
-   });
-   ```
-
-3. Em `.pages.yml`, no marcador `T-05` (mesma indentação do bloco `links`):
+3. `.pages.yml`: troque `# T-14: coleção "guiaOrientacao"` por:
 
    ```yaml
-   - name: guia
-     label: "Guia: pode / não pode"
+   - name: guiaOrientacao
+     label: "Guia: item fora da lista"
      type: file
-     path: src/content/guia.json
+     path: src/content/guia-orientacao.json
+     format: json
+     fields:
+       - name: naoListado
+         label: Orientação para item fora da lista
+         description: 'Aparece na caixa "Não achou seu item?". Combine o texto com a Enactus. Deixe vazio para mostrar o aviso de pendência.'
+         type: text
+   ```
+
+4. `src/components/GuiaPodeNaoPode.astro`, **acrescentando** (não reescreva o arquivo, porque a Nicole mexe no `<style>` dele na T-11):
+
+   - **No topo (frontmatter):** troque `import { getCollection } from "astro:content";` por `import { getCollection, getEntry } from "astro:content";` e, depois da linha do `naoPode`, acrescente:
+
+     ```ts
+     const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
+     ```
+
+   - **Na `<section>`:** acrescente o atributo `data-guia` (fica `<section id="guia" aria-labelledby="titulo-guia" data-guia>`).
+   - **Logo abaixo do `<h2>`:**
+
+     ```astro
+     <div class="busca" hidden data-busca>
+       <label for="busca-guia">Procure um item</label>
+       <input id="busca-guia" type="search" autocomplete="off" />
+       <p class="contagem" aria-live="polite" data-contagem></p>
+     </div>
+     ```
+
+   - **Depois do `</div>` que fecha `.grupos`, antes do `</section>`:**
+
+     ```astro
+     <aside class="nao-listado" aria-labelledby="titulo-nao-listado">
+       <h3 id="titulo-nao-listado">Não achou seu item?</h3>
+       <p>
+         {naoListado ??
+           "Orientação para itens fora da lista em validação com a Enactus."}
+       </p>
+     </aside>
+     ```
+
+   - **Depois do `</section>`:**
+
+     ```astro
+     <script>
+       // Busca local: o que é digitado não é guardado nem enviado.
+       const semAcento = (texto: string) =>
+         texto
+           .normalize("NFD")
+           .replace(/\p{Diacritic}/gu, "")
+           .toLowerCase()
+           .trim();
+
+       for (const guia of document.querySelectorAll<HTMLElement>("[data-guia]")) {
+         const busca = guia.querySelector<HTMLElement>("[data-busca]")!;
+         const campo = busca.querySelector("input")!;
+         const contagem = guia.querySelector<HTMLElement>("[data-contagem]")!;
+         const cartoes = [...guia.querySelectorAll<HTMLElement>(".cartao")];
+         const textos = cartoes.map((cartao) => semAcento(cartao.textContent ?? ""));
+         busca.hidden = false;
+
+         campo.addEventListener("input", () => {
+           const termo = semAcento(campo.value);
+           let achados = 0;
+           cartoes.forEach((cartao, indice) => {
+             const mostra = textos[indice].includes(termo);
+             cartao.hidden = !mostra;
+             if (mostra) achados += 1;
+           });
+           if (!termo) contagem.textContent = "";
+           else if (achados === 0) contagem.textContent = "Nenhum item encontrado.";
+           else
+             contagem.textContent =
+               achados === 1
+                 ? "1 item encontrado."
+                 : `${achados} itens encontrados.`;
+         });
+       }
+     </script>
+     ```
+
+   - **No `<style>`, logo depois do bloco `.grupos { … }`:**
+
+     ```css
+     .busca {
+       max-width: var(--largura-conteudo);
+       margin-bottom: var(--espaco);
+     }
+
+     .busca label {
+       display: block;
+       margin-bottom: 0.25rem;
+       font-weight: 700;
+     }
+
+     .busca input {
+       width: 100%;
+       min-height: var(--alvo-toque);
+       border: 2px solid var(--cor-texto-suave);
+       border-radius: var(--raio);
+       padding-inline: 0.75rem;
+       font: inherit;
+     }
+
+     .contagem {
+       margin: 0.25rem 0 0;
+       color: var(--cor-texto-suave);
+     }
+
+     .contagem:empty {
+       display: none;
+     }
+
+     .nao-listado {
+       max-width: var(--largura-conteudo);
+       margin-top: var(--espaco);
+       border-radius: var(--raio);
+       padding: 0.75rem var(--espaco);
+       background: var(--cor-fundo-suave);
+     }
+
+     .nao-listado h3 {
+       margin: 0;
+     }
+
+     .nao-listado p {
+       margin: 0.25rem 0 0;
+     }
+     ```
+
+   - **Não toque** nas regras `section { margin-block: 0.75rem; }` e `h2 { margin: 0 0 0.5rem; }` do `<style>`: a Nicole as apaga na T-11. Se você mexer nelas, os PRs entram em conflito.
+
+5. `docs/guia-edicao-conteudo.md`: troque `<!-- T-14: seção "9. Item fora da lista do guia" -->` por esta seção (o número 9 já está reservado para ela):
+
+   ```markdown
+   ## 9. Item fora da lista do guia
+
+   1. No menu do painel, abra **Guia: item fora da lista**.
+   2. No campo **Orientação para item fora da lista**, escreva o que a pessoa deve fazer quando não encontra o item no guia. Use o texto combinado com a Enactus.
+   3. Esse texto aparece na caixa "Não achou seu item?", embaixo do guia. Com o campo vazio, a caixa mostra "Orientação para itens fora da lista em validação com a Enactus."
+   4. Clique em **Save** (Salvar).
+   ```
+
+**Como testar:** além da seção 8, digite "citrica", "CINZAS" e "zzz" no campo (devem aparecer 1 item, 1 item e "Nenhum item encontrado.", com a caixa "Não achou seu item?" sempre visível); apague o texto e confira que todos os itens voltam. Desative o JavaScript (DevTools → Ctrl+Shift+P → "Disable JavaScript"): o campo some e o guia aparece inteiro.
+
+**Commit sugerido:** `feat(guia): adiciona busca e orientação para item fora da lista`
+
+## 6. T-15 · Quiz educativo
+
+**Arquivos:** `src/content/quiz.json` (novo), `src/components/Quiz.astro` (novo), `src/content.config.ts`, `.pages.yml`, `src/pages/index.astro` e `docs/guia-edicao-conteudo.md` (marcadores `T-15`). Pode começar em paralelo com a T-14, num branch próprio.
+
+**Como funciona:** cada pergunta mostra as alternativas e um botão "Responder". Ao responder, aparece "✓ Certo." ou "✕ Errado." e a explicação, e as alternativas travam. Depois da última, aparece "Você acertou X de Y." e o botão "Refazer". Nada é enviado nem guardado (Q-12). Com `quiz.json` vazio, a seção **não aparece**, como a avaliação sem link. As perguntas de verdade vêm da Enactus pelo painel (E-08).
+
+O código abaixo foi **testado em 26/10** (`npm run verify` e teste automático: "Escolha uma alternativa." sem marcar nada, certo/errado, placar e "Refazer" voltando o foco à primeira pergunta).
+
+**Passo a passo**
+
+1. `src/content.config.ts`: troque `// T-15: coleção "quiz"` pelo schema `quiz` da seção 1.3 do [plano](../sdd/05-plano-entrega-final.md) e `// T-15: quiz,` por `quiz,`.
+2. `src/content/quiz.json`, exatamente assim:
+
+   ```json
+   []
+   ```
+
+3. `.pages.yml`: troque `# T-15: coleção "quiz"` por:
+
+   ```yaml
+   - name: quiz
+     label: Quiz
+     type: file
+     path: src/content/quiz.json
      format: json
      list: true
      fields:
-       - name: nome
-         label: Item
-         description: "Ex.: Cascas de banana. Regras de descarte são combinadas com a Enactus antes de mudar."
+       - name: pergunta
+         label: Pergunta
+         type: text
+         required: true
+       - name: alternativas
+         label: Alternativas
+         description: De 2 a 4 alternativas.
          type: string
          required: true
-       - name: classificacao
-         label: Pode ir na lixeira?
-         type: select
+         list:
+           min: 2
+           max: 4
+       - name: correta
+         label: Número da alternativa certa
+         description: "1 para a primeira alternativa, 2 para a segunda, e assim por diante."
+         type: number
          required: true
-         options:
-           values:
-             - name: pode
-               label: Pode
-             - name: nao-pode
-               label: Não pode
-       - name: motivo
-         label: Motivo
-         description: Frase curta explicando o porquê.
-         type: string
+       - name: explicacao
+         label: Explicação
+         description: Aparece depois da resposta, certa ou errada.
+         type: text
          required: true
    ```
 
-4. `GuiaPodeNaoPode.astro`:
+4. `src/components/Quiz.astro` (arquivo inteiro):
 
    ```astro
    ---
    import { getCollection } from "astro:content";
 
-   const itens = (await getCollection("guia")).sort(
+   const perguntas = (await getCollection("quiz")).sort(
      (a, b) => Number(a.id) - Number(b.id),
    );
-   const pode = itens.filter(({ data }) => data.classificacao === "pode");
-   const naoPode = itens.filter(({ data }) => data.classificacao === "nao-pode");
    ---
+
+   {perguntas.length > 0 && (
+     <section id="quiz" aria-labelledby="titulo-quiz" data-quiz>
+       <h2 id="titulo-quiz">Teste o que você aprendeu</h2>
+       <noscript>
+         <p>Para conferir as respostas, ative o JavaScript do navegador.</p>
+       </noscript>
+       <ol class="perguntas">
+         {perguntas.map(({ id, data }) => (
+           <li>
+             <fieldset data-pergunta data-correta={data.correta}>
+               <legend>{data.pergunta}</legend>
+               {data.alternativas.map((alternativa, indice) => (
+                 <label>
+                   <input type="radio" name={`quiz-${id}`} value={indice + 1} />
+                   {alternativa}
+                 </label>
+               ))}
+               <button type="button" class="botao" data-responder hidden>
+                 Responder
+               </button>
+               <div
+                 class="resultado"
+                 tabindex="-1"
+                 aria-live="polite"
+                 data-resultado
+               />
+               <p class="explicacao" hidden data-explicacao>
+                 {data.explicacao}
+               </p>
+             </fieldset>
+           </li>
+         ))}
+       </ol>
+       <div class="final" aria-live="polite">
+         <p data-placar />
+         <button type="button" class="botao" data-refazer hidden>
+           Refazer
+         </button>
+       </div>
+     </section>
+   )}
+
+   <script>
+     // O quiz só ensina: nada é enviado nem guardado (Q-12).
+     for (const quiz of document.querySelectorAll<HTMLElement>("[data-quiz]")) {
+       const perguntas = [
+         ...quiz.querySelectorAll<HTMLFieldSetElement>("[data-pergunta]"),
+       ];
+       const placar = quiz.querySelector<HTMLElement>("[data-placar]")!;
+       const refazer = quiz.querySelector<HTMLButtonElement>("[data-refazer]")!;
+       const acertos = new Map<HTMLFieldSetElement, boolean>();
+
+       const mostrarResultado = (
+         pergunta: HTMLFieldSetElement,
+         acertou: boolean,
+       ) => {
+         const resultado =
+           pergunta.querySelector<HTMLElement>("[data-resultado]")!;
+         const simbolo = document.createElement("span");
+         simbolo.setAttribute("aria-hidden", "true");
+         simbolo.textContent = acertou ? "✓ " : "✕ ";
+         const texto = document.createElement("p");
+         texto.className = acertou ? "certo" : "errado";
+         texto.append(simbolo, acertou ? "Certo." : "Errado.");
+         resultado.replaceChildren(texto);
+         pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = false;
+         resultado.focus();
+       };
+
+       for (const pergunta of perguntas) {
+         const responder =
+           pergunta.querySelector<HTMLButtonElement>("[data-responder]")!;
+         responder.hidden = false;
+         responder.addEventListener("click", () => {
+           const escolhida =
+             pergunta.querySelector<HTMLInputElement>("input:checked");
+           const resultado =
+             pergunta.querySelector<HTMLElement>("[data-resultado]")!;
+           if (!escolhida) {
+             resultado.textContent = "Escolha uma alternativa.";
+             return;
+           }
+           const acertou = escolhida.value === pergunta.dataset.correta;
+           acertos.set(pergunta, acertou);
+           for (const opcao of pergunta.querySelectorAll("input"))
+             opcao.disabled = true;
+           responder.hidden = true;
+           mostrarResultado(pergunta, acertou);
+
+           if (acertos.size === perguntas.length) {
+             const total = [...acertos.values()].filter(Boolean).length;
+             placar.textContent = `Você acertou ${total} de ${perguntas.length}.`;
+             refazer.hidden = false;
+           }
+         });
+       }
+
+       refazer.addEventListener("click", () => {
+         acertos.clear();
+         for (const pergunta of perguntas) {
+           for (const opcao of pergunta.querySelectorAll("input")) {
+             opcao.disabled = false;
+             opcao.checked = false;
+           }
+           pergunta
+             .querySelector<HTMLElement>("[data-resultado]")!
+             .replaceChildren();
+           pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = true;
+           pergunta.querySelector<HTMLElement>("[data-responder]")!.hidden = false;
+         }
+         placar.textContent = "";
+         refazer.hidden = true;
+         perguntas[0]?.querySelector("input")?.focus();
+       });
+     }
+   </script>
+
+   <style>
+     .perguntas {
+       display: grid;
+       gap: calc(var(--espaco) * 1.5);
+       max-width: var(--largura-conteudo);
+       margin: 0;
+       padding: 0;
+       list-style: none;
+     }
+
+     fieldset {
+       margin: 0;
+       border: 0;
+       border-radius: var(--raio);
+       padding: var(--espaco);
+       background: var(--cor-fundo-suave);
+     }
+
+     legend {
+       float: left;
+       width: 100%;
+       margin-bottom: 0.5rem;
+       padding: 0;
+       font-weight: 700;
+     }
+
+     label {
+       clear: both;
+       display: flex;
+       align-items: center;
+       gap: 0.75rem;
+       min-height: var(--alvo-toque);
+     }
+
+     input {
+       flex-shrink: 0;
+       width: 1.25rem;
+       height: 1.25rem;
+       margin: 0;
+     }
+
+     .botao {
+       min-height: var(--alvo-toque);
+       margin-top: 0.5rem;
+       border: 0;
+       border-radius: var(--raio);
+       padding-inline: var(--espaco);
+       background: var(--cor-escura);
+       color: var(--cor-fundo);
+       font: inherit;
+       font-weight: 700;
+       cursor: pointer;
+     }
+
+     .botao:focus-visible {
+       outline-color: var(--cor-escura);
+     }
+
+     .resultado p,
+     .explicacao,
+     .final p {
+       margin: 0.5rem 0 0;
+     }
+
+     .resultado:focus {
+       outline: none;
+     }
+
+     .certo {
+       color: var(--cor-pode);
+       font-weight: 700;
+     }
+
+     .errado {
+       color: var(--cor-nao-pode);
+       font-weight: 700;
+     }
+
+     .final p {
+       font-size: 1.25rem;
+       font-weight: 700;
+     }
+   </style>
    ```
 
-   HTML: `<section id="guia" aria-labelledby="titulo-guia">` com `<h2 id="titulo-guia">O que pode ir nesta lixeira?</h2>` e dois grupos. Cada grupo: `<h3><span aria-hidden="true">✓</span> Pode</h3>` (ou `✕` e "Não pode") e uma `<ul>` de cartões; cada cartão com o **nome** em destaque e o **motivo** em `var(--cor-texto-suave)`. Grupo "Pode" vazio: `<p>Lista do que pode ir na lixeira em validação com a Enactus.</p>`. Ordem dos grupos: "Pode" primeiro.
+5. `src/pages/index.astro`: troque `// T-15: import Quiz from "../components/Quiz.astro";` por `import Quiz from "../components/Quiz.astro";` e `{/* T-15: <Quiz /> */}` por `<Quiz />`.
+6. `docs/guia-edicao-conteudo.md`: troque `<!-- T-15: seção "10. Quiz" -->` por esta seção (o número 10 já está reservado para ela):
 
-5. CSS: cartões com borda esquerda grossa (`var(--cor-pode)` ou `var(--cor-nao-pode)`) e fundo `var(--cor-pode-fundo)` ou `var(--cor-nao-pode-fundo)`; título do grupo na cor do grupo. Compacto: em 360 px, o `<h2>` e o começo da lista precisam aparecer logo abaixo do cabeçalho, **sem rolar**. A partir de `48rem`, os dois grupos podem ficar lado a lado.
-6. Troque o marcador `T-05` no `index.astro` por `<GuiaPodeNaoPode />` (com o `import`).
-7. Em `docs/guia-edicao-conteudo.md`, preencha a seção "Guia pode / não pode": incluir, editar, remover e reordenar itens, e o aviso em destaque: **"Antes de mudar uma regra de descarte, combine com a Enactus."**
+   ```markdown
+   ## 10. Quiz
 
-**Commit sugerido:** `feat(guia): adiciona guia pode/não pode editável pelo painel`
-
-## 6. T-06 · Onde está a lixeira agora
-
-**Arquivos:** `src/content/ponto-coleta.json` (novo), `src/content.config.ts` (marcador `T-06`), `.pages.yml` (marcador `T-06`), `src/components/PontoColeta.astro` (novo), `src/pages/index.astro` (marcador `T-06`), `docs/guia-edicao-conteudo.md` (seção "Onde está a lixeira").
-
-A lixeira faz rodízio aleatório pelo campus, sem agenda; o Prof. Marcus troca o local pelo painel.
-
-**Passo a passo**
-
-1. `src/content/ponto-coleta.json`, um **objeto** (não lista). Use a data do dia do PR:
-
-   ```json
-   {
-     "local": "Local pendente de atualização pelo Prof. Marcus",
-     "comoReconhecer": "Procure a lixeira com o adesivo do QR Code deste site.",
-     "atualizadoEm": "2026-10-22"
-   }
+   1. No menu do painel, abra **Quiz**.
+   2. Cada pergunta tem:
+      - **Pergunta**;
+      - **Alternativas**, de 2 a 4;
+      - **Número da alternativa certa**: 1 para a primeira alternativa, 2 para a segunda, e assim por diante;
+      - **Explicação**, que aparece depois da resposta, certa ou errada.
+   3. Só publique perguntas validadas pela Enactus.
+   4. Se o número da alternativa certa for maior que o número de alternativas, o site não é atualizado e continua com a versão anterior. Confira esse campo antes de salvar.
+   5. Para mudar a ordem, arraste as perguntas. Para esconder o quiz, remova todas as perguntas.
+   6. Clique em **Save** (Salvar).
    ```
 
-2. Em `src/content.config.ts`, no marcador `T-06` (testado):
+**Como testar:** com `quiz.json` igual a `[]`, a seção não aparece. Para ver o quiz, cole no `quiz.json` as perguntas **de exemplo** abaixo, teste e **volte o arquivo para `[]` antes do commit**:
 
-   ```ts
-   const pontoColeta = defineCollection({
-     loader: file("src/content/ponto-coleta.json", {
-       // O arquivo é um objeto único; o Astro exige uma lista com id.
-       parser: (texto) => [
-         { id: "atual", ...(JSON.parse(texto) as Record<string, unknown>) },
-       ],
-     }),
-     schema: z.object({
-       local: z.string().trim().min(1),
-       comoReconhecer: z.string().trim().min(1),
-       atualizadoEm: z.coerce.date(),
-     }),
-   });
-   ```
+```json
+[
+  {
+    "pergunta": "EXEMPLO: Pergunta de teste 1?",
+    "alternativas": ["Alternativa A", "Alternativa B", "Alternativa C"],
+    "correta": 2,
+    "explicacao": "Explicação de teste 1."
+  },
+  {
+    "pergunta": "EXEMPLO: Pergunta de teste 2?",
+    "alternativas": ["Sim", "Não"],
+    "correta": 1,
+    "explicacao": "Explicação de teste 2."
+  },
+  {
+    "pergunta": "EXEMPLO: Pergunta de teste 3?",
+    "alternativas": ["Alternativa A", "Alternativa B", "Alternativa C", "Alternativa D"],
+    "correta": 4,
+    "explicacao": "Explicação de teste 3."
+  }
+]
+```
 
-3. Em `.pages.yml`, no marcador `T-06`. **Sem** `list: true` (é um objeto):
+Confira: "Responder" sem marcar nada mostra "Escolha uma alternativa."; acerto e erro com símbolo e cor; placar "Você acertou X de 3."; "Refazer" limpa tudo e põe o foco na primeira alternativa; tudo funciona só com o teclado (Tab, setas e Espaço). Sem JavaScript, as perguntas aparecem com o aviso do `<noscript>`.
 
-   ```yaml
-   - name: pontoColeta
-     label: Onde está a lixeira
-     type: file
-     path: src/content/ponto-coleta.json
-     format: json
-     fields:
-       - name: local
-         label: Local atual
-         description: "Onde a lixeira está agora. Ex.: Bloco K, perto da cantina."
-         type: string
-         required: true
-       - name: comoReconhecer
-         label: Como reconhecer a lixeira
-         type: text
-         required: true
-       - name: atualizadoEm
-         label: Data da atualização
-         description: Sempre que mudar o local, atualize esta data para o dia de hoje.
-         type: date
-         required: true
-   ```
+**Commit sugerido:** `feat(quiz): adiciona quiz educativo editável pelo painel`
 
-4. `PontoColeta.astro` (testado; a data sai no dia certo, sem voltar um dia por causa do fuso):
+## 7. Como os PRs de vocês se encaixam
 
-   ```astro
-   ---
-   import { getEntry } from "astro:content";
-
-   const ponto = await getEntry("pontoColeta", "atual");
-   if (!ponto) {
-     throw new Error("src/content/ponto-coleta.json não encontrado.");
-   }
-   const { local, comoReconhecer, atualizadoEm } = ponto.data;
-   const dataFormatada = new Intl.DateTimeFormat("pt-BR", {
-     timeZone: "UTC",
-   }).format(atualizadoEm);
-   const dataIso = atualizadoEm.toISOString().slice(0, 10);
-   ---
-   ```
-
-   HTML: `<section id="ponto-de-coleta" aria-labelledby="titulo-ponto">`, `<h2 id="titulo-ponto">Onde está a lixeira agora</h2>`, o `local` em destaque (texto grande, num cartão `var(--cor-fundo-suave)`), o `comoReconhecer` e `<p>Atualizado em <time datetime={dataIso}>{dataFormatada}</time></p>` em `var(--cor-texto-suave)`.
-
-5. Troque o marcador `T-06` no `index.astro` por `<PontoColeta />` (com o `import`).
-6. Em `docs/guia-edicao-conteudo.md`, preencha a seção "Onde está a lixeira" como **passo a passo numerado** para o Prof. Marcus: abrir o painel → "Onde está a lixeira" → trocar o local → trocar a data para hoje → Salvar → esperar cerca de 2 minutos.
-
-**Commit sugerido:** `feat(ponto-coleta): adiciona local atual da lixeira editável pelo painel`
-
-## 7. T-07 · Botão "Avalie o projeto" (Google Forms)
-
-**Arquivos:** `src/content/avaliacao.json` (novo), `src/content.config.ts` (marcador `T-07`), `.pages.yml` (marcador `T-07`), `src/components/Avaliacao.astro` (novo), `src/pages/index.astro` (marcador `T-07`), `docs/guia-edicao-conteudo.md` (seção "Formulário de avaliação").
-
-**Passo a passo**
-
-1. `src/content/avaliacao.json` (objeto). O link fica vazio até o formulário existir (E-02); o Pedro ou o Prof. Marcus coloca pelo painel:
-
-   ```json
-   {
-     "texto": "Sua opinião ajuda a melhorar o projeto. Leva poucos minutos.",
-     "endereco": ""
-   }
-   ```
-
-2. Em `src/content.config.ts`, no marcador `T-07` (testado: `http://` e texto que não é URL são recusados no build):
-
-   ```ts
-   const avaliacao = defineCollection({
-     loader: file("src/content/avaliacao.json", {
-       parser: (texto) => [
-         { id: "formulario", ...(JSON.parse(texto) as Record<string, unknown>) },
-       ],
-     }),
-     schema: z.object({
-       texto: z.string().trim().min(1),
-       endereco: z.preprocess(
-         vazioParaUndefined,
-         z.url({ protocol: /^https$/ }).optional(),
-       ),
-     }),
-   });
-   ```
-
-3. Em `.pages.yml`, no marcador `T-07` (sem `list`):
-
-   ```yaml
-   - name: avaliacao
-     label: Formulário de avaliação
-     type: file
-     path: src/content/avaliacao.json
-     format: json
-     fields:
-       - name: texto
-         label: Texto antes do botão
-         type: text
-         required: true
-       - name: endereco
-         label: Link do Google Forms
-         description: "Começa com https://. Deixe vazio para esconder a seção."
-         type: string
-   ```
-
-4. `Avaliacao.astro`:
-
-   ```astro
-   ---
-   import { getEntry } from "astro:content";
-
-   const formulario = await getEntry("avaliacao", "formulario");
-   const endereco = formulario?.data.endereco;
-   ---
-   ```
-
-   Se **não** houver `endereco`, o componente não renderiza nada (`{endereco && (<section>…</section>)}`). Se houver: `<section id="avaliacao" aria-labelledby="titulo-avaliacao">`, `<h2 id="titulo-avaliacao">Avalie o projeto</h2>`, o `texto` e um **link com cara de botão**:
-
-   ```astro
-   <a class="botao" href={endereco} target="_blank" rel="noopener">
-     Responder o formulário
-     <span class="visualmente-oculto"> (abre em nova aba)</span>
-   </a>
-   ```
-
-   CSS do botão: `display: inline-flex`, `align-items: center`, `min-height: var(--alvo-toque)`, `padding-inline: var(--espaco)`, fundo `var(--cor-destaque)`, texto `var(--cor-texto)`, `border-radius: var(--raio)`, negrito. Defina `.visualmente-oculto` no `<style>` do componente (padrão "sr-only": `position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;`).
-
-5. Troque o marcador `T-07` no `index.astro` por `<Avaliacao />` (com o `import`).
-6. Para **testar** a seção visível, coloque temporariamente um link `https://` qualquer no JSON, confira e **volte para `""` antes do commit**.
-7. Em `docs/guia-edicao-conteudo.md`, preencha a seção "Formulário de avaliação" (como colar ou trocar o link; vazio esconde a seção).
-
-**Commit sugerido:** `feat(avaliacao): adiciona botão do formulário de avaliação`
+- A Nicole muda o visual de todas as seções (T-11). No `GuiaPodeNaoPode.astro`, ela **só apaga** as regras `section` e `h2` do `<style>`; você acrescenta o resto. Os dois PRs entram sem conflito se cada um ficar na sua parte.
+- Se a T-11 entrar na `develop` antes do seu PR, atualize o seu branch (`git switch develop && git pull && git switch <seu branch> && git merge develop`) e teste de novo em 360 px e 1366 px: o guia e o quiz devem ficar com o visual novo sem você mudar nada.
+- A T-14 e a T-15 mexem nos mesmos três arquivos (`content.config.ts`, `.pages.yml` e guia de edição), mas em marcadores diferentes. Faça cada uma num branch e num PR.
 
 ## 8. Antes de abrir o PR (checklist)
 
 - [ ] Só os arquivos da tarefa foram alterados (`git status`).
-- [ ] O conteúdo do JSON é **exatamente** o deste guia (nada inventado; link do formulário vazio).
 - [ ] `npm run verify` passou.
-- [ ] Testado em 360 px (DevTools → modo responsivo → 360 × 640) e no computador; capturas de tela no PR.
-- [ ] Navegação só com o teclado (Tab): links recebem foco visível.
-- [ ] Nenhuma cor fora dos tokens; "Pode" e "Não pode" têm texto e símbolo.
+- [ ] Testado em **360 × 640** e **1366 × 768**, sem rolagem horizontal; capturas das duas no PR.
+- [ ] Navegação só com o teclado (Tab, setas, Enter, Espaço): foco visível no campo, nas alternativas e nos botões.
+- [ ] Sem JavaScript, o guia e as perguntas continuam legíveis.
+- [ ] Nada do que é digitado ou respondido é guardado ou enviado.
+- [ ] Nenhuma cor fora dos tokens; certo e errado com texto e símbolo.
 - [ ] `content.config.ts`, `.pages.yml` e `docs/guia-edicao-conteudo.md` atualizados juntos.
+- [ ] `quiz.json` igual a `[]` e `guia-orientacao.json` igual a `{ "naoListado": "" }` no commit.
 - [ ] Revisei o código gerado pela IA e entendo o que ele faz.
 
 ## 9. Fluxo Git (você executa, não a IA)
@@ -345,31 +571,30 @@ A lixeira faz rodízio aleatório pelo campus, sem agenda; o Prof. Marcus troca 
 ```bash
 git switch develop
 git pull
-git switch -c feature/<nº da issue>-guia-pode-nao-pode   # um branch por tarefa
-npm ci                                                   # só na primeira vez ou se o package-lock mudar
-npm run dev                                              # http://localhost:4321/SocialTech/
+git switch -c feature/<nº da issue>-busca-guia   # um branch por tarefa
+npm ci                                          # só se o package-lock mudar
+npm run dev                                     # http://localhost:4321/SocialTech/
 # ... implementar com a IA, revisar, testar ...
 npm run format
 npm run verify
 git add <arquivos da tarefa>
-git commit -m "feat(guia): adiciona guia pode/não pode editável pelo painel"
-git push -u origin feature/<nº da issue>-guia-pode-nao-pode
+git commit -m "feat(guia): adiciona busca e orientação para item fora da lista"
+git push -u origin feature/<nº da issue>-busca-guia
 ```
 
-Abra o PR para **`develop`** com o template preenchido (`Closes #<nº>`, `Tarefa: T-05`, capturas de tela). O Pedro revisa e aprova. Para a próxima tarefa, volte ao `git switch develop` e `git pull` e crie outro branch: não espere o merge do PR anterior. Os marcadores evitam conflito entre os seus três PRs.
+Abra o PR para **`develop`** com o template preenchido (`Closes #<nº>`, `Tarefa: T-14`, capturas de tela). O Pedro revisa e aprova. Para a T-15, repita com `feature/<nº da issue>-quiz`, partindo da `develop` atualizada.
 
-Mais detalhes em [`CONTRIBUTING.md`](../../CONTRIBUTING.md) e no [plano de tarefas](../sdd/03-plano-tarefas.md).
-
-**Bônus (recomendado):** o Pages CMS (`app.pagescms.org`) deixa escolher o branch. Abra o painel no **seu** branch e confira se os campos aparecem certos e se dá para editar e salvar. Cada "Salvar" ali vira um commit no seu branch: faça `git pull` antes de continuar.
+Mais detalhes em [`CONTRIBUTING.md`](../../CONTRIBUTING.md) e no [plano da entrega final](../sdd/05-plano-entrega-final.md).
 
 ## 10. Problemas comuns
 
 | Sintoma | Causa provável e solução |
 |---|---|
-| `InvalidContentEntryDataError` no build | O JSON não bate com o schema (campo vazio, nome errado, URL sem `https://`). A mensagem diz a coleção e o campo |
-| Data aparece um dia antes | Faltou `timeZone: "UTC"` no `Intl.DateTimeFormat` |
-| Itens fora de ordem | Faltou o `.sort((a, b) => Number(a.id) - Number(b.id))` |
-| Erro de tipo em `ponto.data` ("possibly undefined") | Faltou o `if (!ponto) throw …` depois do `getEntry` |
-| Painel não mostra a coleção | Indentação errada no `.pages.yml` ou `path` diferente do arquivo real |
+| Cartão com `hidden` continua aparecendo | Alguma regra `display` no `.cartao` ganha do `hidden`. Acrescente `.cartao[hidden] { display: none; }` |
+| A busca não acha "citrica" | Falta tirar o acento do texto dos cartões **e** do que foi digitado (`semAcento` nos dois lados) |
+| `Cannot read properties of null` no console | O `<script>` procura um `data-…` que não está no HTML. Confira `data-guia`, `data-busca`, `data-contagem`, `data-quiz` etc. |
+| Aviso `No items found` para `quiz` no build | Normal com `quiz.json` igual a `[]`; não é erro |
+| `InvalidContentEntryDataError` no build | O JSON não bate com o schema (ex.: `correta` maior que o número de alternativas). A mensagem diz a coleção e o campo |
+| O leitor de tela não anuncia o resultado | O texto precisa mudar **dentro** de um elemento com `aria-live="polite"` que já existia na página |
 | `npm run verify` reclama de formatação | Rode `npm run format` |
-| Conflito no PR em `index.astro`, `content.config.ts` ou `.pages.yml` | Alguém mexeu em marcador alheio. Mantenha as duas versões e peça ajuda ao Pedro |
+| Conflito no PR | Alguém mexeu em marcador ou linha alheia. Mantenha as duas versões e peça ajuda ao Pedro |

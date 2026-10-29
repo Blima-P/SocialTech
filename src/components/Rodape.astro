@@ -5,41 +5,54 @@ import ListaLinks from "./ListaLinks.astro";
 ---
 
 <footer>
-  <div class="conteudo">
-    <ListaLinks />
+  <div class="marca">
     <Image src={logo} alt="Enactus Brasil" height={48} />
     <p>Projeto de extensão da UCB em parceria com o Projeto Enactus</p>
   </div>
+  <ListaLinks />
 </footer>
 
 <style>
   footer {
-    margin-top: calc(var(--espaco) * 2);
+    display: grid;
+    gap: calc(var(--espaco) * 1.5);
     border-top: 0.25rem solid var(--cor-destaque);
-    padding-block: calc(var(--espaco) * 1.5);
+    padding: calc(var(--espaco) * 2.5) var(--recuo-lateral);
     background: var(--cor-escura);
     color: var(--cor-fundo);
   }
 
-  .conteudo {
-    max-width: var(--largura-conteudo);
-    margin-inline: auto;
-    padding-inline: var(--espaco);
+  img {
+    width: auto;
+    height: 3rem;
+  }
+
+  .marca p {
+    max-width: 22rem;
+    margin: 0.75rem 0 0;
+    font-size: 0.9375rem;
   }
 
   /* ListaLinks é de outro componente: :global() aplica o estilo só dentro do rodapé. */
-  .conteudo :global(h2) {
-    margin-top: 0;
-    font-size: 1.125rem;
+  footer :global(h2) {
+    margin: 0 0 0.5rem;
+    color: var(--cor-destaque);
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
-  .conteudo :global(ul) {
-    margin: 0 0 var(--espaco);
+  footer :global(h2)::after {
+    display: none;
+  }
+
+  footer :global(ul) {
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .conteudo :global(a) {
+  footer :global(a) {
     display: inline-flex;
     align-items: center;
     min-width: var(--alvo-toque);
@@ -48,17 +61,14 @@ import ListaLinks from "./ListaLinks.astro";
     text-decoration: underline;
   }
 
-  .conteudo :global(a:focus-visible) {
+  footer :global(a:focus-visible) {
     outline-color: var(--cor-destaque);
   }
 
-  img {
-    width: auto;
-    height: 3rem;
-  }
-
-  p {
-    margin: calc(var(--espaco) / 2) 0 0;
-    font-size: 0.875rem;
+  @media (min-width: 48rem) {
+    footer {
+      grid-template-columns: 1fr auto;
+      align-items: start;
+    }
   }
 </style>

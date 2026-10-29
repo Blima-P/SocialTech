@@ -74,12 +74,41 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 3. Para esconder a seção, deixe o campo **Link do Google Forms** vazio.
 4. Clique em **Save** (Salvar).
 
-## 8. Quando a mudança aparece no site?
+<!-- Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu. -->
+## 8. Números de impacto
+
+1. No menu do painel, abra **Números de impacto**.
+2. Cada item tem o **Número** (ex.: "81 milhões de toneladas"), a **Frase** que o completa e a **Fonte** (quem publicou o dado e o ano).
+3. Todo número precisa de fonte. Não publique dado sem fonte confiável.
+4. Para mudar a ordem, arraste os itens. Para esconder a seção, remova todos os itens.
+5. Clique em **Save** (Salvar).
+
+## 9. Item fora da lista do guia
+
+1. No menu do painel, abra **Guia: item fora da lista**.
+2. No campo **Orientação para item fora da lista**, escreva o que a pessoa deve fazer quando não encontra o item no guia. Use o texto combinado com a Enactus.
+3. Esse texto aparece na caixa "Não achou seu item?", embaixo do guia. Com o campo vazio, a caixa mostra "Orientação para itens fora da lista em validação com a Enactus."
+4. Clique em **Save** (Salvar).
+
+## 10. Quiz
+
+1. No menu do painel, abra **Quiz**.
+2. Cada pergunta tem:
+   - **Pergunta**;
+   - **Alternativas**, de 2 a 4;
+   - **Número da alternativa certa**: 1 para a primeira alternativa, 2 para a segunda, e assim por diante;
+   - **Explicação**, que aparece depois da resposta, certa ou errada.
+3. Só publique perguntas validadas pela Enactus.
+4. Se o número da alternativa certa for maior que o número de alternativas, o site não é atualizado e continua com a versão anterior. Confira esse campo antes de salvar.
+5. Para mudar a ordem, arraste as perguntas. Para esconder o quiz, remova todas as perguntas.
+6. Clique em **Save** (Salvar).
+
+## 11. Quando a mudança aparece no site?
 
 Cerca de **2 minutos** depois de salvar. Recarregue a página do site: **https://blima-p.github.io/SocialTech/**
 
 Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto). Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
 
-## 9. Dúvidas
+## 12. Dúvidas
 
 Fale com o Pedro, responsável técnico do projeto.

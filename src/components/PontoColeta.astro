@@ -23,14 +23,16 @@ const dataIso = atualizadoEm.toISOString().slice(0, 10);
 
 <style>
   section {
-    margin-block: var(--espaco);
+    background: var(--cor-fundo-suave);
   }
 
   .local {
+    max-width: var(--largura-conteudo);
     margin: 0;
+    border-left: 0.375rem solid var(--cor-destaque);
     border-radius: var(--raio);
     padding: var(--espaco);
-    background: var(--cor-fundo-suave);
+    background: var(--cor-fundo);
     font-size: 1.25rem;
     font-weight: 700;
   }

@@ -18,7 +18,16 @@ const endereco = formulario?.data.endereco;
 
 <style>
   section {
-    margin-block: var(--espaco);
+    background: var(--cor-destaque);
+  }
+
+  /* Na faixa amarela, o traço do título e o contorno de foco ficam escuros. */
+  h2::after {
+    background: var(--cor-escura);
+  }
+
+  .botao:focus-visible {
+    outline-color: var(--cor-escura);
   }
 
   .botao {
@@ -27,8 +36,8 @@ const endereco = formulario?.data.endereco;
     min-height: var(--alvo-toque);
     padding-inline: var(--espaco);
     border-radius: var(--raio);
-    background: var(--cor-destaque);
-    color: var(--cor-texto);
+    background: var(--cor-escura);
+    color: var(--cor-fundo);
     font-weight: 700;
   }
 

@@ -102,7 +102,6 @@ const avaliacao = defineCollection({
   }),
 });
 
-// Marcadores do plano do MVP (docs/sdd/03-plano-tarefas.md, seção 1.3): cada tarefa troca só o seu.
 const ciclo = defineCollection({
   loader: file("src/content/ciclo.json", {
     // Lista simples; o id é a posição, para manter a ordem definida no painel.
@@ -121,7 +120,57 @@ const ciclo = defineCollection({
   }),
 });
 
-// T-06: coleção "pontoColeta" (docs/equipe/luiz.md)
+// Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
+const impacto = defineCollection({
+  loader: file("src/content/impacto.json", {
+    parser: (texto) =>
+      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
+        id: String(indice),
+        ...item,
+      })),
+  }),
+  schema: z.object({
+    numero: z.string().trim().min(1),
+    descricao: z.string().trim().min(1),
+    fonte: z.string().trim().min(1),
+  }),
+});
+
+const guiaOrientacao = defineCollection({
+  loader: file("src/content/guia-orientacao.json", {
+    parser: (texto) => [
+      { id: "atual", ...(JSON.parse(texto) as Record<string, unknown>) },
+    ],
+  }),
+  schema: z.object({
+    naoListado: z.preprocess(
+      vazioParaUndefined,
+      z.string().trim().min(1).optional(),
+    ),
+  }),
+});
+
+const quiz = defineCollection({
+  loader: file("src/content/quiz.json", {
+    parser: (texto) =>
+      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
+        id: String(indice),
+        ...item,
+      })),
+  }),
+  schema: z
+    .object({
+      pergunta: z.string().trim().min(1),
+      alternativas: z.array(z.string().trim().min(1)).min(2).max(4),
+      // Número da alternativa certa, contando a partir de 1 (como aparece no painel).
+      correta: z.number().int().min(1),
+      explicacao: z.string().trim().min(1),
+    })
+    .refine((item) => item.correta <= item.alternativas.length, {
+      message: "A alternativa certa precisa existir na lista de alternativas.",
+      path: ["correta"],
+    }),
+});
 
 export const collections = {
   secoes,
@@ -133,4 +182,10 @@ export const collections = {
   pontoColeta,
 
   avaliacao,
+
+  impacto,
+
+  guiaOrientacao,
+
+  quiz,
 };
