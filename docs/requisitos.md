@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.0 (26/10/2026) |
+| Versão | 1.1 (29/10/2026): situação depois da release final |
 | Status | 🚦 Em revisão pela equipe |
 | Tarefa | T-16 (issue #37) |
 | Base | [Constituição](sdd/00-constituicao.md), [Especificação](sdd/01-especificacao.md), [Clarificações](sdd/02-clarificacoes.md), [Plano do MVP](sdd/03-plano-tarefas.md), [Plano da entrega final](sdd/05-plano-entrega-final.md) |
@@ -28,10 +28,11 @@ Este documento diz **o que** o site precisa fazer (requisitos funcionais), **com
 
 **Fora:** o que está em [especificação §4.1](sdd/01-especificacao.md#41-fora-do-escopo-wont-neste-semestre) (login, dados em tempo real, aplicativo, ranking, outros idiomas, mapa com geolocalização, chatbot). As atividades fora do site (ação no campus, cartazes, análise do formulário) estão na [especificação §4.2](sdd/01-especificacao.md#42-fora-do-site-mas-dentro-do-projeto).
 
-### 1.3 Situação em 26/10/2026
+### 1.3 Situação em 29/10/2026
 
-- O **MVP** (requisitos **Must**) foi publicado na `main` em 26/10/2026 (PR #29) e está em `https://blima-p.github.io/SocialTech/`. A Homologação 1 está marcada para 26/10, 20h.
-- Os requisitos **Should** são entregues pelas tarefas T-11 a T-15 ([plano da entrega final](sdd/05-plano-entrega-final.md)), com release em 28/10 e Homologação 2 em 29/10/2026.
+- O **MVP** (requisitos **Must**) foi publicado na `main` em 26/10/2026 (PR #29) e está em `https://blima-p.github.io/SocialTech/`.
+- Os requisitos **Should** foram entregues pelas tarefas T-11 a T-16 ([plano da entrega final](sdd/05-plano-entrega-final.md)) e publicados na release final de 29/10/2026 (PR #47).
+- As melhorias depois da entrega (T-18 a T-23) estão no [plano de melhorias](sdd/06-plano-melhorias.md). O conteúdo ainda pendente está na [seção 6](#6-requisitos-de-conteúdo).
 - O plano do MVP foi feito antes deste documento (exceção aprovada em [03-plano-tarefas.md §0.1](sdd/03-plano-tarefas.md#01-exceção-aprovada-à-definição-de-preparado)). A [seção 8](#8-matriz-de-rastreabilidade) liga cada tarefa já feita aos requisitos daqui.
 
 ### 1.4 Convenções
@@ -124,7 +125,7 @@ Funcionalidade: Guia "Pode / Não pode"
 | Prioridade | Should |
 | Origem | OE-2 · C-02 · Jornada J1 |
 | Conteúdo | Usa os itens de RC-01 e RC-02 |
-| Situação | 🔨 Planejado (T-14, issue #35) |
+| Situação | ✅ Implementado (T-14, PR #41) |
 
 ```gherkin
 Funcionalidade: Busca no guia
@@ -154,7 +155,7 @@ Funcionalidade: Busca no guia
 | Prioridade | Should |
 | Origem | OE-2 · C-02 · Jornada J1 (passo 5) |
 | Conteúdo | RC-03 |
-| Situação | 🔨 Planejado (T-14, issue #35); texto [PENDENTE] (Q-02) |
+| Situação | ✅ Implementado (T-14, PR #41); texto [PENDENTE] (Q-02) |
 
 ```gherkin
 Funcionalidade: Item não listado
@@ -207,7 +208,7 @@ Funcionalidade: Ciclo do resíduo
 | Prioridade | Should |
 | Origem | OE-1 · C-03b · Jornada J2 |
 | Conteúdo | RC-04, RC-05; fotos (RC-06) ficam fora desta entrega |
-| Situação | 🔨 Planejado (T-12, issue #33; depende da T-11) |
+| Situação | ✅ Implementado (T-12, PR #46) |
 
 ```gherkin
 Funcionalidade: Ciclo passo a passo
@@ -314,7 +315,7 @@ Funcionalidade: Contatos e links
 | Prioridade | Should |
 | Origem | C-12 (transversal, todas as jornadas) |
 | Conteúdo | RC-14 |
-| Situação | ✅ Cabeçalho e rodapé (T-02, PR #23) · 🔨 redesign, menu e Roboto (T-11, issue #32) |
+| Situação | ✅ Cabeçalho e rodapé (T-02, PR #23); redesign, menu e Roboto (T-11, PR #44) |
 
 ```gherkin
 Funcionalidade: Identidade e navegação
@@ -347,7 +348,7 @@ Funcionalidade: Identidade e navegação
 | Prioridade | Should |
 | Origem | OE-5 · C-10 · Jornada J2 |
 | Conteúdo | RC-13 |
-| Situação | 🔨 Planejado (T-13, issue #34) |
+| Situação | ✅ Implementado (T-13, PR #45) |
 
 ```gherkin
 Funcionalidade: Números de impacto
@@ -370,7 +371,7 @@ Funcionalidade: Números de impacto
 | Prioridade | Should |
 | Origem | OE-5, OE-6 · C-07 · Jornada J3 |
 | Conteúdo | RC-12 |
-| Situação | 🔨 Planejado (T-15, issue #36); perguntas [PENDENTE] (Q-06) |
+| Situação | ✅ Implementado (T-15, PR #42); perguntas [PENDENTE] (Q-06) |
 
 ```gherkin
 Funcionalidade: Quiz
@@ -480,7 +481,7 @@ Funcionalidade: QR Code impresso
 | Prioridade | **Must** |
 | Origem | C-11 · Jornada J7 |
 | Conteúdo | Todas as coleções da [arquitetura §6](arquitetura.md#6-modelo-de-dados-do-conteúdo) |
-| Situação | ✅ Implementado (ADR-002) para as coleções do MVP · 🔨 `impacto`, `guiaOrientacao` e `quiz` (T-13, T-14, T-15) |
+| Situação | ✅ Implementado (ADR-002), inclusive `impacto`, `guiaOrientacao` e `quiz` (T-13, T-14, T-15) |
 
 ```gherkin
 Funcionalidade: Edição sem programar
@@ -517,12 +518,12 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 | RNF-02 | Desempenho | No Lighthouse em modo celular (4G simulado): **Desempenho ≥ 90** e **LCP ≤ 3 s** [SUPOSIÇÃO: meta proposta pela T-16, a confirmar na H2] | Lighthouse, modo celular, na página publicada | Should | A medir na H2 |
 | RNF-03 | Acessibilidade | Lighthouse em modo celular: **Acessibilidade ≥ 90** [CONFIRMADO, H2-6] | Lighthouse | **Must** | A medir na H2 |
 | RNF-04 | Acessibilidade | Contraste de texto **≥ 4,5:1** (WCAG 2.1 AA); só os pares de cor da [arquitetura §5.1](arquitetura.md#51-cores-e-contraste) | Tabela de pares; verificador de contraste | **Must** | ✅ |
-| RNF-05 | Acessibilidade | Em **360 px** não há rolagem horizontal; em **1366 px** o conteúdo fica centralizado em até `72rem` | Modo responsivo do navegador e celular real | **Must** (360 px) · Should (1366 px, T-11) | ✅ 360 px · 🔨 1366 px |
+| RNF-05 | Acessibilidade | Em **360 px** não há rolagem horizontal; em **1366 px** o conteúdo fica centralizado em até `72rem` | Modo responsivo do navegador e celular real | **Must** (360 px) · Should (1366 px, T-11) | ✅ (1366 px: T-11, PR #44) |
 | RNF-06 | Acessibilidade | Botões, links de ação, campos e alternativas com alvo de toque **≥ 44 × 44 px** (`--alvo-toque`) | Ferramentas do navegador (medir o elemento) | **Must** | ✅ |
-| RNF-07 | Acessibilidade | Tudo que é interativo funciona **só com teclado** (Tab, Enter, Espaço), com **foco visível**; um único `<h1>`; cada seção com `<h2>` ligado por `aria-labelledby`; testado com leitor de tela (TalkBack ou VoiceOver) | Teste manual com teclado e leitor de tela | **Must** | ✅ MVP · 🔨 T-12, T-14, T-15 |
+| RNF-07 | Acessibilidade | Tudo que é interativo funciona **só com teclado** (Tab, Enter, Espaço), com **foco visível**; um único `<h1>`; cada seção com `<h2>` ligado por `aria-labelledby`; testado com leitor de tela (TalkBack ou VoiceOver) | Teste manual com teclado e leitor de tela | **Must** | ✅ (T-12, T-14 e T-15 incluídas) |
 | RNF-08 | Acessibilidade | Nenhuma informação só por cor: "Pode"/"Não pode" e "Certo"/"Errado" sempre com **texto e símbolo** | Ver a página em escala de cinza | **Must** | ✅ |
 | RNF-09 | Acessibilidade | Com `prefers-reduced-motion: reduce`, nenhuma animação nem rolagem suave | Emular a preferência nas ferramentas do navegador | **Must** | ✅ |
-| RNF-10 | Robustez | **Sem JavaScript**, todo o conteúdo continua legível (guia completo, todas as etapas do ciclo, perguntas do quiz com aviso) (ADR-008) | Desativar o JavaScript no navegador | **Must** | ✅ MVP · 🔨 T-12, T-14, T-15 |
+| RNF-10 | Robustez | **Sem JavaScript**, todo o conteúdo continua legível (guia completo, todas as etapas do ciclo, perguntas do quiz com aviso) (ADR-008) | Desativar o JavaScript no navegador | **Must** | ✅ (T-12, T-14 e T-15 incluídas) |
 | RNF-11 | Compatibilidade | Funciona nas versões atuais de Chrome (Android) e Safari (iOS) e de Chrome, Edge e Firefox no computador; testado em **2 celulares reais** com 4G | Roteiro de homologação ([arquitetura §10.2](arquitetura.md#102-roteiro-de-homologação)) | **Must** | H1 e H2 |
 | RNF-12 | Privacidade (LGPD) | **Nenhum dado pessoal** coletado; **nenhum cookie**; as únicas requisições a terceiros são as do GoatCounter (`gc.zgo.at` e `socialtech-ucb.goatcounter.com`); busca e quiz não enviam nem guardam nada | Aba Rede e aba Aplicação (Cookies, Local Storage) | **Must** | ✅ |
 | RNF-13 | Segurança | Nenhum segredo no repositório; nenhum `set:html`, `innerHTML`, `eval` ou `new Function` com conteúdo do painel (bloqueado pelo ESLint); links que abrem nova aba com `rel="noopener"`; site só em HTTPS | `npm run lint`; revisão de PR | **Must** | ✅ |
@@ -608,7 +609,7 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 
 ### 8.2 Tarefa → requisitos
 
-| Tarefa | Requisitos | Issue / PR | Situação em 26/10/2026 |
+| Tarefa | Requisitos | Issue / PR | Situação em 29/10/2026 |
 |---|---|---|---|
 | T-01 Base da `develop` para o MVP | RF-15, RNF-04, RNF-14, RNF-16 | PR #7 | ✅ Concluída |
 | T-02 Cabeçalho e rodapé | RF-08, RF-09 | #8 / PR #23 | ✅ Concluída |
@@ -618,15 +619,15 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 | T-06 Onde está a lixeira | RF-06 | #12 / PR #21 | ✅ Concluída |
 | T-07 Botão de avaliação | RF-12 | #13 / PR #22 | ✅ Concluída |
 | T-08 Contagem de acessos | RF-13, RNF-12 | #14 / PR #27 | ✅ Concluída |
-| T-09 Publicação do MVP e H1 | Todos os **Must** | #15 / PR #29 | 🔨 Release feita; H1 em 26/10, 20h |
+| T-09 Publicação do MVP e H1 | Todos os **Must** | #15 / PR #29 | ✅ Concluída |
 | T-10 Base da entrega final | RF-09, RF-15, RNF-16 | #39 / PR #30 | ✅ Concluída |
-| T-11 Redesign Enactus | RF-09, RNF-05, RNF-06, RNF-07, RNF-09 | #32 | 🔨 Aberta |
-| T-12 Ciclo interativo | RF-05, RNF-07, RNF-10 | #33 | 🔨 Aberta (depende da T-11) |
-| T-13 Números de impacto | RF-10, RF-15, RN-02 | #34 | 🔨 Aberta |
-| T-14 Busca e item não listado | RF-02, RF-03, RF-15, RNF-10, RNF-12 | #35 | 🔨 Aberta |
-| T-15 Quiz | RF-11, RF-15, RN-06, RNF-10, RNF-12 | #36 | 🔨 Aberta |
-| T-16 Documentação do SDD | Rastreabilidade de todos os requisitos | #37 | 🔨 Este documento |
-| T-17 Release final e H2 | Todos os **Must** e **Should** entregues; RNF-01 a RNF-03 | #38 | 🔨 Aberta |
+| T-11 Redesign Enactus | RF-09, RNF-05, RNF-06, RNF-07, RNF-09 | #32 / PR #44 | ✅ Concluída |
+| T-12 Ciclo interativo | RF-05, RNF-07, RNF-10 | #33 / PR #46 | ✅ Concluída |
+| T-13 Números de impacto | RF-10, RF-15, RN-02 | #34 / PR #45 | ✅ Concluída |
+| T-14 Busca e item não listado | RF-02, RF-03, RF-15, RNF-10, RNF-12 | #35 / PR #41 | ✅ Concluída |
+| T-15 Quiz | RF-11, RF-15, RN-06, RNF-10, RNF-12 | #36 / PR #42 | ✅ Concluída |
+| T-16 Documentação do SDD | Rastreabilidade de todos os requisitos | #37 / PR #40 | ✅ Concluída |
+| T-17 Release final e H2 | Todos os **Must** e **Should** entregues; RNF-01 a RNF-03 | #38 / PR #47 | ✅ Release feita |
 
 ## 9. Pendências e riscos
 

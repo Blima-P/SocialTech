@@ -74,7 +74,6 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 3. Para esconder a seção, deixe o campo **Link do Google Forms** vazio.
 4. Clique em **Save** (Salvar).
 
-<!-- Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu. -->
 ## 8. Números de impacto
 
 1. No menu do painel, abra **Números de impacto**.

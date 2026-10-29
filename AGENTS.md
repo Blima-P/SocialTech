@@ -53,7 +53,7 @@ Decisão registrada no **ADR-001** (aprovado pela equipe em 15/10/2026): **Astro
 | Conteúdo | **Content Collections** do Astro (JSON/Markdown validados por schema `zod`), editadas pelo professor no painel **Pages CMS** (ADR-002) |
 | Qualidade | ESLint (com regras de acessibilidade), Prettier e `astro check` |
 | Hospedagem | GitHub Pages, build via GitHub Actions a partir da branch `main` |
-| URL | `https://blima-p.github.io/SocialTech/` (`base: "/SocialTech"` no `astro.config.mjs`) |
+| URL | `https://blima-p.github.io/SocialTech/` (`base: "/SocialTech/"` no `astro.config.mjs`) |
 | Node.js | 22.22 ou superior |
 | Python | Apenas como **ferramenta auxiliar** fora do site (ex.: gerar QR Code, analisar respostas do Forms) |
 
