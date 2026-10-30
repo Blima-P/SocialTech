@@ -69,11 +69,22 @@ const pontoColeta = defineCollection({
   loader: file("src/content/ponto-coleta.json", {
     parser: objetoUnico("atual"),
   }),
-  schema: z.object({
-    local: z.string().trim().min(1),
-    comoReconhecer: z.string().trim().min(1),
-    atualizadoEm: z.coerce.date(),
-  }),
+  schema: ({ image }) =>
+    z
+      .object({
+        local: z.string().trim().min(1),
+        comoReconhecer: z.string().trim().min(1),
+        atualizadoEm: z.coerce.date(),
+        imagem: z.preprocess(vazioParaUndefined, image().optional()),
+        descricaoImagem: z.preprocess(
+          vazioParaUndefined,
+          z.string().trim().min(1).optional(),
+        ),
+      })
+      .refine((ponto) => !ponto.imagem || ponto.descricaoImagem, {
+        message: "Toda imagem precisa de descrição (texto alternativo).",
+        path: ["descricaoImagem"],
+      }),
 });
 
 const guia = defineCollection({

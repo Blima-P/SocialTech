@@ -1,11 +1,13 @@
 ---
 import { getEntry } from "astro:content";
+import { Image } from "astro:assets";
 
 const ponto = await getEntry("pontoColeta", "atual");
 if (!ponto) {
   throw new Error("src/content/ponto-coleta.json não encontrado.");
 }
-const { local, comoReconhecer, atualizadoEm } = ponto.data;
+const { local, comoReconhecer, atualizadoEm, imagem, descricaoImagem } =
+  ponto.data;
 const dataFormatada = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "UTC",
 }).format(atualizadoEm);
@@ -15,6 +17,15 @@ const dataIso = atualizadoEm.toISOString().slice(0, 10);
 <section id="ponto-de-coleta" aria-labelledby="titulo-ponto">
   <h2 id="titulo-ponto">Onde está a lixeira agora</h2>
   <p class="local">{local}</p>
+  {imagem && (
+    <Image
+      class="foto"
+      src={imagem}
+      alt={descricaoImagem ?? ""}
+      widths={[360, 720]}
+      sizes="(max-width: 40rem) 100vw, 40rem"
+    />
+  )}
   <p>{comoReconhecer}</p>
   <p class="atualizacao">
     Atualizado em <time datetime={dataIso}>{dataFormatada}</time>
@@ -35,6 +46,15 @@ const dataIso = atualizadoEm.toISOString().slice(0, 10);
     background: var(--cor-fundo);
     font-size: 1.25rem;
     font-weight: 700;
+  }
+
+  .foto {
+    display: block;
+    width: 100%;
+    max-width: var(--largura-conteudo);
+    height: auto;
+    margin-top: var(--espaco);
+    border-radius: var(--raio);
   }
 
   .atualizacao {
