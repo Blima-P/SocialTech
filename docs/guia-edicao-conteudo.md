@@ -62,6 +62,8 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 2. Cada item é uma etapa do caminho do resto de comida. Para cada uma, preencha:
    - **Nome da etapa**: o nome que aparece no site (ex.: "Compostagem").
    - **Frase curta (opcional)**: uma frase explicando a etapa. Se deixar vazio, aparece só o nome.
+   - **Foto (opcional)**: envie uma foto do espaço (JPG, PNG ou WEBP). Use só fotos autorizadas pela Enactus.
+   - **Descrição da foto**: obrigatória quando houver foto. Escreva o que a foto mostra, por exemplo "Canteiros da Horta Botânica". Ela é lida em voz alta para pessoas com deficiência visual.
 3. Para mudar a ordem, arraste as etapas. A ordem da lista é a ordem no site.
 4. Clique em **Save** (Salvar).
 
