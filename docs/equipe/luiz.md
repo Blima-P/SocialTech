@@ -53,6 +53,7 @@ O [`AGENTS.md`](../../AGENTS.md) tem a lista completa e **prevalece** sobre este
 | `src/content.config.ts`, `.pages.yml`, `docs/guia-edicao-conteudo.md` | Schemas, painel e manual | Só os marcadores `T-14` e `T-15` |
 | `src/pages/index.astro` | A página | T-15: só os marcadores `T-15` |
 | `src/styles/global.css` | Tokens e estilos gerais (da Nicole) | Não mexa |
+| `src/styles/animacoes.css` | Animações (T-24, do Pedro) | Não mexa |
 
 **Marcadores:** a T-10 deixou comentários `T-13`, `T-14` e `T-15`. Troque **só os seus** (`T-14` e `T-15`) e não toque nos da Nicole (`T-13`). Assim os PRs não entram em conflito.
 
