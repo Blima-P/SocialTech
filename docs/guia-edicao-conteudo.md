@@ -52,9 +52,11 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 
 1. No menu do painel, abra **Onde está a lixeira**.
 2. Troque o campo **Local atual** pelo local onde a lixeira está agora.
-3. Atualize **Data da atualização** para a data de hoje.
-4. Clique em **Save** (Salvar).
-5. Aguarde cerca de **2 minutos** para a mudança aparecer no site.
+3. Envie ou troque **Foto da lixeira (opcional)** para mostrar como ela está no local atual.
+4. Se houver foto, preencha **Descrição da foto** com uma descrição objetiva do que aparece nela; esse texto é usado como texto alternativo para leitores de tela.
+5. Atualize **Data da atualização** para a data de hoje.
+6. Clique em **Save** (Salvar).
+7. Aguarde cerca de **2 minutos** para a mudança aparecer no site.
 
 ## 6. Ciclo do resíduo
 
