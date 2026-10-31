@@ -104,13 +104,24 @@ const ciclo = defineCollection({
   loader: file("src/content/ciclo.json", {
     parser: listaComPosicao,
   }),
-  schema: z.object({
-    nome: z.string().trim().min(1),
-    descricao: z.preprocess(
-      vazioParaUndefined,
-      z.string().trim().min(1).optional(),
-    ),
-  }),
+  schema: ({ image }) =>
+    z
+      .object({
+        nome: z.string().trim().min(1),
+        descricao: z.preprocess(
+          vazioParaUndefined,
+          z.string().trim().min(1).optional(),
+        ),
+        imagem: z.preprocess(vazioParaUndefined, image().optional()),
+        descricaoImagem: z.preprocess(
+          vazioParaUndefined,
+          z.string().trim().min(1).optional(),
+        ),
+      })
+      .refine((etapa) => !etapa.imagem || etapa.descricaoImagem, {
+        message: "Toda imagem precisa de descrição (texto alternativo).",
+        path: ["descricaoImagem"],
+      }),
 });
 
 const impacto = defineCollection({
