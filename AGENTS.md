@@ -61,7 +61,7 @@ Estrutura:
 
 ```
 src/
-├── pages/            # rotas; index.astro é a página inicial
+├── pages/            # rotas; index.astro é a página inicial e 404.astro, a de erro
 ├── layouts/          # estrutura HTML comum (BaseLayout.astro)
 ├── components/       # componentes reutilizáveis (ex.: GuiaPodeNaoPode.astro, Quiz.astro)
 ├── content/          # conteúdo editável pelo painel (JSON e secoes/*.md), separado da lógica
@@ -69,7 +69,7 @@ src/
 ├── scripts/          # TypeScript de interatividade no navegador
 ├── assets/           # imagens otimizadas pelo Astro (astro:assets); assets/conteudo/ recebe os uploads do painel
 └── styles/           # CSS global e tokens do design system
-public/               # arquivos copiados sem processamento (favicon, imagem do QR Code)
+public/               # arquivos copiados sem processamento (favicon, compartilhar.png da prévia nas redes)
 docs/                 # especificação SDD: requisitos, arquitetura, ADRs, plano de tarefas
 ```
 
