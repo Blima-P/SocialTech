@@ -111,6 +111,40 @@ h3 {
   outline-offset: 2px;
 }
 
+/* Botão principal do site (arquitetura, seção 5.5). */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  border: 0;
+  border-radius: var(--raio);
+  padding-inline: var(--espaco);
+  background: var(--cor-escura);
+  color: var(--cor-fundo);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* O display acima ganharia do atributo hidden (botões do quiz). */
+.botao[hidden] {
+  display: none;
+}
+
+.botao:hover {
+  text-decoration: underline;
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
