@@ -10,6 +10,7 @@ import Rodape from "../components/Rodape.astro";
 import CicloResiduo from "../components/CicloResiduo.astro";
 import NumerosImpacto from "../components/NumerosImpacto.astro";
 import Quiz from "../components/Quiz.astro";
+import FaixaParceria from "../components/FaixaParceria.astro";
 
 const secoes = (
   await getCollection("secoes", ({ data }) => data.publicada)
@@ -37,6 +38,8 @@ const secoes = (
     {secoes.map((secao) => (
       <Secao secao={secao} />
     ))}
+
+    <FaixaParceria />
   </main>
   <Rodape />
 </BaseLayout>

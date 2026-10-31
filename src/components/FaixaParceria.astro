@@ -1,0 +1,222 @@
+---
+import { Image } from "astro:assets";
+import logoEnactus from "../assets/marca/logo-enactus-brasil.svg";
+
+/* Versão para a web da faixa "Um projeto de parceria" da lixeira (foto do Prof. Marcus).
+   A UCB aparece como marca em texto até recebermos o arquivo oficial do logo. */
+---
+
+<section class="parceria" aria-labelledby="parceria-titulo">
+  <svg class="folha folha-esq" viewBox="0 0 64 64" aria-hidden="true">
+    <path d="M32 60C32 38 18 22 4 18c4 22 14 36 28 42Z" />
+    <path d="M32 60c0-20 10-38 28-46-2 24-12 40-28 46Z" />
+  </svg>
+  <svg class="folha folha-dir" viewBox="0 0 64 64" aria-hidden="true">
+    <path d="M32 60C32 38 18 22 4 18c4 22 14 36 28 42Z" />
+    <path d="M32 60c0-20 10-38 28-46-2 24-12 40-28 46Z" />
+  </svg>
+
+  <div class="cartao">
+    <h2 id="parceria-titulo">Um projeto de parceria</h2>
+    <ul class="marcas">
+      <li class="marca">
+        <Image src={logoEnactus} alt="Enactus" height={56} />
+      </li>
+      <li class="marca">
+        <p class="ucb">
+          <span class="ucb-sigla">UCB</span>
+          <span class="ucb-nome">Universidade Católica de Brasília</span>
+        </p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .parceria {
+    --cor-ucb: #003f7d;
+
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 15% 120%, #cfe9d6 0 30%, transparent 31%),
+      radial-gradient(circle at 90% -20%, #cfe9d6 0 25%, transparent 26%),
+      var(--cor-pode-fundo);
+  }
+
+  .cartao {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: calc(var(--espaco) * 1.25);
+    max-width: 44rem;
+    margin-inline: auto;
+    border-radius: calc(var(--raio) * 2);
+    padding: calc(var(--espaco) * 1.75) calc(var(--espaco) * 1.5);
+    background: var(--cor-fundo);
+    box-shadow: 0 0.75rem 2rem -1rem rgb(30 107 52 / 35%);
+    text-align: center;
+  }
+
+  h2 {
+    margin: 0;
+    color: var(--cor-texto-suave);
+    font-size: 0.875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h2::after {
+    margin-inline: auto;
+  }
+
+  .marcas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--espaco) * 1.5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* "+" entre as marcas: decorativo, fora da árvore de acessibilidade. */
+  .marca + .marca::before {
+    content: "+" / "";
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-right: calc(var(--espaco) * 1.5);
+    border-radius: 50%;
+    background: var(--cor-destaque);
+    color: var(--cor-texto);
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .marca {
+    display: flex;
+    align-items: center;
+  }
+
+  .marca img {
+    width: auto;
+    height: 3.5rem;
+  }
+
+  .ucb {
+    display: grid;
+    justify-items: center;
+    margin: 0;
+    color: var(--cor-ucb);
+    line-height: 1.1;
+  }
+
+  .ucb-sigla {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .ucb-nome {
+    max-width: 10rem;
+    font-size: 0.75rem;
+    text-wrap: balance;
+  }
+
+  .folha {
+    position: absolute;
+    bottom: -0.5rem;
+    width: clamp(4rem, 12vw, 7rem);
+    fill: var(--cor-pode);
+    opacity: 0.18;
+    transform-origin: 50% 100%;
+  }
+
+  .folha-esq {
+    left: clamp(0.5rem, 6vw, 5rem);
+  }
+
+  .folha-dir {
+    right: clamp(0.5rem, 6vw, 5rem);
+    transform: scaleX(-1);
+  }
+
+  @media (max-width: 30rem) {
+    .marca + .marca::before {
+      display: none;
+    }
+
+    .marcas {
+      flex-direction: column;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .folha-esq {
+      animation: balancar 6s ease-in-out infinite alternate;
+    }
+
+    .folha-dir {
+      animation: balancar-espelhado 7s ease-in-out infinite alternate;
+    }
+
+    .marca {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .marca:hover {
+      transform: translateY(-0.25rem);
+    }
+
+    @supports (animation-timeline: view()) {
+      .cartao {
+        animation: surgir linear both;
+        animation-range: entry 0% entry 80%;
+        animation-timeline: view();
+      }
+
+      .marca + .marca::before {
+        animation: girar linear both;
+        animation-range: entry 20% cover 40%;
+        animation-timeline: view();
+      }
+    }
+
+    @keyframes balancar {
+      from {
+        transform: rotate(-4deg);
+      }
+
+      to {
+        transform: rotate(4deg);
+      }
+    }
+
+    @keyframes balancar-espelhado {
+      from {
+        transform: scaleX(-1) rotate(-4deg);
+      }
+
+      to {
+        transform: scaleX(-1) rotate(4deg);
+      }
+    }
+
+    @keyframes surgir {
+      from {
+        opacity: 0;
+        transform: translateY(1.5rem) scale(0.96);
+      }
+    }
+
+    @keyframes girar {
+      from {
+        transform: rotate(-180deg) scale(0.4);
+      }
+    }
+  }
+</style>
