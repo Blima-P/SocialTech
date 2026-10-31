@@ -71,7 +71,10 @@ const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
     const campo = busca.querySelector("input")!;
     const contagem = guia.querySelector<HTMLElement>("[data-contagem]")!;
     const cartoes = [...guia.querySelectorAll<HTMLElement>(".cartao")];
-    const textos = cartoes.map((cartao) => semAcento(cartao.textContent ?? ""));
+    const textos = cartoes.map((cartao) =>
+      semAcento(cartao.querySelector("strong")?.textContent ?? ""),
+    );
+    const grupos = [...guia.querySelectorAll<HTMLElement>(".grupo")];
     busca.hidden = false;
 
     campo.addEventListener("input", () => {
@@ -82,6 +85,11 @@ const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
         cartao.hidden = !mostra;
         if (mostra) achados += 1;
       });
+      for (const grupo of grupos) {
+        grupo.hidden =
+          termo.length > 0 &&
+          grupo.querySelectorAll(".cartao:not([hidden])").length === 0;
+      }
       if (!termo) contagem.textContent = "";
       else if (achados === 0) contagem.textContent = "Nenhum item encontrado.";
       else

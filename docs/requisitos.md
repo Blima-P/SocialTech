@@ -121,25 +121,33 @@ Funcionalidade: Guia "Pode / Não pode"
 
 | Campo | Valor |
 |---|---|
-| Descrição | Um campo de busca filtra os itens do guia enquanto a pessoa digita, ignorando acentos e maiúsculas, no nome e no motivo |
+| Descrição | Um campo de busca filtra os itens do guia enquanto a pessoa digita, ignorando acentos e maiúsculas, pelo nome |
 | Prioridade | Should |
 | Origem | OE-2 · C-02 · Jornada J1 |
 | Conteúdo | Usa os itens de RC-01 e RC-02 |
-| Situação | ✅ Implementado (T-14, PR #41) |
+| Situação | ✅ Implementado (T-14, PR #41); busca somente pelo nome (T-22, 29/10/2026) |
 
 ```gherkin
 Funcionalidade: Busca no guia
 
   Cenário: Busca sem acento e sem maiúscula
     Dado que o guia tem o item "Frutas cítricas"
-    Quando digito "citrica", "CITRICA" ou "cítrica" no campo "Procure um item"
+    Quando digito "citrica", "CÍTRICA" ou "cítrica" no campo "Procure um item"
     Então só os itens que combinam continuam visíveis, nos dois grupos
     E um texto anunciado pelo leitor de tela informa quantos itens foram encontrados
 
-  Cenário: Nenhum resultado
-    Quando digito um texto que não está em nenhum nome nem motivo
+  Cenário: A busca considera somente o nome
+    Dado que "pode" e "composto" aparecem nos motivos, mas não nos nomes dos itens
+    Quando digito "pode" ou "composto" no campo "Procure um item"
     Então vejo "Nenhum item encontrado."
+    E os grupos sem itens correspondentes ficam ocultos
     E a caixa "Não achou seu item?" (RF-03) continua visível
+
+  Cenário: Nenhum grupo sem resultados
+    Dado que digitei um termo que corresponde a itens de apenas um grupo
+    Então o grupo sem itens correspondentes fica oculto
+    Quando apago o texto do campo de busca
+    Então os dois grupos e todos os itens voltam a aparecer
 
   Cenário: Sem JavaScript
     Dado que o JavaScript está desativado no navegador
