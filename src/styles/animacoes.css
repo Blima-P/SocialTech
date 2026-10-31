@@ -85,9 +85,10 @@
     animation: deslizar-direita 1s var(--saida) both;
   }
 
-  /* Botões: sobem no hover e afundam ao tocar. */
-  .botao,
-  button {
+  /* Botões: sobem no hover e afundam ao tocar. Links com .botao nunca ficam
+     desabilitados; botões desabilitados (mesmo com .botao) não se mexem. */
+  a.botao,
+  button:not(:disabled) {
     transition:
       transform 0.25s var(--mola),
       box-shadow 0.25s var(--saida),
@@ -95,14 +96,14 @@
   }
 
   @media (hover: hover) {
-    .botao:hover,
+    a.botao:hover,
     button:not(:disabled):hover {
       transform: translateY(-0.1875rem);
       box-shadow: 0 0.5rem 1.25rem rgb(48 51 60 / 0.3);
     }
   }
 
-  .botao:active,
+  a.botao:active,
   button:not(:disabled):active {
     transform: translateY(0.0625rem) scale(0.96);
     box-shadow: none;
@@ -149,11 +150,43 @@
 
   /* Rolagem: cada bloco surge quando entra na tela (sem JavaScript). */
   @supports (animation-timeline: view()) {
-    /* A animação termina depois de 8rem de rolagem, mesmo em blocos altos. */
-    main > section > * {
+    /* A animação termina depois de 8rem de rolagem, mesmo em blocos altos.
+       Listas cujos itens já animam (ciclo, guia, números) ficam paradas: quem
+       surge são os itens, para o contêiner e o item não se moverem juntos. */
+    main > section > :not(:where(.etapas, .grupos, #impacto > ul)),
+    [data-guia] .grupo > :not(ul) {
       animation: subir linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 8rem;
+    }
+
+    /* Etapas e cartões: surgem ao rolar e também ao trocar de etapa ou
+       reaparecer na busca. As duas animações ficam no mesmo elemento; a da
+       troca termina no ponto em que a da rolagem está, sem somar movimento. */
+    [data-ciclo] .etapas > li {
+      animation: subir linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 8rem;
+    }
+
+    [data-ciclo].interativo .etapas > li {
+      animation:
+        subir linear both,
+        subir 0.5s var(--saida);
+      animation-timeline: view(), auto;
+      animation-range:
+        entry 0% entry 8rem,
+        normal;
+    }
+
+    [data-guia] .cartao {
+      animation:
+        subir linear both,
+        subir 0.45s var(--saida) both;
+      animation-timeline: view(), auto;
+      animation-range:
+        entry 0% entry 8rem,
+        normal;
     }
 
     /* O traço amarelo do título cresce da esquerda. */
@@ -165,10 +198,6 @@
     }
 
     /* Números de impacto: um depois do outro, crescendo. */
-    main > section#impacto > ul {
-      animation: none;
-    }
-
     #impacto li {
       animation: crescer linear both;
       animation-timeline: view();
