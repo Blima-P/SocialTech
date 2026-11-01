@@ -26,8 +26,11 @@ const perguntas = (await getCollection("quiz")).sort(
             <button type="button" class="botao" data-responder hidden>
               Responder
             </button>
-            <div class="feedback" aria-live="polite">
-              <div class="resultado" tabindex="-1" data-resultado />
+            {/* Só o aviso é lido sozinho (aria-live). O resultado e a explicação são
+                lidos uma vez, quando o foco vai para o .feedback (T-26). */}
+            <p class="aviso" aria-live="polite" data-aviso />
+            <div class="feedback" tabindex="-1" data-feedback>
+              <div class="resultado" data-resultado />
               <p class="explicacao" hidden data-explicacao>
                 {data.explicacao}
               </p>
@@ -69,7 +72,7 @@ const perguntas = (await getCollection("quiz")).sort(
       texto.append(simbolo, acertou ? "Certo." : "Errado.");
       resultado.replaceChildren(texto);
       pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = false;
-      resultado.focus();
+      pergunta.querySelector<HTMLElement>("[data-feedback]")!.focus();
     };
 
     for (const pergunta of perguntas) {
@@ -79,12 +82,12 @@ const perguntas = (await getCollection("quiz")).sort(
       responder.addEventListener("click", () => {
         const escolhida =
           pergunta.querySelector<HTMLInputElement>("input:checked");
-        const resultado =
-          pergunta.querySelector<HTMLElement>("[data-resultado]")!;
+        const aviso = pergunta.querySelector<HTMLElement>("[data-aviso]")!;
         if (!escolhida) {
-          resultado.textContent = "Escolha uma alternativa.";
+          aviso.textContent = "Escolha uma alternativa.";
           return;
         }
+        aviso.textContent = "";
         const acertou = escolhida.value === pergunta.dataset.correta;
         acertos.set(pergunta, acertou);
         for (const opcao of pergunta.querySelectorAll("input"))
@@ -110,6 +113,7 @@ const perguntas = (await getCollection("quiz")).sort(
         pergunta
           .querySelector<HTMLElement>("[data-resultado]")!
           .replaceChildren();
+        pergunta.querySelector<HTMLElement>("[data-aviso]")!.textContent = "";
         pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = true;
         pergunta.querySelector<HTMLElement>("[data-responder]")!.hidden = false;
       }
@@ -178,13 +182,19 @@ const perguntas = (await getCollection("quiz")).sort(
     outline-color: var(--cor-escura);
   }
 
+  .aviso,
   .resultado p,
   .explicacao,
   .final p {
     margin: 0.5rem 0 0;
   }
 
-  .resultado:focus {
+  /* A região do aviso fica sempre na página (para o leitor de tela), mas sem espaço quando vazia. */
+  .aviso:empty {
+    margin: 0;
+  }
+
+  .feedback:focus {
     outline: none;
   }
 
