@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.0 (26/10/2026) |
+| Versão | 1.2 (31/10/2026): respostas do Prof. Marcus e [plano 07](sdd/07-plano-conteudo-enactus.md) |
 | Status | 🚦 Em revisão pela equipe |
 | Tarefa | T-16 (issue #37) |
 | Base | [Constituição](sdd/00-constituicao.md), [Especificação](sdd/01-especificacao.md), [Clarificações](sdd/02-clarificacoes.md), [Plano do MVP](sdd/03-plano-tarefas.md), [Plano da entrega final](sdd/05-plano-entrega-final.md) |
@@ -28,10 +28,12 @@ Este documento diz **o que** o site precisa fazer (requisitos funcionais), **com
 
 **Fora:** o que está em [especificação §4.1](sdd/01-especificacao.md#41-fora-do-escopo-wont-neste-semestre) (login, dados em tempo real, aplicativo, ranking, outros idiomas, mapa com geolocalização, chatbot). As atividades fora do site (ação no campus, cartazes, análise do formulário) estão na [especificação §4.2](sdd/01-especificacao.md#42-fora-do-site-mas-dentro-do-projeto).
 
-### 1.3 Situação em 26/10/2026
+### 1.3 Situação em 31/10/2026
 
-- O **MVP** (requisitos **Must**) foi publicado na `main` em 26/10/2026 (PR #29) e está em `https://blima-p.github.io/SocialTech/`. A Homologação 1 está marcada para 26/10, 20h.
-- Os requisitos **Should** são entregues pelas tarefas T-11 a T-15 ([plano da entrega final](sdd/05-plano-entrega-final.md)), com release em 28/10 e Homologação 2 em 29/10/2026.
+- O **MVP** (requisitos **Must**) foi publicado na `main` em 26/10/2026 (PR #29) e está em `https://blima-p.github.io/SocialTech/`.
+- Os requisitos **Should** foram entregues pelas tarefas T-11 a T-16 ([plano da entrega final](sdd/05-plano-entrega-final.md)) e publicados na release final de 29/10/2026 (PR #47).
+- As melhorias depois da entrega (T-18 a T-23) estão no [plano de melhorias](sdd/06-plano-melhorias.md).
+- Em 31/10/2026, o Prof. Marcus respondeu às perguntas de conteúdo ([clarificações](sdd/02-clarificacoes.md), Q-01 a Q-05 e Q-15). O conteúdo validado, o nome "Compostagem Enactus UCB", a seção "Dúvidas comuns" (RF-16), as fotos, o cartaz e o quiz estão no [plano 07](sdd/07-plano-conteudo-enactus.md) (T-28 a T-35). O que ainda falta está na [seção 6](#6-requisitos-de-conteúdo).
 - O plano do MVP foi feito antes deste documento (exceção aprovada em [03-plano-tarefas.md §0.1](sdd/03-plano-tarefas.md#01-exceção-aprovada-à-definição-de-preparado)). A [seção 8](#8-matriz-de-rastreabilidade) liga cada tarefa já feita aos requisitos daqui.
 
 ### 1.4 Convenções
@@ -94,15 +96,15 @@ Os requisitos estão na ordem em que aparecem na página.
 | Prioridade | **Must** |
 | Origem | OE-2 · C-01 · Jornada J1 |
 | Conteúdo | RC-01, RC-02 |
-| Situação | ✅ Implementado (T-05, PR #20); lista "Pode" [PENDENTE] |
+| Situação | ✅ Implementado (T-05, PR #20); lista validada pelo Prof. Marcus em 31/10/2026 (T-29) |
 
 ```gherkin
 Funcionalidade: Guia "Pode / Não pode"
 
-  Cenário: Ver os itens ao abrir pelo QR Code
+  Cenário: Ir ao guia pelo atalho do topo
     Dado que abri o site num celular de 360 px
-    Quando a página termina de carregar
-    Então vejo o título "O que pode ir nesta lixeira?" nos primeiros 400 px da página, sem rolar
+    Quando toco em "O que pode ir na lixeira?" no cabeçalho
+    Então a página vai até o título "O que pode ir nesta lixeira?"
     E os itens aparecem em dois grupos com os títulos "✓ Pode" e "✕ Não pode"
     E cada item mostra o nome e o motivo
 
@@ -120,25 +122,33 @@ Funcionalidade: Guia "Pode / Não pode"
 
 | Campo | Valor |
 |---|---|
-| Descrição | Um campo de busca filtra os itens do guia enquanto a pessoa digita, ignorando acentos e maiúsculas, no nome e no motivo |
+| Descrição | Um campo de busca filtra os itens do guia enquanto a pessoa digita, ignorando acentos e maiúsculas, pelo nome |
 | Prioridade | Should |
 | Origem | OE-2 · C-02 · Jornada J1 |
 | Conteúdo | Usa os itens de RC-01 e RC-02 |
-| Situação | 🔨 Planejado (T-14, issue #35) |
+| Situação | ✅ Implementado (T-14, PR #41); busca somente pelo nome (T-22, 29/10/2026) |
 
 ```gherkin
 Funcionalidade: Busca no guia
 
   Cenário: Busca sem acento e sem maiúscula
     Dado que o guia tem o item "Frutas cítricas"
-    Quando digito "citrica", "CITRICA" ou "cítrica" no campo "Procure um item"
+    Quando digito "citrica", "CÍTRICA" ou "cítrica" no campo "Procure um item"
     Então só os itens que combinam continuam visíveis, nos dois grupos
     E um texto anunciado pelo leitor de tela informa quantos itens foram encontrados
 
-  Cenário: Nenhum resultado
-    Quando digito um texto que não está em nenhum nome nem motivo
+  Cenário: A busca considera somente o nome
+    Dado que "pode" e "composto" aparecem nos motivos, mas não nos nomes dos itens
+    Quando digito "pode" ou "composto" no campo "Procure um item"
     Então vejo "Nenhum item encontrado."
+    E os grupos sem itens correspondentes ficam ocultos
     E a caixa "Não achou seu item?" (RF-03) continua visível
+
+  Cenário: Nenhum grupo sem resultados
+    Dado que digitei um termo que corresponde a itens de apenas um grupo
+    Então o grupo sem itens correspondentes fica oculto
+    Quando apago o texto do campo de busca
+    Então os dois grupos e todos os itens voltam a aparecer
 
   Cenário: Sem JavaScript
     Dado que o JavaScript está desativado no navegador
@@ -154,7 +164,7 @@ Funcionalidade: Busca no guia
 | Prioridade | Should |
 | Origem | OE-2 · C-02 · Jornada J1 (passo 5) |
 | Conteúdo | RC-03 |
-| Situação | 🔨 Planejado (T-14, issue #35); texto [PENDENTE] (Q-02) |
+| Situação | ✅ Implementado (T-14, PR #41); texto validado em 31/10/2026 (Q-02, T-29) |
 
 ```gherkin
 Funcionalidade: Item não listado
@@ -163,6 +173,7 @@ Funcionalidade: Item não listado
     Dado que o Prof. Marcus preencheu "Orientação para item fora da lista" no painel
     Quando abro o guia
     Então a caixa "Não achou seu item?" mostra esse texto
+    E, hoje, o texto é "Em caso de dúvida, não coloque o resíduo na lixeira de compostagem. Consulte o Enactus UCB."
 
   Cenário: Orientação ainda não validada
     Dado que o campo de orientação está vazio
@@ -174,19 +185,23 @@ Funcionalidade: Item não listado
 
 | Campo | Valor |
 |---|---|
-| Descrição | A página lista as etapas do ciclo em ordem, cada uma com número, nome e, se houver, uma frase curta |
+| Descrição | A página lista as etapas do ciclo em ordem, cada uma com número, nome e, se houver, uma frase curta. O ciclo é a **primeira seção** da página |
 | Prioridade | **Must** |
-| Origem | OE-1, OE-6 · C-03a · Jornada J2 |
+| Origem | OE-1, OE-6 · C-03a · Jornada J2 · resposta do Prof. Marcus de 31/10/2026 ("falta o infográfico do fluxo depois da lixeira") |
 | Conteúdo | RC-04, RC-05 |
-| Situação | ✅ Implementado (T-03, PR #24); frases [PENDENTE] |
+| Situação | ✅ Implementado (T-03, PR #24); nomes e frases validados e ciclo como primeira seção (T-29) |
 
 ```gherkin
 Funcionalidade: Ciclo do resíduo
 
   Cenário: Etapas na ordem do painel
-    Dado que o painel tem as etapas "Lixeira", "Compostagem", "Horta Botânica", "Laboratório de Alimentos" e "Gastronomia/Nutrição", nessa ordem
+    Dado que o painel tem as etapas "Coletor", "Compostagem", "Horto Botânico", "Laboratório de Tecnologia de Alimentos" e "Gastronomia/Nutrição", nessa ordem
     Quando abro a seção "Do resto de comida à horta"
     Então vejo as 5 etapas numeradas de 1 a 5, nessa ordem
+
+  Cenário: Ciclo primeiro
+    Quando abro o site
+    Então a primeira seção depois do cabeçalho é a do ciclo, e a segunda é o guia "Pode / Não pode"
 
   Cenário: Frases ainda não validadas
     Dado que nenhuma etapa tem frase
@@ -206,8 +221,8 @@ Funcionalidade: Ciclo do resíduo
 | Descrição | Com JavaScript, o ciclo pode ser navegado etapa por etapa, com botões numerados, "Anterior" e "Próxima" |
 | Prioridade | Should |
 | Origem | OE-1 · C-03b · Jornada J2 |
-| Conteúdo | RC-04, RC-05; fotos (RC-06) ficam fora desta entrega |
-| Situação | 🔨 Planejado (T-12, issue #33; depende da T-11) |
+| Conteúdo | RC-04, RC-05; fotos (RC-06): campo na T-21 e fotos do professor na T-32 |
+| Situação | ✅ Implementado (T-12, PR #46) |
 
 ```gherkin
 Funcionalidade: Ciclo passo a passo
@@ -242,7 +257,7 @@ Funcionalidade: Ciclo passo a passo
 | Prioridade | **Must** |
 | Origem | OE-7, OE-5 · C-04 · Jornada J6 |
 | Conteúdo | RC-07, RC-08 |
-| Situação | ✅ Implementado (T-06, PR #21); local inicial [PENDENTE] (Q-04) |
+| Situação | ✅ Implementado (T-06, PR #21); local inicial validado: Clínica Escola de Nutrição (Q-04, T-29) |
 
 ```gherkin
 Funcionalidade: Local atual da lixeira
@@ -310,11 +325,11 @@ Funcionalidade: Contatos e links
 
 | Campo | Valor |
 |---|---|
-| Descrição | Cabeçalho com logo e o único título principal da página; rodapé escuro com logo; cores, fonte e faixas no estilo de `enactus.org.br`; a partir de `48rem`, menu com atalhos para as seções |
+| Descrição | Cabeçalho com logo e o único título principal da página, **"Compostagem Enactus UCB"**; rodapé escuro com logo e os créditos da equipe SocialTech; cores, fonte e faixas no estilo de `enactus.org.br`; a partir de `48rem`, menu com atalhos para as seções |
 | Prioridade | Should |
-| Origem | C-12 (transversal, todas as jornadas) |
+| Origem | C-12 (transversal, todas as jornadas) · Q-15 |
 | Conteúdo | RC-14 |
-| Situação | ✅ Cabeçalho e rodapé (T-02, PR #23) · 🔨 redesign, menu e Roboto (T-11, issue #32) |
+| Situação | ✅ Cabeçalho e rodapé (T-02, PR #23); redesign, menu e Roboto (T-11, PR #44) · 🔨 nome "Compostagem Enactus UCB" (T-30) e faixa de parceria (T-35) |
 
 ```gherkin
 Funcionalidade: Identidade e navegação
@@ -323,6 +338,11 @@ Funcionalidade: Identidade e navegação
     Quando abro o site
     Então existe um único título de nível 1, no cabeçalho
     E o logo tem o texto alternativo "Enactus Brasil"
+
+  Cenário: Nome do projeto
+    Quando abro o site ou compartilho o link
+    Então o título principal, a aba do navegador e a prévia nas redes dizem "Compostagem Enactus UCB"
+    E "SocialTech" aparece só nos créditos do rodapé, sem o logo do grupo
 
   Cenário: Atalho para o guia
     Dado que estou no topo da página num celular de 360 px
@@ -347,7 +367,7 @@ Funcionalidade: Identidade e navegação
 | Prioridade | Should |
 | Origem | OE-5 · C-10 · Jornada J2 |
 | Conteúdo | RC-13 |
-| Situação | 🔨 Planejado (T-13, issue #34) |
+| Situação | ✅ Implementado (T-13, PR #45) |
 
 ```gherkin
 Funcionalidade: Números de impacto
@@ -370,7 +390,7 @@ Funcionalidade: Números de impacto
 | Prioridade | Should |
 | Origem | OE-5, OE-6 · C-07 · Jornada J3 |
 | Conteúdo | RC-12 |
-| Situação | 🔨 Planejado (T-15, issue #36); perguntas [PENDENTE] (Q-06) |
+| Situação | ✅ Implementado (T-15, PR #42); 🔨 5 perguntas na T-34, aguardando a aprovação do Prof. Marcus (Q-06) |
 
 ```gherkin
 Funcionalidade: Quiz
@@ -458,7 +478,7 @@ Funcionalidade: Contagem de acessos
 | Prioridade | **Must** |
 | Origem | OE-3 · C-09 · Jornada J1 |
 | Conteúdo | RC-15 |
-| Situação | ✅ Arquivos prontos (T-04, PR #25, `docs/materiais/`) · impressão e fixação [PENDENTE] (E-03) |
+| Situação | ✅ Arquivos prontos (T-04, PR #25, `docs/materiais/`) · impressão e fixação [PENDENTE] (E-03) · 🔨 cartaz A4 com `ref=cartaz` (T-33) |
 
 ```gherkin
 Funcionalidade: QR Code impresso
@@ -480,7 +500,7 @@ Funcionalidade: QR Code impresso
 | Prioridade | **Must** |
 | Origem | C-11 · Jornada J7 |
 | Conteúdo | Todas as coleções da [arquitetura §6](arquitetura.md#6-modelo-de-dados-do-conteúdo) |
-| Situação | ✅ Implementado (ADR-002) para as coleções do MVP · 🔨 `impacto`, `guiaOrientacao` e `quiz` (T-13, T-14, T-15) |
+| Situação | ✅ Implementado (ADR-002), inclusive `impacto`, `guiaOrientacao` e `quiz` (T-13, T-14, T-15) |
 
 ```gherkin
 Funcionalidade: Edição sem programar
@@ -500,12 +520,44 @@ Funcionalidade: Edição sem programar
     Então consegue fazer isso sozinho, seguindo o guia de edição
 ```
 
+### RF-16 · Dúvidas comuns
+
+| Campo | Valor |
+|---|---|
+| Descrição | Seção "Dúvidas comuns", depois de "Onde está a lixeira agora", com perguntas que abrem e fecham (`<details>`), editáveis pelo painel |
+| Prioridade | Should |
+| Origem | OE-5 · C-02 · Jornadas J1 e J2 · resposta do Prof. Marcus de 31/10/2026 ("como podemos fazer isso?") |
+| Conteúdo | RC-17 |
+| Situação | 🔨 Planejado (T-31) |
+
+```gherkin
+Funcionalidade: Dúvidas comuns
+
+  Cenário: Abrir uma dúvida
+    Dado que o painel tem a pergunta "Quanto tempo leva a compostagem?"
+    Quando toco na pergunta
+    Então a resposta aparece logo abaixo
+    E, quando toco de novo, ela se fecha
+
+  Cenário: Teclado e leitor de tela
+    Quando chego à pergunta com Tab e aperto Enter ou Espaço
+    Então a resposta abre, e o leitor de tela anuncia se a pergunta está aberta ou fechada
+
+  Cenário: Sem JavaScript
+    Dado que o JavaScript está desativado
+    Então as perguntas continuam abrindo e fechando
+
+  Cenário: Lista vazia
+    Dado que o professor apagou todas as dúvidas no painel
+    Então a seção não aparece
+```
+
 ### 3.1 Capacidades sem requisito nesta entrega
 
 | Capacidade | Prioridade | Motivo |
 |---|---|---|
 | C-13 Números do próprio projeto (kg compostados) | Removido | O dado não existe (Q-19) |
-| C-14 Depoimentos e carrossel de fotos da ação | Could | ⏸ Sem fotos com autorização de uso (Q-05) e sem tarefa no plano. Pode virar `RF-16` depois de 29/10 |
+| C-14 Depoimentos e carrossel de fotos da ação | Could | ⏸ Sem fotos da ação com autorização de uso e sem tarefa no plano. Pode virar `RF-17` depois |
 
 ## 4. Requisitos não funcionais
 
@@ -517,12 +569,12 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 | RNF-02 | Desempenho | No Lighthouse em modo celular (4G simulado): **Desempenho ≥ 90** e **LCP ≤ 3 s** [SUPOSIÇÃO: meta proposta pela T-16, a confirmar na H2] | Lighthouse, modo celular, na página publicada | Should | A medir na H2 |
 | RNF-03 | Acessibilidade | Lighthouse em modo celular: **Acessibilidade ≥ 90** [CONFIRMADO, H2-6] | Lighthouse | **Must** | A medir na H2 |
 | RNF-04 | Acessibilidade | Contraste de texto **≥ 4,5:1** (WCAG 2.1 AA); só os pares de cor da [arquitetura §5.1](arquitetura.md#51-cores-e-contraste) | Tabela de pares; verificador de contraste | **Must** | ✅ |
-| RNF-05 | Acessibilidade | Em **360 px** não há rolagem horizontal; em **1366 px** o conteúdo fica centralizado em até `72rem` | Modo responsivo do navegador e celular real | **Must** (360 px) · Should (1366 px, T-11) | ✅ 360 px · 🔨 1366 px |
+| RNF-05 | Acessibilidade | Em **360 px** não há rolagem horizontal; em **1366 px** o conteúdo fica centralizado em até `72rem` | Modo responsivo do navegador e celular real | **Must** (360 px) · Should (1366 px, T-11) | ✅ (1366 px: T-11, PR #44) |
 | RNF-06 | Acessibilidade | Botões, links de ação, campos e alternativas com alvo de toque **≥ 44 × 44 px** (`--alvo-toque`) | Ferramentas do navegador (medir o elemento) | **Must** | ✅ |
-| RNF-07 | Acessibilidade | Tudo que é interativo funciona **só com teclado** (Tab, Enter, Espaço), com **foco visível**; um único `<h1>`; cada seção com `<h2>` ligado por `aria-labelledby`; testado com leitor de tela (TalkBack ou VoiceOver) | Teste manual com teclado e leitor de tela | **Must** | ✅ MVP · 🔨 T-12, T-14, T-15 |
+| RNF-07 | Acessibilidade | Tudo que é interativo funciona **só com teclado** (Tab, Enter, Espaço), com **foco visível**; um único `<h1>`; cada seção com `<h2>` ligado por `aria-labelledby`; testado com leitor de tela (TalkBack ou VoiceOver) | Teste manual com teclado e leitor de tela | **Must** | ✅ (T-12, T-14 e T-15 incluídas) |
 | RNF-08 | Acessibilidade | Nenhuma informação só por cor: "Pode"/"Não pode" e "Certo"/"Errado" sempre com **texto e símbolo** | Ver a página em escala de cinza | **Must** | ✅ |
 | RNF-09 | Acessibilidade | Com `prefers-reduced-motion: reduce`, nenhuma animação nem rolagem suave | Emular a preferência nas ferramentas do navegador | **Must** | ✅ |
-| RNF-10 | Robustez | **Sem JavaScript**, todo o conteúdo continua legível (guia completo, todas as etapas do ciclo, perguntas do quiz com aviso) (ADR-008) | Desativar o JavaScript no navegador | **Must** | ✅ MVP · 🔨 T-12, T-14, T-15 |
+| RNF-10 | Robustez | **Sem JavaScript**, todo o conteúdo continua legível (guia completo, todas as etapas do ciclo, perguntas do quiz com aviso) (ADR-008) | Desativar o JavaScript no navegador | **Must** | ✅ (T-12, T-14 e T-15 incluídas) |
 | RNF-11 | Compatibilidade | Funciona nas versões atuais de Chrome (Android) e Safari (iOS) e de Chrome, Edge e Firefox no computador; testado em **2 celulares reais** com 4G | Roteiro de homologação ([arquitetura §10.2](arquitetura.md#102-roteiro-de-homologação)) | **Must** | H1 e H2 |
 | RNF-12 | Privacidade (LGPD) | **Nenhum dado pessoal** coletado; **nenhum cookie**; as únicas requisições a terceiros são as do GoatCounter (`gc.zgo.at` e `socialtech-ucb.goatcounter.com`); busca e quiz não enviam nem guardam nada | Aba Rede e aba Aplicação (Cookies, Local Storage) | **Must** | ✅ |
 | RNF-13 | Segurança | Nenhum segredo no repositório; nenhum `set:html`, `innerHTML`, `eval` ou `new Function` com conteúdo do painel (bloqueado pelo ESLint); links que abrem nova aba com `rel="noopener"`; site só em HTTPS | `npm run lint`; revisão de PR | **Must** | ✅ |
@@ -535,7 +587,7 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 
 | ID | Regra | Origem | Onde se aplica |
 |---|---|---|---|
-| RN-01 | Só entram no guia itens **validados pela Enactus** ou citados no roteiro (suposição S-Q01). Nenhum item, motivo ou regra é inventado | Constituição, princípio 1; `AGENTS.md` §4.6 | RF-01, RF-03 |
+| RN-01 | Só entram no guia itens **validados pelo Enactus UCB** (banner da lixeira e infográfico v1, confirmados pelo Prof. Marcus em 31/10/2026) ou citados no roteiro. Nenhum item, motivo ou regra é inventado | Constituição, princípio 1; `AGENTS.md` §4.6; Q-01 | RF-01, RF-03, RF-16 |
 | RN-02 | Toda estatística mostra a **fonte** (ex.: "ABREMA, 2025"). Só dados do roteiro ou fornecidos pela equipe | `AGENTS.md` §4.6 | RF-10 |
 | RN-03 | "Pode" e "Não pode" (e "Certo" e "Errado") nunca são indicados só por cor | `AGENTS.md` §4.5 | RF-01, RF-11 |
 | RN-04 | **Conteúdo pendente:** quando a página pode funcionar sem ele, mostra um aviso "… em validação com a Enactus." (lista "Pode", frases do ciclo, item não listado); quando não pode, a seção **não aparece** (formulário sem link, quiz sem perguntas, impacto sem números) | Constituição, princípio 1; planos 03 e 05 | RF-01, RF-03, RF-04, RF-10, RF-11, RF-12 |
@@ -550,26 +602,27 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 
 ## 6. Requisitos de conteúdo
 
-Situação em 26/10/2026, 17h. O conteúdo atual está nos arquivos de `src/content/` da `main` (a versão oficial, editada pelo painel).
+Situação em 31/10/2026, depois das respostas do Prof. Marcus. O conteúdo publicado está nos arquivos de `src/content/` da `main` (a versão oficial, editada pelo painel); o conteúdo validado entra pelas tarefas do [plano 07](sdd/07-plano-conteudo-enactus.md).
 
 | ID | Conteúdo | Onde aparece | Quem fornece | Tarefa fora do código | Status |
 |---|---|---|---|---|---|
-| RC-01 | Itens "Não pode" com motivo | `guia.json` (RF-01) | Roteiro, item 2.1 (S-Q01) e Enactus | E-01, E-06 | [CONFIRMADO] 7 itens publicados: frutas cítricas, cinzas, gorduras, carnes, isopor, sacolas plásticas e outras embalagens |
-| RC-02 | Itens "Pode" com motivo | `guia.json` (RF-01, RF-02) | Enactus | E-01, E-06 | [PENDENTE] Q-01: nenhum item "Pode" publicado (**risco R-01**) |
-| RC-03 | Regra para item fora da lista | `guia-orientacao.json` (RF-03) | Enactus | E-06 | [PENDENTE] Q-02 |
-| RC-04 | Nomes das etapas do ciclo | `ciclo.json` (RF-04, RF-05) | Roteiro (OE-1) e Enactus | E-07 | [SUPOSIÇÃO] S-Q03: nomes do roteiro, com "Horta Botânica" (conflito C1 com "Horto") |
-| RC-05 | Frase curta de cada etapa (até 20 palavras) | `ciclo.json` (RF-04, RF-05) | Enactus ou Prof. Marcus | E-07 | [PENDENTE] Q-03 |
-| RC-06 | Fotos dos espaços do ciclo, com autorização | Ciclo (fora desta entrega) | Enactus | E-07 | [PENDENTE] Q-05 |
-| RC-07 | Local inicial da lixeira | `ponto-coleta.json` (RF-06) | Prof. Marcus | E-05 | [PENDENTE] Q-04: hoje mostra "Local pendente de atualização pelo Prof. Marcus" |
-| RC-08 | Foto da lixeira | Ponto de coleta | Prof. Marcus | E-05 | [PENDENTE] Q-04 (opcional) |
-| RC-09 | Texto "Sobre o projeto" | `secoes/sobre-o-projeto.md` (RF-07) | Prof. Marcus | — | [CONFIRMADO] publicado; "Como descartar" está oculta, com texto pendente |
+| RC-01 | Itens "Não pode" com motivo | `guia.json` (RF-01) | Banner da lixeira e infográfico v1 (Q-01), roteiro (item 2.1) | E-01, E-06 | [CONFIRMADO] 31/10 (T-29); "cinzas" mantida do roteiro até Q-27 |
+| RC-02 | Itens "Pode" com motivo | `guia.json` (RF-01, RF-02) | Banner da lixeira e infográfico v1 (Q-01) | E-01, E-06 | [CONFIRMADO] 31/10 (T-29) |
+| RC-03 | Regra para item fora da lista | `guia-orientacao.json` (RF-03) | Infográfico v1 (Q-02) | E-06 | [CONFIRMADO] 31/10 (T-29) |
+| RC-04 | Nomes das etapas do ciclo | `ciclo.json` (RF-04, RF-05) | Prof. Marcus (Q-03) | E-07 | [CONFIRMADO] 31/10 (T-29): Coletor, Compostagem, Horto Botânico, Laboratório de Tecnologia de Alimentos, Gastronomia/Nutrição; nome do laboratório a confirmar (Q-24) |
+| RC-05 | Frase curta de cada etapa (até 20 palavras) | `ciclo.json` (RF-04, RF-05) | Infográfico v1 e respostas de 31/10 (Q-03) | E-07 | [CONFIRMADO] 31/10 (T-29) |
+| RC-06 | Fotos dos espaços do ciclo, com autorização | Ciclo (RF-05) | Prof. Marcus (Q-05) | E-07 | [CONFIRMADO] fotos recebidas em 31/10; entram na T-32 |
+| RC-07 | Local inicial da lixeira | `ponto-coleta.json` (RF-06) | Prof. Marcus (Q-04) | E-05 | [CONFIRMADO] 31/10 (T-29): Clínica Escola de Nutrição |
+| RC-08 | Foto da lixeira | Ponto de coleta (RF-06) | Prof. Marcus (Q-04) | E-05 | [CONFIRMADO] foto recebida em 31/10; entra na T-32 |
+| RC-09 | Texto "Sobre o projeto" | `secoes/sobre-o-projeto.md` (RF-07) | Prof. Marcus | — | [CONFIRMADO] reescrito com as respostas de 31/10 (T-29); "Como descartar" continua oculta |
 | RC-10 | Contatos e links | `links.json` (RF-08) | Prof. Marcus | — | [CONFIRMADO] UCB e Enactus Brasil publicados |
 | RC-11 | Link do Google Forms e perguntas | `avaliacao.json` (RF-12) | Equipe | E-02 | [PENDENTE] Q-07: endereço vazio, seção oculta (**risco para S-02**) |
-| RC-12 | 3 a 5 perguntas do quiz com alternativas, gabarito e explicação | `quiz.json` (RF-11) | Equipe rascunha, Enactus valida | E-08 | [PENDENTE] Q-06 |
-| RC-13 | 4 números de impacto com fonte | `impacto.json` (RF-10) | Roteiro (ABREMA, SLU, PDAD/IPEDF) | — | [CONFIRMADO] lista definida na T-13 |
-| RC-14 | Logo, cores e fonte da Enactus | `src/assets/marca/`, tokens (RF-09) | `enactus.org.br` (uso autorizado, Q-22) | — | [CONFIRMADO]; [SUPOSIÇÃO] S-Q15: o Enactus UCB usa a identidade da Enactus Brasil |
-| RC-15 | Texto, arte e impressão do adesivo do QR | `docs/materiais/` (RF-14) | Equipe | E-03 | [CONFIRMADO] arte pronta (PR #25); [PENDENTE] aprovação do texto (Q-13) e impressão |
+| RC-12 | 3 a 5 perguntas do quiz com alternativas, gabarito e explicação | `quiz.json` (RF-11) | Equipe rascunha, Prof. Marcus aprova | E-08 | [PENDENTE] Q-06: rascunho de 5 perguntas na T-34 |
+| RC-13 | 4 números de impacto com fonte | `impacto.json` (RF-10) | Roteiro (ABREMA, SLU, PDAD/IPEDF) | — | [CONFIRMADO] lista definida na T-13. Não há dados do próprio projeto (primeira coleta) |
+| RC-14 | Nome, logos, cores e fonte | Cabeçalho, rodapé, faixa de parceria, tokens (RF-09) | `enactus.org.br` (Q-22) e Prof. Marcus (Q-15) | — | [CONFIRMADO] nome "Enactus UCB", sem o logo do grupo SocialTech, logos da UCB e da Enactus (T-30, T-35); [PENDENTE] arquivo oficial do logo da UCB (Q-25) |
+| RC-15 | Texto, arte e impressão do adesivo do QR e dos cartazes | `docs/materiais/` (RF-14) | Equipe | E-03 | [CONFIRMADO] arte do adesivo pronta (PR #25) e cartazes autorizados (Q-13); [PENDENTE] cartaz A4 (T-33), aprovação do texto e impressão |
 | RC-16 | Fotos e depoimentos da ação | C-14 (fora desta entrega) | Equipe | E-09, E-10 | [PENDENTE] autorização de imagem |
+| RC-17 | Perguntas e respostas das dúvidas comuns | `duvidas.json` (RF-16) | Respostas do Prof. Marcus de 31/10 | — | [CONFIRMADO] 7 dúvidas no plano 07 (T-31); capacidade de 60 kg a esclarecer (Q-28) |
 
 ## 7. Histórias de usuário
 
@@ -600,7 +653,7 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 | **OE-2** Guia "Pode / Não pode" | RF-01, RF-02, RF-03 | `GuiaPodeNaoPode.astro`, `guia.json`, `guia-orientacao.json` | T-05, T-14 | H1-1, H1-2, H2-2, RH-03, RH-04 |
 | **OE-3** QR Code na lixeira | RF-14, RF-13 | `docs/materiais/qr-lixeira.png`, `adesivo-lixeira.pdf` | T-04, T-09 (E-03) | H1-1, H1-6, H1-7, RH-01 |
 | **OE-4** Formulários para avaliar o alcance | RF-12, RF-13 | `Avaliacao.astro`, `avaliacao.json`, `BaseLayout.astro` (GoatCounter) | T-07, T-08 (E-02) | H1-5, H1-6, H2-7, RH-02, RH-09 |
-| **OE-5** Espaços de conscientização | RF-06, RF-07, RF-10, RF-11 | `PontoColeta.astro`, `Secao.astro`, `NumerosImpacto.astro`, `Quiz.astro` | T-06, T-13, T-15 (E-09: ação presencial) | H1-4, H2-4, H2-5, RH-06, RH-07, RH-08 |
+| **OE-5** Espaços de conscientização | RF-06, RF-07, RF-10, RF-11, RF-16 | `PontoColeta.astro`, `Secao.astro`, `NumerosImpacto.astro`, `Quiz.astro`, `DuvidasComuns.astro` | T-06, T-13, T-15, T-31 (E-09: ação presencial) | H1-4, H2-4, H2-5, RH-06, RH-07, RH-08 |
 | **OE-6** Incentivar métodos sustentáveis | RF-04, RF-07, RF-11 | `CicloResiduo.astro`, `Secao.astro`, `Quiz.astro` | T-03, T-15 | H1-3, H2-5 |
 | **OE-7** Divulgar o ponto de coleta | RF-06 | `PontoColeta.astro`, `ponto-coleta.json` | T-06 (E-05) | H1-4, RH-06 |
 | Transversal: edição e identidade | RF-08, RF-09, RF-15 | `Cabecalho.astro`, `Rodape.astro`, `ListaLinks.astro`, `.pages.yml`, `content.config.ts` | T-01, T-02, T-10, T-11 | H1-4, H2-1, H2-8, RH-10 |
@@ -608,7 +661,7 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 
 ### 8.2 Tarefa → requisitos
 
-| Tarefa | Requisitos | Issue / PR | Situação em 26/10/2026 |
+| Tarefa | Requisitos | Issue / PR | Situação em 29/10/2026 |
 |---|---|---|---|
 | T-01 Base da `develop` para o MVP | RF-15, RNF-04, RNF-14, RNF-16 | PR #7 | ✅ Concluída |
 | T-02 Cabeçalho e rodapé | RF-08, RF-09 | #8 / PR #23 | ✅ Concluída |
@@ -618,21 +671,34 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 | T-06 Onde está a lixeira | RF-06 | #12 / PR #21 | ✅ Concluída |
 | T-07 Botão de avaliação | RF-12 | #13 / PR #22 | ✅ Concluída |
 | T-08 Contagem de acessos | RF-13, RNF-12 | #14 / PR #27 | ✅ Concluída |
-| T-09 Publicação do MVP e H1 | Todos os **Must** | #15 / PR #29 | 🔨 Release feita; H1 em 26/10, 20h |
+| T-09 Publicação do MVP e H1 | Todos os **Must** | #15 / PR #29 | ✅ Concluída |
 | T-10 Base da entrega final | RF-09, RF-15, RNF-16 | #39 / PR #30 | ✅ Concluída |
-| T-11 Redesign Enactus | RF-09, RNF-05, RNF-06, RNF-07, RNF-09 | #32 | 🔨 Aberta |
-| T-12 Ciclo interativo | RF-05, RNF-07, RNF-10 | #33 | 🔨 Aberta (depende da T-11) |
-| T-13 Números de impacto | RF-10, RF-15, RN-02 | #34 | 🔨 Aberta |
-| T-14 Busca e item não listado | RF-02, RF-03, RF-15, RNF-10, RNF-12 | #35 | 🔨 Aberta |
-| T-15 Quiz | RF-11, RF-15, RN-06, RNF-10, RNF-12 | #36 | 🔨 Aberta |
-| T-16 Documentação do SDD | Rastreabilidade de todos os requisitos | #37 | 🔨 Este documento |
-| T-17 Release final e H2 | Todos os **Must** e **Should** entregues; RNF-01 a RNF-03 | #38 | 🔨 Aberta |
+| T-11 Redesign Enactus | RF-09, RNF-05, RNF-06, RNF-07, RNF-09 | #32 / PR #44 | ✅ Concluída |
+| T-12 Ciclo interativo | RF-05, RNF-07, RNF-10 | #33 / PR #46 | ✅ Concluída |
+| T-13 Números de impacto | RF-10, RF-15, RN-02 | #34 / PR #45 | ✅ Concluída |
+| T-14 Busca e item não listado | RF-02, RF-03, RF-15, RNF-10, RNF-12 | #35 / PR #41 | ✅ Concluída |
+| T-15 Quiz | RF-11, RF-15, RN-06, RNF-10, RNF-12 | #36 / PR #42 | ✅ Concluída |
+| T-16 Documentação do SDD | Rastreabilidade de todos os requisitos | #37 / PR #40 | ✅ Concluída |
+| T-17 Release final e H2 | Todos os **Must** e **Should** entregues; RNF-01 a RNF-03 | #38 / PR #47 | ✅ Release feita |
+
+As tarefas T-18 a T-27 estão no [plano de melhorias](sdd/06-plano-melhorias.md) e nas issues. As do [plano 07](sdd/07-plano-conteudo-enactus.md), em 31/10/2026:
+
+| Tarefa | Requisitos | Issue / PR | Situação em 31/10/2026 |
+|---|---|---|---|
+| T-28 Documentação das respostas do professor | RF-01, RF-03, RF-04, RF-06, RF-09, RF-16, RN-01, RC | Este PR | 🔨 Em revisão |
+| T-29 Conteúdo validado | RF-01, RF-03, RF-04, RF-06, RF-07 | — | 🔨 Planejada |
+| T-30 Identidade "Compostagem Enactus UCB" | RF-09 | — | 🔨 Planejada |
+| T-31 Dúvidas comuns | RF-16, RF-15 | — | 🔨 Planejada |
+| T-32 Fotos do professor | RF-05, RF-06, RN-10 | — | 🔨 Planejada |
+| T-33 Cartaz A4 com QR Code | RF-14, RN-09 | — | 🔨 Planejada |
+| T-34 Perguntas do quiz | RF-11, RN-06 | — | 🔨 Planejada |
+| T-35 Faixa de parceria | RF-09 | #62 / PR #63 | 🔨 Em revisão |
 
 ## 9. Pendências e riscos
 
 ### 9.1 Conteúdo pendente
 
-Os requisitos de conteúdo **[PENDENTE]** da [seção 6](#6-requisitos-de-conteúdo) são: RC-02, RC-03, RC-05, RC-06, RC-07, RC-08, RC-11, RC-12, RC-15 (impressão) e RC-16. Os responsáveis e prazos estão nas tarefas E-01 a E-05 ([plano do MVP §4](sdd/03-plano-tarefas.md#4-tarefas-fora-do-código-equipe-sem-github)) e E-06 a E-10 ([plano da entrega final §4](sdd/05-plano-entrega-final.md#4-tarefas-fora-do-código-equipe-sem-github)).
+Os requisitos de conteúdo **[PENDENTE]** da [seção 6](#6-requisitos-de-conteúdo) são: RC-11, RC-12 (T-34), RC-14 (logo da UCB, Q-25), RC-15 (cartaz e impressão) e RC-16. Os responsáveis e prazos estão nas tarefas E-01 a E-05 ([plano do MVP §4](sdd/03-plano-tarefas.md#4-tarefas-fora-do-código-equipe-sem-github)), E-06 a E-10 ([plano da entrega final §4](sdd/05-plano-entrega-final.md#4-tarefas-fora-do-código-equipe-sem-github)) e no [plano 07](sdd/07-plano-conteudo-enactus.md).
 
 ### 9.2 Riscos
 
@@ -643,4 +709,4 @@ Os riscos de produto R-01 a R-06 estão na [especificação §7](sdd/01-especifi
 | R-07 | O formulário (RC-11) não existe a 3 dias da entrega | Meta S-02 (≥ 80 respostas) sem tempo de coleta | Criar o Forms (E-02) antes da ação no campus (E-09); o Prof. Marcus cola o link pelo painel |
 | R-08 | A T-12 só começa depois do merge da T-11 (mesmo arquivo) | Ciclo interativo fora da release de 28/10 | Revisar a T-11 assim que o PR abrir; se a T-12 atrasar, a release sai com o ciclo simples (RF-04 já cumpre o Must) |
 | R-09 | Bloqueadores de anúncio impedem o script do GoatCounter | Acessos contados a menos (S-01) | Aceito: a contagem é um mínimo; registrar a limitação no relatório |
-| R-10 | Guia sem nenhum item "Pode" na H2 | Jornada J1 só parcialmente cumprida | Cobrar a lista da Enactus (E-06); o aviso de pendência (RN-04) evita informação errada |
+| R-10 | Guia sem nenhum item "Pode" na H2 | Jornada J1 só parcialmente cumprida | Resolvido em 31/10/2026: lista validada pelo Prof. Marcus (Q-01), publicada pela T-29 |

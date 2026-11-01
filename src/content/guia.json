@@ -1,37 +1,117 @@
 [
   {
+    "nome": "Cascas e restos de frutas",
+    "classificacao": "pode",
+    "motivo": "Menos as cítricas."
+  },
+  {
+    "nome": "Restos de verduras e legumes",
+    "classificacao": "pode",
+    "motivo": "Folhas, talos e cascas."
+  },
+  {
+    "nome": "Borra de café",
+    "classificacao": "pode",
+    "motivo": "O pó e o filtro de papel."
+  },
+  {
+    "nome": "Cascas de ovos",
+    "classificacao": "pode",
+    "motivo": "Limpas e trituradas."
+  },
+  {
+    "nome": "Folhas secas e restos de jardim",
+    "classificacao": "pode",
+    "motivo": "Inclusive as folhas das árvores do campus."
+  },
+  {
+    "nome": "Ervas e temperos frescos",
+    "classificacao": "pode",
+    "motivo": "Como hortelã, alecrim e manjericão."
+  },
+  {
+    "nome": "Pães, arroz e massas",
+    "classificacao": "pode",
+    "motivo": "Sem tempero, recheio ou molho, em pequenas quantidades."
+  },
+  {
+    "nome": "Saquinhos de chá",
+    "classificacao": "pode",
+    "motivo": "Sem plástico e sem grampo."
+  },
+  {
+    "nome": "Frutas secas e cascas",
+    "classificacao": "pode",
+    "motivo": "Como castanhas e nozes."
+  },
+  {
+    "nome": "Papel, papelão branco e guardanapos",
+    "classificacao": "pode",
+    "motivo": "Em pequenas quantidades, sem tinta, plástico ou produtos químicos."
+  },
+  {
+    "nome": "Carnes, peixes e ossos",
+    "classificacao": "nao-pode",
+    "motivo": "Atraem vetores e causam odores fortes."
+  },
+  {
+    "nome": "Laticínios",
+    "classificacao": "nao-pode",
+    "motivo": "Queijos, leite, iogurtes e manteiga."
+  },
+  {
+    "nome": "Óleos, gorduras e alimentos gordurosos",
+    "classificacao": "nao-pode",
+    "motivo": "Dificultam a decomposição e atraem pragas."
+  },
+  {
     "nome": "Frutas cítricas",
     "classificacao": "nao-pode",
-    "motivo": "Pode contaminar o composto"
+    "motivo": "Alteram o pH do composto."
   },
   {
-    "nome": "Cinzas",
+    "nome": "Condimentos fortes e alimentos processados",
     "classificacao": "nao-pode",
-    "motivo": "Pode contaminar o composto"
-  },
-  {
-    "nome": "Gorduras",
-    "classificacao": "nao-pode",
-    "motivo": "Pode contaminar o composto"
-  },
-  {
-    "nome": "Carnes",
-    "classificacao": "nao-pode",
-    "motivo": "Pode contaminar o composto"
+    "motivo": "Pimenta, alho em excesso, molhos, temperos industrializados e restos com sal ou azeite."
   },
   {
     "nome": "Isopor",
     "classificacao": "nao-pode",
-    "motivo": "Não é compostável"
+    "motivo": "Não é compostável."
   },
   {
     "nome": "Sacolas plásticas",
     "classificacao": "nao-pode",
-    "motivo": "Não é compostável"
+    "motivo": "Não é compostável."
   },
   {
-    "nome": "Outras embalagens",
+    "nome": "Plásticos e outras embalagens",
     "classificacao": "nao-pode",
-    "motivo": "Não é compostável"
+    "motivo": "Não são compostáveis, nem os biodegradáveis."
+  },
+  {
+    "nome": "Metais e vidros",
+    "classificacao": "nao-pode",
+    "motivo": "Não se decompõem."
+  },
+  {
+    "nome": "Bitucas de cigarro",
+    "classificacao": "nao-pode",
+    "motivo": "São tóxicas e contaminam o composto."
+  },
+  {
+    "nome": "Fezes de animais",
+    "classificacao": "nao-pode",
+    "motivo": "Podem transmitir doenças."
+  },
+  {
+    "nome": "Papel higiênico, fraldas, absorventes e madeira tratada",
+    "classificacao": "nao-pode",
+    "motivo": "Não são materiais orgânicos compostáveis."
+  },
+  {
+    "nome": "Cinzas",
+    "classificacao": "nao-pode",
+    "motivo": "Pode contaminar o composto."
   }
 ]

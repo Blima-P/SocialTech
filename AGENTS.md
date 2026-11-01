@@ -8,9 +8,9 @@
 
 ## 1. Sobre o projeto
 
-- **SocialTech**: projeto de extensão da Universidade Católica de Brasília (UCB, Campus Taguatinga), em parceria com o **Projeto Enactus**, semestre 2026/2.
-- **Objetivo:** página web educativa, acessada por **QR Code** na lixeira de compostagem, para orientar o **descarte correto de resíduos orgânicos** e mostrar o ciclo do resíduo:
-  **Lixeira → Compostagem → Horta Botânica → Laboratório de Alimentos → Gastronomia/Nutrição**.
+- **SocialTech**: projeto de extensão da Universidade Católica de Brasília (UCB, Campus Taguatinga), em parceria com o **Enactus UCB**, semestre 2026/2. O site se apresenta como **"Compostagem Enactus UCB"**; "SocialTech" é o nome da equipe e aparece só nos créditos do rodapé.
+- **Objetivo:** página web educativa, acessada por **QR Code** na lixeira de compostagem, para orientar o **descarte correto de resíduos orgânicos** e mostrar o ciclo do resíduo (fluxo confirmado pelo Prof. Marcus em 31/10/2026):
+  **Coletor → Compostagem → Horto Botânico → Laboratório de Tecnologia de Alimentos → Gastronomia/Nutrição**.
 - **Componentes previstos:**
   1. Infográfico interativo do ciclo do resíduo.
   2. Guia interativo **"Pode / Não Pode"** no descarte.
@@ -37,6 +37,8 @@ O projeto segue **SDD**: primeiro a especificação, depois o código. A especif
 | [`docs/sdd/03-plano-tarefas.md`](docs/sdd/03-plano-tarefas.md) | Tarefas de implementação (`T-XX`) para vibecoding |
 | [`docs/sdd/04-revisao.md`](docs/sdd/04-revisao.md) | Revisão da especificação (Fase 7): checklist, divergências e pendências |
 | [`docs/sdd/05-plano-entrega-final.md`](docs/sdd/05-plano-entrega-final.md) | Tarefas da entrega final (T-10 a T-17): visual Enactus, capacidades Should, Fases 4, 5 e 7 e H2 |
+| [`docs/sdd/06-plano-melhorias.md`](docs/sdd/06-plano-melhorias.md) | Melhorias depois da entrega (T-18 a T-23): limpeza, verificação automática, design system, fotos e busca |
+| [`docs/sdd/07-plano-conteudo-enactus.md`](docs/sdd/07-plano-conteudo-enactus.md) | Conteúdo validado pelo Prof. Marcus em 31/10/2026 (T-28 a T-35): guia, ciclo, nome "Compostagem Enactus UCB", dúvidas comuns, fotos, cartaz e quiz |
 
 Enquanto esses documentos não existirem ou não estiverem aprovados, siga as seções 2 e 4 deste arquivo e **não implemente funcionalidades** além do que o desenvolvedor pedir explicitamente.
 
@@ -52,7 +54,7 @@ Decisão registrada no **ADR-001** (aprovado pela equipe em 15/10/2026): **Astro
 | Conteúdo | **Content Collections** do Astro (JSON/Markdown validados por schema `zod`), editadas pelo professor no painel **Pages CMS** (ADR-002) |
 | Qualidade | ESLint (com regras de acessibilidade), Prettier e `astro check` |
 | Hospedagem | GitHub Pages, build via GitHub Actions a partir da branch `main` |
-| URL | `https://blima-p.github.io/SocialTech/` (`base: "/SocialTech"` no `astro.config.mjs`) |
+| URL | `https://blima-p.github.io/SocialTech/` (`base: "/SocialTech/"` no `astro.config.mjs`) |
 | Node.js | 22.22 ou superior |
 | Python | Apenas como **ferramenta auxiliar** fora do site (ex.: gerar QR Code, analisar respostas do Forms) |
 
@@ -60,7 +62,7 @@ Estrutura:
 
 ```
 src/
-├── pages/            # rotas; index.astro é a página inicial
+├── pages/            # rotas; index.astro é a página inicial e 404.astro, a de erro
 ├── layouts/          # estrutura HTML comum (BaseLayout.astro)
 ├── components/       # componentes reutilizáveis (ex.: GuiaPodeNaoPode.astro, Quiz.astro)
 ├── content/          # conteúdo editável pelo painel (JSON e secoes/*.md), separado da lógica
@@ -68,7 +70,7 @@ src/
 ├── scripts/          # TypeScript de interatividade no navegador
 ├── assets/           # imagens otimizadas pelo Astro (astro:assets); assets/conteudo/ recebe os uploads do painel
 └── styles/           # CSS global e tokens do design system
-public/               # arquivos copiados sem processamento (favicon, imagem do QR Code)
+public/               # arquivos copiados sem processamento (favicon, compartilhar.png da prévia nas redes)
 docs/                 # especificação SDD: requisitos, arquitetura, ADRs, plano de tarefas
 ```
 
@@ -140,7 +142,7 @@ Rode `npm run verify` antes de propor qualquer commit. O CI também verifica lin
 
 ### 4.8 Seguir a especificação
 - Ao executar o `PROMPT-SDD.md`, respeite as fases **na ordem** e **pare em cada portão 🚦** até um humano responder. Marque informações como **[CONFIRMADO]**, **[SUPOSIÇÃO]** ou **[PENDENTE]**.
-- Ao implementar, trabalhe em **uma tarefa `T-XX` por vez**, conforme `docs/sdd/03-plano-tarefas.md` (T-01 a T-09) e `docs/sdd/05-plano-entrega-final.md` (T-10 a T-17), e cumpra os critérios de aceite dos requisitos ligados a ela.
+- Ao implementar, trabalhe em **uma tarefa `T-XX` por vez**, conforme `docs/sdd/03-plano-tarefas.md` (T-01 a T-09) e `docs/sdd/05-plano-entrega-final.md` (T-10 a T-17) e `docs/sdd/06-plano-melhorias.md` (T-18 a T-23) e `docs/sdd/07-plano-conteudo-enactus.md` (T-28 a T-35), e cumpra os critérios de aceite dos requisitos ligados a ela.
 - Cite os IDs no PR (ex.: `T-04`, `RF-02`). Na mensagem de commit, use o escopo do componente; os IDs podem ir no corpo.
 - **Não implemente** o que não está na especificação (sem *scope creep*). Se a especificação estiver ambígua, contraditória ou incompleta, **pare e pergunte**.
 - **Não altere** requisitos, ADRs aprovados ou respostas da equipe sem aprovação. Se uma mudança no código alterar o comportamento especificado, proponha também a atualização em `docs/`.

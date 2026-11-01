@@ -7,9 +7,17 @@ const CODIGO_GOATCOUNTER = "socialtech-ucb";
 interface Props {
   title: string;
   description?: string;
+  /** Página de erro (404): não é indexada pelo Google nem contada no GoatCounter. */
+  erro?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, erro = false } = Astro.props;
+const enderecoPagina = new URL(Astro.url.pathname, Astro.site);
+// Prévia do link no WhatsApp e nas redes (Open Graph). A imagem fica em public/.
+const imagemCompartilhar = new URL(
+  `${import.meta.env.BASE_URL}compartilhar.png`,
+  Astro.site,
+);
 ---
 
 <!doctype html>
@@ -20,8 +28,28 @@ const { title, description } = Astro.props;
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    {erro ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <link rel="canonical" href={enderecoPagina} />
+    )}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="SocialTech" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {!erro && <meta property="og:url" content={enderecoPagina} />}
+    <meta property="og:image" content={imagemCompartilhar} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="SocialTech: descarte correto de resíduos orgânicos. Projeto de extensão UCB + Enactus."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
     {/* Contagem de acessos sem cookies, só no site publicado (ADR-003). */}
-    {import.meta.env.PROD && (
+    {import.meta.env.PROD && !erro && (
       <script
         is:inline
         async

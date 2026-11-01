@@ -9,8 +9,9 @@ Você vai me ajudar no projeto SocialTech (Astro + TypeScript, site estático).
 Antes de escrever qualquer código, leia por completo, nesta ordem:
 1. AGENTS.md (regras obrigatórias do projeto);
 2. docs/equipe/nicole.md (este guia, com o código de referência e o passo a passo);
-3. a tarefa T-XX em docs/sdd/05-plano-entrega-final.md (critérios de aceite e prompt da tarefa).
-Trabalhe SOMENTE na tarefa T-XX e SOMENTE nos arquivos listados para ela no guia.
+3. a tarefa T-XX em docs/sdd/05-plano-entrega-final.md (T-11 a T-17) ou docs/sdd/06-plano-melhorias.md
+   (T-18 em diante), com os critérios de aceite e o prompt da tarefa.
+Trabalhe SOMENTE na tarefa T-XX e SOMENTE nos arquivos listados para ela no guia ou no plano.
 Não instale pacotes, não use fontes ou scripts externos, não invente conteúdo,
 não faça commit nem push. Se algo estiver ambíguo, pare e me pergunte.
 Primeiro me mostre um plano curto (arquivos e passos). Depois de eu aprovar, implemente,

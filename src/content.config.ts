@@ -9,6 +9,18 @@ import { z } from "astro/zod";
 const vazioParaUndefined = (valor: unknown) =>
   valor === "" || valor === null ? undefined : valor;
 
+// O Astro exige um id por item. Nas listas, o id é a posição, para manter a ordem do painel.
+const listaComPosicao = (texto: string) =>
+  (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
+    id: String(indice),
+    ...item,
+  }));
+
+// Arquivo com um objeto só: vira uma lista de um item com id fixo.
+const objetoUnico = (id: string) => (texto: string) => [
+  { id, ...(JSON.parse(texto) as Record<string, unknown>) },
+];
+
 const secoes = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/secoes" }),
   schema: ({ image }) =>
@@ -31,12 +43,7 @@ const secoes = defineCollection({
 
 const links = defineCollection({
   loader: file("src/content/links.json", {
-    // O arquivo é uma lista simples; o Astro exige um id por item.
-    parser: (texto) =>
-      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
-        id: String(indice),
-        ...item,
-      })),
+    parser: listaComPosicao,
   }),
   schema: z.discriminatedUnion("tipo", [
     z.object({
@@ -60,10 +67,7 @@ const links = defineCollection({
 
 const pontoColeta = defineCollection({
   loader: file("src/content/ponto-coleta.json", {
-    // O arquivo é um objeto único; o Astro exige uma lista com id.
-    parser: (texto) => [
-      { id: "atual", ...(JSON.parse(texto) as Record<string, unknown>) },
-    ],
+    parser: objetoUnico("atual"),
   }),
   schema: z.object({
     local: z.string().trim().min(1),
@@ -74,11 +78,7 @@ const pontoColeta = defineCollection({
 
 const guia = defineCollection({
   loader: file("src/content/guia.json", {
-    parser: (texto) =>
-      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
-        id: String(indice),
-        ...item,
-      })),
+    parser: listaComPosicao,
   }),
   schema: z.object({
     nome: z.string().trim().min(1),
@@ -89,9 +89,7 @@ const guia = defineCollection({
 
 const avaliacao = defineCollection({
   loader: file("src/content/avaliacao.json", {
-    parser: (texto) => [
-      { id: "formulario", ...(JSON.parse(texto) as Record<string, unknown>) },
-    ],
+    parser: objetoUnico("formulario"),
   }),
   schema: z.object({
     texto: z.string().trim().min(1),
@@ -104,12 +102,7 @@ const avaliacao = defineCollection({
 
 const ciclo = defineCollection({
   loader: file("src/content/ciclo.json", {
-    // Lista simples; o id é a posição, para manter a ordem definida no painel.
-    parser: (texto) =>
-      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
-        id: String(indice),
-        ...item,
-      })),
+    parser: listaComPosicao,
   }),
   schema: z.object({
     nome: z.string().trim().min(1),
@@ -120,14 +113,9 @@ const ciclo = defineCollection({
   }),
 });
 
-// Marcadores da entrega final (docs/sdd/05-plano-entrega-final.md, seção 1.3): cada tarefa troca só o seu.
 const impacto = defineCollection({
   loader: file("src/content/impacto.json", {
-    parser: (texto) =>
-      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
-        id: String(indice),
-        ...item,
-      })),
+    parser: listaComPosicao,
   }),
   schema: z.object({
     numero: z.string().trim().min(1),
@@ -138,9 +126,7 @@ const impacto = defineCollection({
 
 const guiaOrientacao = defineCollection({
   loader: file("src/content/guia-orientacao.json", {
-    parser: (texto) => [
-      { id: "atual", ...(JSON.parse(texto) as Record<string, unknown>) },
-    ],
+    parser: objetoUnico("atual"),
   }),
   schema: z.object({
     naoListado: z.preprocess(
@@ -152,11 +138,7 @@ const guiaOrientacao = defineCollection({
 
 const quiz = defineCollection({
   loader: file("src/content/quiz.json", {
-    parser: (texto) =>
-      (JSON.parse(texto) as Record<string, unknown>[]).map((item, indice) => ({
-        id: String(indice),
-        ...item,
-      })),
+    parser: listaComPosicao,
   }),
   schema: z
     .object({
@@ -176,16 +158,10 @@ export const collections = {
   secoes,
   links,
   ciclo,
-
   guia,
-
   pontoColeta,
-
   avaliacao,
-
   impacto,
-
   guiaOrientacao,
-
   quiz,
 };
