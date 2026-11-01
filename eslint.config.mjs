@@ -30,9 +30,16 @@ export default defineConfig(
     },
   },
   {
-    files: ["*.config.{js,mjs,ts}"],
+    files: ["*.config.{js,mjs,ts}", "scripts/**/*.mjs"],
     languageOptions: {
       globals: { ...globals.node },
+    },
+  },
+  {
+    // Ferramentas de terminal (T-19): o console.log é a saída esperada.
+    files: ["scripts/**/*.mjs"],
+    rules: {
+      "no-console": "off",
     },
   },
 );
