@@ -1,7 +1,22 @@
 [
-  { "nome": "Lixeira" },
-  { "nome": "Compostagem" },
-  { "nome": "Horta Botânica" },
-  { "nome": "Laboratório de Alimentos" },
-  { "nome": "Gastronomia/Nutrição" }
+  {
+    "nome": "Coletor",
+    "descricao": "Você descarta os resíduos orgânicos na lixeira verde. Os voluntários do Enactus UCB levam tudo à composteira."
+  },
+  {
+    "nome": "Compostagem",
+    "descricao": "Compostagem simples: o resíduo vira composto orgânico em cerca de 4 meses, conforme o clima e a umidade."
+  },
+  {
+    "nome": "Horto Botânico",
+    "descricao": "O composto aduba o cultivo de plantas, como hortelã, alecrim e manjericão, no Horto Botânico da UCB."
+  },
+  {
+    "nome": "Laboratório de Tecnologia de Alimentos",
+    "descricao": "As plantas são processadas no laboratório e viram chás, temperos e insumos para as aulas."
+  },
+  {
+    "nome": "Gastronomia/Nutrição",
+    "descricao": "Os insumos vão para os cursos de Gastronomia e Nutrição da UCB."
+  }
 ]
