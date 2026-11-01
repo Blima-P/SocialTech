@@ -120,7 +120,7 @@ flowchart TB
 
 | Componente | Arquivo | Coleção | Seção (`id`) | JavaScript | Tarefa | Situação |
 |---|---|---|---|---|---|---|
-| Layout base | `src/layouts/BaseLayout.astro` | — | `<html>`, `<head>` | `count.js` (produção) | T-01, T-08 | ✅ |
+| Layout base | `src/layouts/BaseLayout.astro` | — | `<html>`, `<head>`, prévia de compartilhamento | `count.js` (produção) | T-01, T-08, T-25 | ✅ |
 | Cabeçalho | `src/components/Cabecalho.astro` | — | `<header>` | Não | T-02, T-11 | ✅ · 🔨 redesign |
 | Guia "Pode / Não pode" | `src/components/GuiaPodeNaoPode.astro` | `guia`, `guiaOrientacao` | `guia` | Busca (T-14) | T-05, T-14 | ✅ · 🔨 busca |
 | Onde está a lixeira | `src/components/PontoColeta.astro` | `pontoColeta` | `ponto-de-coleta` | Não | T-06, T-11 | ✅ |
@@ -132,6 +132,10 @@ flowchart TB
 | Rodapé | `src/components/Rodape.astro` + `ListaLinks.astro` | `links` | `<footer>` | Não | T-02, T-11 | ✅ |
 
 A página `src/pages/index.astro` só compõe os componentes, na ordem da seção 4.
+
+A página `src/pages/404.astro` vira o `404.html`, que o GitHub Pages mostra em qualquer endereço inexistente dentro de `/SocialTech/`. Ela leva de volta ao início e às seções principais (links com `BASE_URL` completo), não é indexada (`noindex`) e não é contada no GoatCounter (T-25).
+
+**Prévia de compartilhamento (T-25).** O `BaseLayout` gera as metatags Open Graph (`og:title`, `og:description`, `og:url`, `og:image`) e o `link rel="canonical"`, sempre com endereço absoluto (`Astro.site` + `BASE_URL`). A imagem é `public/compartilhar.png` (1200 × 630 px, menos de 300 KB, como o WhatsApp exige). Não há `robots.txt` nem `sitemap.xml`: num site de projeto do GitHub Pages, o `robots.txt` só vale na raiz do domínio (`blima-p.github.io`, que é outro repositório), e o sitemap só ajudaria se fosse enviado ao Google Search Console.
 
 ## 4. Arquitetura da informação
 
@@ -316,14 +320,15 @@ SocialTech/
 │   ├── equipe/                     # guias para a IA de cada integrante
 │   ├── materiais/                  # qr-lixeira.png e adesivo-lixeira.pdf
 │   └── sdd/                        # constituição, especificação, clarificações, planos e revisão
+├── public/compartilhar.png         # imagem da prévia no WhatsApp e nas redes (T-25)
 ├── src/
 │   ├── assets/
 │   │   ├── fontes/                 # Roboto WOFF2 + licença (ADR-004)
 │   │   └── marca/                  # logos da Enactus Brasil
 │   ├── components/                 # um componente .astro por seção (PascalCase)
 │   ├── content/                    # conteúdo do painel (JSON e secoes/*.md)
-│   ├── layouts/BaseLayout.astro    # <html>, <head>, GoatCounter
-│   ├── pages/index.astro           # página única: só compõe os componentes
+│   ├── layouts/BaseLayout.astro    # <html>, <head>, GoatCounter, prévia de compartilhamento
+│   ├── pages/                      # index.astro (página única) e 404.astro (página de erro)
 │   ├── styles/global.css           # tokens e estilos globais
 │   └── content.config.ts           # schemas zod das coleções
 ├── .pages.yml                      # campos do painel Pages CMS
