@@ -1,0 +1,74 @@
+---
+import { getCollection } from "astro:content";
+
+const duvidas = await getCollection("duvidas");
+---
+
+{duvidas.length > 0 && (
+  <section id="duvidas" aria-labelledby="titulo-duvidas">
+    <h2 id="titulo-duvidas">Dúvidas comuns</h2>
+    <div class="lista">
+      {duvidas.map(({ data }) => (
+        <details>
+          <summary>
+            {data.pergunta}
+            <span class="icone" aria-hidden="true"></span>
+          </summary>
+          <p>{data.resposta}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  section {
+    background: var(--cor-fundo-suave);
+  }
+
+  .lista {
+    max-width: var(--largura-conteudo);
+  }
+
+  details {
+    margin-bottom: 0.75rem;
+    border-radius: var(--raio);
+    background: var(--cor-fundo);
+  }
+
+  summary {
+    display: flex;
+    min-height: var(--alvo-toque);
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.5rem var(--espaco);
+    border-radius: var(--raio);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary:focus-visible {
+    outline-color: var(--cor-escura);
+  }
+
+  .icone::before {
+    content: "+";
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  details[open] .icone::before {
+    content: "−";
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 var(--espaco) var(--espaco);
+  }
+</style>

@@ -1,0 +1,30 @@
+[
+  {
+    "pergunta": "Meu resíduo não está na lista. E agora?",
+    "resposta": "Em caso de dúvida, não coloque o resíduo na lixeira de compostagem. Consulte o Enactus UCB."
+  },
+  {
+    "pergunta": "Quem recolhe o resíduo da lixeira?",
+    "resposta": "Os voluntários do Enactus UCB recolhem o resíduo e levam para a composteira."
+  },
+  {
+    "pergunta": "Que tipo de compostagem é feita?",
+    "resposta": "Compostagem simples, também chamada de tradicional."
+  },
+  {
+    "pergunta": "Quanto tempo leva a compostagem?",
+    "resposta": "Cerca de 4 meses. É uma estimativa: o tempo depende do clima, da umidade e de outros fatores."
+  },
+  {
+    "pergunta": "O que é produzido?",
+    "resposta": "Composto orgânico, usado no cultivo de plantas no Horto Botânico da UCB. A quantidade depende do que for coletado, e a capacidade é de 60 kg."
+  },
+  {
+    "pergunta": "Quanto resíduo já foi compostado?",
+    "resposta": "Ainda não há dados: esta é a primeira coleta do projeto."
+  },
+  {
+    "pergunta": "Por que a lixeira muda de lugar?",
+    "resposta": "A lixeira é itinerante: ela passa por vários pontos do campus. Veja o local atual em \"Onde está a lixeira agora\"."
+  }
+]

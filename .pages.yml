@@ -248,6 +248,22 @@ content:
         type: text
         required: true
 
+  - name: duvidas
+    label: Dúvidas comuns
+    type: file
+    path: src/content/duvidas.json
+    format: json
+    list: true
+    fields:
+      - name: pergunta
+        label: Pergunta
+        type: text
+        required: true
+      - name: resposta
+        label: Resposta
+        type: text
+        required: true
+
 settings:
   commit:
     templates:

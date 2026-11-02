@@ -102,12 +102,20 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 5. Para mudar a ordem, arraste as perguntas. Para esconder o quiz, remova todas as perguntas.
 6. Clique em **Save** (Salvar).
 
-## 11. Quando a mudança aparece no site?
+## 11. Dúvidas comuns
+
+1. No menu do painel, abra **Dúvidas comuns**.
+2. Para incluir uma dúvida, clique em **Add** e preencha **Pergunta** e **Resposta**.
+3. Para editar, abra a dúvida e altere os campos necessários. Para remover, use a opção de excluir.
+4. Para mudar a ordem, arraste as dúvidas para a ordem desejada.
+5. Clique em **Save** (Salvar).
+
+## 12. Quando a mudança aparece no site?
 
 Cerca de **2 minutos** depois de salvar. Recarregue a página do site: **https://blima-p.github.io/SocialTech/**
 
 Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto). Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
 
-## 12. Dúvidas
+## 13. Dúvidas
 
 Fale com o Pedro, responsável técnico do projeto.

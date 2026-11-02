@@ -154,6 +154,16 @@ const quiz = defineCollection({
     }),
 });
 
+const duvidas = defineCollection({
+  loader: file("src/content/duvidas.json", {
+    parser: listaComPosicao,
+  }),
+  schema: z.object({
+    pergunta: z.string().trim().min(1),
+    resposta: z.string().trim().min(1),
+  }),
+});
+
 export const collections = {
   secoes,
   links,
@@ -164,4 +174,5 @@ export const collections = {
   impacto,
   guiaOrientacao,
   quiz,
+  duvidas,
 };
