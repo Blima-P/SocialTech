@@ -50,12 +50,28 @@ const imagemCompartilhar = new URL(
     <meta name="twitter:card" content="summary_large_image" />
     {/* Contagem de acessos sem cookies, só no site publicado (ADR-003). */}
     {import.meta.env.PROD && !erro && (
-      <script
-        is:inline
-        async
-        data-goatcounter={`https://${CODIGO_GOATCOUNTER}.goatcounter.com/count`}
-        src="https://gc.zgo.at/count.js"
-      ></script>
+      <>
+        <script is:inline>
+          window.goatcounter = {
+            path: () => {
+              const parametros = new URLSearchParams(window.location.search);
+              const origem = new URLSearchParams();
+              for (const chave of ["campaign", "ref"]) {
+                const valor = parametros.get(chave);
+                if (valor) origem.set(chave, valor);
+              }
+              const sufixo = origem.toString();
+              return `${window.location.pathname}${sufixo ? `?${sufixo}` : ""}`;
+            },
+          };
+        </script>
+        <script
+          is:inline
+          async
+          data-goatcounter={`https://${CODIGO_GOATCOUNTER}.goatcounter.com/count`}
+          src="https://gc.zgo.at/count.js"
+        ></script>
+      </>
     )}
   </head>
   <body>
