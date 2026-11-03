@@ -1,19 +1,7 @@
 [
-  {
-    "nome": "Lixeira"
-  },
-  {
-    "nome": "Compostagem",
-    "imagem": "../assets/conteudo/foto-teste-ciclo.jpg",
-    "descricaoImagem": "Foto de teste"
-  },
-  {
-    "nome": "Horta Botânica"
-  },
-  {
-    "nome": "Laboratório de Alimentos"
-  },
-  {
-    "nome": "Gastronomia/Nutrição"
-  }
+  { "nome": "Lixeira" },
+  { "nome": "Compostagem" },
+  { "nome": "Horta Botânica" },
+  { "nome": "Laboratório de Alimentos" },
+  { "nome": "Gastronomia/Nutrição" }
 ]
