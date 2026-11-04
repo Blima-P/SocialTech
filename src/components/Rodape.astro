@@ -7,7 +7,10 @@ import ListaLinks from "./ListaLinks.astro";
 <footer>
   <div class="marca">
     <Image src={logo} alt="Enactus Brasil" height={48} />
-    <p>Projeto de extensão da UCB em parceria com o Projeto Enactus</p>
+    <p>Projeto de extensão da UCB em parceria com o Enactus UCB</p>
+    <p class="creditos">
+      Site feito pela equipe SocialTech, de estudantes da UCB
+    </p>
   </div>
   <ListaLinks />
   <p class="topo">
@@ -34,6 +37,11 @@ import ListaLinks from "./ListaLinks.astro";
     max-width: 22rem;
     margin: 0.75rem 0 0;
     font-size: 0.9375rem;
+  }
+
+  .marca .creditos {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
   }
 
   /* ListaLinks é de outro componente: :global() aplica o estilo só dentro do rodapé. */
