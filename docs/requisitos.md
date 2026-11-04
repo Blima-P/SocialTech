@@ -424,7 +424,7 @@ Funcionalidade: Quiz
 | Prioridade | **Must** |
 | Origem | OE-4 · C-06 · Jornada J4 |
 | Conteúdo | RC-11 |
-| Situação | ✅ Implementado (T-07, PR #22); link [PENDENTE] (Q-07, E-02) |
+| Situação | ✅ Implementado (T-07, PR #22); link do Google Forms recebido em 04/11/2026 (Q-07, E-02) |
 
 ```gherkin
 Funcionalidade: Avaliação
@@ -616,7 +616,7 @@ Situação em 31/10/2026, depois das respostas do Prof. Marcus. O conteúdo publ
 | RC-08 | Foto da lixeira | Ponto de coleta (RF-06) | Prof. Marcus (Q-04) | E-05 | [CONFIRMADO] foto recebida em 31/10; publicada na T-32 (PR #86) |
 | RC-09 | Texto "Sobre o projeto" | `secoes/sobre-o-projeto.md` (RF-07) | Prof. Marcus | — | [CONFIRMADO] reescrito com as respostas de 31/10 (T-29); "Como descartar" continua oculta |
 | RC-10 | Contatos e links | `links.json` (RF-08) | Prof. Marcus | — | [CONFIRMADO] UCB e Enactus Brasil publicados |
-| RC-11 | Link do Google Forms e perguntas | `avaliacao.json` (RF-12) | Equipe | E-02 | [PENDENTE] Q-07: endereço vazio, seção oculta (**risco para S-02**) |
+| RC-11 | Link do Google Forms e perguntas | `avaliacao.json` (RF-12) | Equipe | E-02 | [CONFIRMADO] 04/11/2026: link do Google Forms em `avaliacao.json` (Q-07) |
 | RC-12 | 3 a 5 perguntas do quiz com alternativas, gabarito e explicação | `quiz.json` (RF-11) | Equipe rascunha, Prof. Marcus aprova | E-08 | [CONFIRMADO] 04/11: 5 perguntas da T-34 (PR #83), aceite registrado por Pedro; o Prof. Marcus pode revisá-las pelo painel |
 | RC-13 | 4 números de impacto com fonte | `impacto.json` (RF-10) | Roteiro (ABREMA, SLU, PDAD/IPEDF) | — | [CONFIRMADO] lista definida na T-13. Não há dados do próprio projeto (primeira coleta) |
 | RC-14 | Nome, logos, cores e fonte | Cabeçalho, rodapé, faixa de parceria, tokens (RF-09) | `enactus.org.br` (Q-22) e Prof. Marcus (Q-15) | — | [CONFIRMADO] nome "Enactus UCB", sem o logo do grupo SocialTech, logos da UCB e da Enactus (T-30, T-35); [PENDENTE] arquivo oficial do logo da UCB (Q-25) |
@@ -708,7 +708,7 @@ As tarefas do [plano de melhorias](sdd/06-plano-melhorias.md) e do [plano 07](sd
 
 ### 9.1 Conteúdo pendente
 
-Os requisitos de conteúdo **[PENDENTE]** da [seção 6](#6-requisitos-de-conteúdo) são: RC-11, RC-14 (logo da UCB, Q-25), RC-15 (impressão e fixação do cartaz) e RC-16. Os responsáveis e prazos estão nas tarefas E-01 a E-05 ([plano do MVP §4](sdd/03-plano-tarefas.md#4-tarefas-fora-do-código-equipe-sem-github)), E-06 a E-10 ([plano da entrega final §4](sdd/05-plano-entrega-final.md#4-tarefas-fora-do-código-equipe-sem-github)) e no [plano 07](sdd/07-plano-conteudo-enactus.md).
+Os requisitos de conteúdo **[PENDENTE]** da [seção 6](#6-requisitos-de-conteúdo) são: RC-14 (logo da UCB, Q-25), RC-15 (impressão e fixação do cartaz) e RC-16. Os responsáveis e prazos estão nas tarefas E-01 a E-05 ([plano do MVP §4](sdd/03-plano-tarefas.md#4-tarefas-fora-do-código-equipe-sem-github)), E-06 a E-10 ([plano da entrega final §4](sdd/05-plano-entrega-final.md#4-tarefas-fora-do-código-equipe-sem-github)) e no [plano 07](sdd/07-plano-conteudo-enactus.md).
 
 ### 9.2 Riscos
 
@@ -716,7 +716,7 @@ Os riscos de produto R-01 a R-06 estão na [especificação §7](sdd/01-especifi
 
 | ID | Risco | Impacto | Mitigação |
 |---|---|---|---|
-| R-07 | O formulário (RC-11) ainda não existe: em 01/11/2026, o link em `avaliacao.json` continua vazio e o botão de avaliação fica oculto | Meta S-02 (≥ 80 respostas) sem tempo de coleta | Criar o Forms (E-02, Q-07) antes da ação no campus (E-09); o Prof. Marcus cola o link pelo painel |
+| R-07 | O formulário (RC-11) não existia até 01/11/2026 e o botão de avaliação ficava oculto | Meta S-02 (≥ 80 respostas) sem tempo de coleta | Resolvido em 04/11/2026: link do Google Forms em `avaliacao.json`; divulgar na ação no campus (E-09) |
 | R-08 | A T-12 só começa depois do merge da T-11 (mesmo arquivo) | Ciclo interativo fora da release de 28/10 | Resolvido: a T-12 entrou na release final (PR #46, release #47) |
 | R-09 | Bloqueadores de anúncio impedem o script do GoatCounter | Acessos contados a menos (S-01) | Aceito: a contagem é um mínimo; registrar a limitação no relatório |
 | R-10 | Guia sem nenhum item "Pode" na H2 | Jornada J1 só parcialmente cumprida | Resolvido em 31/10/2026: lista validada pelo Prof. Marcus (Q-01), publicada pela T-29 |
