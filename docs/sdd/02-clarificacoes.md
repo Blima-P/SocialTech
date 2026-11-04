@@ -27,7 +27,7 @@ Q-01 a Q-05 foram respondidas em 31/10/2026 (seção 4).
 
 | ID | Pergunta | Por que importa | Opções sugeridas | Impacto se não respondida | Responsável | Prioridade | Status |
 |---|---|---|---|---|---|---|---|
-| Q-07 | Qual o **link do Google Forms** e quais as perguntas finais? | Botão de avaliação (C-06); meta de 80 respostas (S-02) | Forms sem pedir nome, e-mail nem matrícula; perguntas fechadas + 1 aberta | Botão de avaliação fica oculto; meta S-02 em risco | Equipe | 🔴 | Aberta |
+| Q-07 | Qual o **link do Google Forms** e quais as perguntas finais? | Botão de avaliação (C-06); meta de 80 respostas (S-02) | Forms sem pedir nome, e-mail nem matrícula; perguntas fechadas + 1 aberta | Botão de avaliação fica oculto; meta S-02 em risco | Equipe | 🔴 | ✅ Respondida em 04/11/2026: link em `avaliacao.json` |
 | Q-09 | Como o relatório vai tratar "retenção" (roteiro 2.6), se a Fase 5 diz que não é possível afirmá-la? | Coerência do relatório (conflito C2) | Usar "percepção e intenção declarada", como na Fase 5 | Relatório com afirmação que o próprio roteiro desaconselha | Equipe (relatório) | ⚪ | Aberta |
 
 ## 3. QR Code, identidade visual e operação
