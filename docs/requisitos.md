@@ -338,7 +338,7 @@ Funcionalidade: Contatos e links
 | Prioridade | Should |
 | Origem | C-12 (transversal, todas as jornadas) · Q-15 |
 | Conteúdo | RC-14 |
-| Situação | ✅ Cabeçalho e rodapé (T-02, PR #23); redesign, menu e Roboto (T-11, PR #44); faixa de parceria (T-35, PR #63; foto de fundo em 04/11); botão único e favicon (T-20, PR #58); nome "Compostagem Enactus UCB" (T-30, PR #85) |
+| Situação | ✅ Cabeçalho e rodapé (T-02, PR #23); redesign, menu e Roboto (T-11, PR #44); faixa de parceria (T-35, PR #63; fundo neutro em 04/11); botão único e favicon (T-20, PR #58); nome "Compostagem Enactus UCB" (T-30, PR #85) |
 
 ```gherkin
 Funcionalidade: Identidade e navegação

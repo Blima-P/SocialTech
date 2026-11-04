@@ -322,7 +322,7 @@ Não faça commit. Rode npm run format e npm run verify.
 | Depende de | — |
 | Validação Enactus | Sim: banner de parceria enviado pelo professor (resposta 15) |
 
-**Descrição.** Versão para a web da faixa "Um projeto de parceria: Enactus + UCB", em HTML, CSS e SVG, antes do rodapé. A UCB aparece em texto até chegar o arquivo oficial do logo (Q-25). Feita na issue #62, PR #63. Em 04/11/2026, a pedido da equipe, o fundo ganhou a foto da lixeira com o banner (`lixeira-verde.jpg`), desfocada e com um véu verde. Ela usa os mesmos parâmetros do `<Image>` do Ponto de Coleta, então o arquivo é reaproveitado e o peso da página não aumenta.
+**Descrição.** Versão para a web da faixa "Um projeto de parceria: Enactus + UCB", em HTML, CSS e SVG, antes do rodapé. A UCB aparece em texto até chegar o arquivo oficial do logo (Q-25). Feita na issue #62, PR #63. Em 04/11/2026, a pedido da equipe, o fundo verde com bolhas virou um fundo neutro: branco no tema claro e escuro no tema escuro, com o cartão de borda cinza e as folhas decorativas em cinza. A foto da lixeira chegou a ser testada como fundo, mas a equipe preferiu o fundo neutro.
 
 ## 4. Perguntas que continuam abertas
 
