@@ -121,7 +121,7 @@ flowchart TB
 | Componente | Arquivo | Coleção | Seção (`id`) | JavaScript | Tarefa | Situação |
 |---|---|---|---|---|---|---|
 | Layout base | `src/layouts/BaseLayout.astro` | — | `<html>`, `<head>`, prévia de compartilhamento | `count.js` (produção) | T-01, T-08, T-25 | ✅ |
-| Cabeçalho | `src/components/Cabecalho.astro` | — | `<header id="topo">`; no celular, o menu vira uma faixa com rolagem lateral | Não | T-02, T-11, T-27 | ✅ |
+| Cabeçalho | `src/components/Cabecalho.astro` | — | `<header id="topo">`; no celular, o menu vira uma faixa com rolagem lateral | Botão de tema (RF-17) | T-02, T-11, T-27 | ✅ |
 | Guia "Pode / Não pode" | `src/components/GuiaPodeNaoPode.astro` | `guia`, `guiaOrientacao` | `guia` | Busca (T-14) | T-05, T-14 | ✅ · 🔨 busca |
 | Onde está a lixeira | `src/components/PontoColeta.astro` | `pontoColeta` | `ponto-de-coleta` | Não | T-06, T-11 | ✅ |
 | Ciclo do resíduo | `src/components/CicloResiduo.astro` | `ciclo` | `ciclo` | Passo a passo (T-12) | T-03, T-12 | ✅ · 🔨 interativo |
@@ -218,14 +218,30 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 |---|---|---|---|
 | `--cor-texto` | `#30333C` | Texto principal | 12,6:1 no branco; 11,3:1 em `#F2F2F2` |
 | `--cor-texto-suave` | `#515356` | Datas, legendas | 7,7:1 no branco |
-| `--cor-fundo` | `#FFFFFF` | Fundo da página; texto sobre fundo escuro | — |
+| `--cor-fundo` | `#FFFFFF` | Fundo da página e de cartões | — |
 | `--cor-fundo-suave` | `#F2F2F2` | Faixas cinza e cartões | — |
-| `--cor-escura` | `#30333C` | Faixa de impacto e rodapé | Branco: 12,6:1; amarelo: 7,8:1 |
-| `--cor-destaque` | `#FFC222` | **Só como fundo** (botões, faixas) com `--cor-texto`, ou como **texto sobre `--cor-escura`** | `#30333C` sobre ele: 7,8:1. Sobre fundo claro: 1,6:1, **proibido** |
+| `--cor-escura` | `#30333C` | Cor forte de contorno, foco, borda de botões e `accent-color` | Ver `--cor-texto` |
+| `--cor-borda` | `#D5D5D5` | Bordas decorativas (cartões e alternativas do quiz) | Decorativa |
+| `--cor-botao` / `--cor-botao-texto` | `#30333C` / `#FFFFFF` | Botão de ação | 12,6:1 |
+| `--cor-faixa-escura` | `#30333C` | Faixa de impacto e rodapé (igual nos dois temas) | Com `--cor-sobre-escura` (branco): 12,6:1; amarelo: 7,8:1 |
+| `--cor-destaque` | `#FFC222` | **Só como fundo** (botões, faixas) com `--cor-sobre-destaque` (`#30333C`), ou como **texto sobre `--cor-faixa-escura`** ou sobre o fundo do tema escuro | `#30333C` sobre ele: 7,8:1. Sobre fundo claro: 1,6:1, **proibido** |
 | `--cor-pode` | `#1E6B34` | Texto e borda de "Pode" e "Certo" | 6,6:1 no branco; 5,8:1 em `--cor-pode-fundo` |
 | `--cor-pode-fundo` | `#E8F5EC` | Fundo do cartão "Pode" | — |
 | `--cor-nao-pode` | `#B42318` | Texto e borda de "Não pode" e "Errado" | 6,6:1 no branco; 5,8:1 em `--cor-nao-pode-fundo` |
 | `--cor-nao-pode-fundo` | `#FDECEA` | Fundo do cartão "Não pode" | — |
+
+**Tema escuro (RF-17).** Os mesmos tokens ganham outros valores em `:root[data-tema="escuro"]` e, sem escolha salva, em `@media (prefers-color-scheme: dark)` (os dois blocos de `global.css` precisam ficar iguais). As faixas amarelas (destaque do cabeçalho, "Avalie o projeto", página 404) e o cartão de logos da parceria usam a classe `.tema-fixo-claro`, que mantém as cores do tema claro. `--exibir-no-claro` e `--exibir-no-escuro` trocam a logo do cabeçalho pela versão para fundo escuro.
+
+| Token | Valor no escuro | Contraste |
+|---|---|---|
+| `--cor-texto` | `#ECEEF1` | 15,1:1 no fundo; 13,0:1 no fundo suave |
+| `--cor-texto-suave` | `#B4B8C0` | 8,8:1 no fundo; 7,6:1 no fundo suave |
+| `--cor-fundo` / `--cor-fundo-suave` | `#17191E` / `#23262C` | — |
+| `--cor-escura` | `#ECEEF1` | Ver `--cor-texto` |
+| `--cor-borda` | `#3B3F47` | Decorativa |
+| `--cor-botao` / `--cor-botao-texto` | `#FFC222` / `#30333C` | 7,8:1 |
+| `--cor-pode` / `--cor-pode-fundo` | `#6FCF8A` / `#16301F` | 7,4:1 no cartão; 9,2:1 no fundo |
+| `--cor-nao-pode` / `--cor-nao-pode-fundo` | `#FF8F80` / `#3B1B18` | 7,0:1 no cartão; 7,9:1 no fundo |
 
 ### 5.2 Tipografia
 
@@ -261,13 +277,14 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 
 | Componente | Regras |
 |---|---|
-| Botão de ação | Fundo `--cor-escura` com texto branco, ou fundo `--cor-destaque` com texto `--cor-texto`; altura ≥ `--alvo-toque`; foco visível |
+| Botão de ação | Fundo `--cor-botao` com texto `--cor-botao-texto` (escuro no tema claro, amarelo no escuro), ou fundo `--cor-destaque` com texto `--cor-sobre-destaque`; altura ≥ `--alvo-toque`; foco visível |
+| Botão de tema | Círculo de `--alvo-toque` no cabeçalho, com lua (no claro) ou sol (no escuro) e texto oculto "Modo escuro"; `aria-pressed` diz se o escuro está ligado. Só aparece com JavaScript; guarda a escolha em `localStorage` (`tema`) e um script no `<head>` a aplica antes de desenhar a página (RF-17) |
 | Cartão "Pode" / "Não pode" | Fundo `--cor-pode-fundo` ou `--cor-nao-pode-fundo`, borda e título na cor forte; grupo com título "✓ Pode" ou "✕ Não pode" (símbolo com `aria-hidden`) |
 | Campo de busca | `<label>` visível "Procure um item" + `<input type="search">`; contagem de resultados em `aria-live="polite"` |
 | "Ver mais" do guia | Botão de ação abaixo de cada grupo com mais de 3 itens, com `aria-expanded` e `aria-controls` apontando para a lista; alterna para "Ver menos". Só existe com JavaScript; some durante a busca, que procura em todos os itens |
 | Etapa do ciclo | Número em círculo (`aria-hidden`), nome e frase; seta entre etapas (decorativa) |
 | Controles do ciclo | Botões numerados com `aria-label="Etapa X: <nome>"` e `aria-current="step"`; "Anterior" e "Próxima" desabilitados nas pontas |
-| Número de impacto | Número grande em `--cor-destaque` sobre `--cor-escura`; descrição e fonte em `--cor-fundo`; entram um a um ao rolar, sem contagem animada |
+| Número de impacto | Número grande em `--cor-destaque` sobre `--cor-faixa-escura`; descrição e fonte em `--cor-sobre-escura`; entram um a um ao rolar, sem contagem animada |
 | Pergunta do quiz | `<fieldset>` com `<legend>`; alternativas em `<input type="radio">` + `<label>`; resultado "✓ Certo" / "✕ Errado" em `aria-live`. Um texto inicial diz quantas perguntas são; com JavaScript, só a primeira aparece e cada resposta revela a seguinte (animação `revelar` em `animacoes.css`) |
 | Título de seção | `<h2>` com traço amarelo embaixo (escuro na faixa amarela e no rodapé) (T-11) |
 
