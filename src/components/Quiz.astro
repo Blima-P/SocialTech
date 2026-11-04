@@ -9,6 +9,14 @@ const perguntas = (await getCollection("quiz")).sort(
 {perguntas.length > 0 && (
   <section id="quiz" aria-labelledby="titulo-quiz" data-quiz>
     <h2 id="titulo-quiz">Teste o que você aprendeu</h2>
+    <p class="intro">
+      São <strong>{perguntas.length} perguntas</strong> rápidas sobre o que você
+      viu nesta página.
+      <span data-so-com-js hidden>
+        {" "}
+        Responda uma e a próxima aparece logo abaixo.
+      </span>
+    </p>
     <noscript>
       <p>Para conferir as respostas, ative o JavaScript do navegador.</p>
     </noscript>
@@ -62,6 +70,17 @@ const perguntas = (await getCollection("quiz")).sort(
     const placar = quiz.querySelector<HTMLElement>("[data-placar]")!;
     const refazer = quiz.querySelector<HTMLButtonElement>("[data-refazer]")!;
     const acertos = new Map<HTMLFieldSetElement, boolean>();
+    const itens = perguntas.map((pergunta) => pergunta.closest("li")!);
+    quiz.querySelector<HTMLElement>("[data-so-com-js]")!.hidden = false;
+
+    // Uma pergunta de cada vez: a seguinte surge quando a anterior é respondida.
+    const revelar = (indice: number) => {
+      itens.forEach((item, i) => {
+        item.hidden = i > indice;
+      });
+      itens[indice]?.classList.add("revelada");
+    };
+    revelar(0);
 
     const mostrarResultado = (
       pergunta: HTMLFieldSetElement,
@@ -102,6 +121,7 @@ const perguntas = (await getCollection("quiz")).sort(
           opcao.disabled = true;
         responder.hidden = true;
         mostrarResultado(pergunta, acertou);
+        revelar(Math.max(acertos.size, perguntas.indexOf(pergunta) + 1));
 
         if (acertos.size === perguntas.length) {
           const total = [...acertos.values()].filter(Boolean).length;
@@ -130,12 +150,24 @@ const perguntas = (await getCollection("quiz")).sort(
       }
       placar.textContent = "";
       refazer.hidden = true;
+      for (const item of itens) item.classList.remove("revelada");
+      revelar(0);
       perguntas[0]?.querySelector("input")?.focus();
     });
   }
 </script>
 
 <style>
+  .intro {
+    max-width: var(--largura-conteudo);
+    margin: 0 0 var(--espaco);
+    color: var(--cor-texto-suave);
+  }
+
+  .intro strong {
+    color: var(--cor-texto);
+  }
+
   .perguntas {
     display: grid;
     gap: var(--espaco);
