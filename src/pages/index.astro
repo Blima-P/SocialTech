@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PontoColeta from "../components/PontoColeta.astro";
+import DuvidasComuns from "../components/DuvidasComuns.astro";
 import GuiaPodeNaoPode from "../components/GuiaPodeNaoPode.astro";
 import Avaliacao from "../components/Avaliacao.astro";
 import Secao from "../components/Secao.astro";
@@ -10,6 +11,7 @@ import Rodape from "../components/Rodape.astro";
 import CicloResiduo from "../components/CicloResiduo.astro";
 import NumerosImpacto from "../components/NumerosImpacto.astro";
 import Quiz from "../components/Quiz.astro";
+import FaixaParceria from "../components/FaixaParceria.astro";
 
 const secoes = (
   await getCollection("secoes", ({ data }) => data.publicada)
@@ -18,15 +20,17 @@ const secoes = (
 
 <BaseLayout
   title="SocialTech: descarte correto de resíduos orgânicos"
-  description="Projeto de extensão da UCB em parceria com o Projeto Enactus."
+  description="O que pode ir na lixeira de compostagem da UCB, para onde vai o resíduo e onde a lixeira está. Projeto de extensão da UCB com o Projeto Enactus."
 >
   <Cabecalho />
   <main>
+    <CicloResiduo />
+
     <GuiaPodeNaoPode />
 
     <PontoColeta />
 
-    <CicloResiduo />
+    <DuvidasComuns />
 
     <NumerosImpacto />
 
@@ -37,6 +41,8 @@ const secoes = (
     {secoes.map((secao) => (
       <Secao secao={secao} />
     ))}
+
+    <FaixaParceria />
   </main>
   <Rodape />
 </BaseLayout>

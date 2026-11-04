@@ -47,6 +47,7 @@ O [`AGENTS.md`](../../AGENTS.md) tem a lista completa e **prevalece** sobre este
 | Arquivo | O que faz | Tarefa |
 |---|---|---|
 | `src/styles/global.css` | Tokens e estilos gerais | T-11 |
+| `src/styles/animacoes.css` | Animações (T-24, do Pedro) | Não mexa, salvo se a tarefa pedir |
 | `src/components/Cabecalho.astro`, `Rodape.astro` | Cabeçalho e rodapé | T-11 |
 | `src/components/GuiaPodeNaoPode.astro` | Guia (o Luiz mexe na T-14) | T-11: **só** o `<style>` |
 | `src/components/PontoColeta.astro`, `Avaliacao.astro` | Ponto de coleta e avaliação | T-11: só o `<style>` |

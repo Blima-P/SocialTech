@@ -52,9 +52,11 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 
 1. No menu do painel, abra **Onde está a lixeira**.
 2. Troque o campo **Local atual** pelo local onde a lixeira está agora.
-3. Atualize **Data da atualização** para a data de hoje.
-4. Clique em **Save** (Salvar).
-5. Aguarde cerca de **2 minutos** para a mudança aparecer no site.
+3. Envie ou troque **Foto da lixeira (opcional)** para mostrar como ela está no local atual.
+4. Se houver foto, preencha **Descrição da foto** com uma descrição objetiva do que aparece nela; esse texto é usado como texto alternativo para leitores de tela.
+5. Atualize **Data da atualização** para a data de hoje.
+6. Clique em **Save** (Salvar).
+7. Aguarde cerca de **2 minutos** para a mudança aparecer no site.
 
 ## 6. Ciclo do resíduo
 
@@ -62,6 +64,8 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 2. Cada item é uma etapa do caminho do resto de comida. Para cada uma, preencha:
    - **Nome da etapa**: o nome que aparece no site (ex.: "Compostagem").
    - **Frase curta (opcional)**: uma frase explicando a etapa. Se deixar vazio, aparece só o nome.
+   - **Foto (opcional)**: envie uma foto do espaço (JPG, PNG ou WEBP). Use só fotos autorizadas pela Enactus.
+   - **Descrição da foto**: obrigatória quando houver foto. Escreva o que a foto mostra, por exemplo "Canteiros da Horta Botânica". Ela é lida em voz alta para pessoas com deficiência visual.
 3. Para mudar a ordem, arraste as etapas. A ordem da lista é a ordem no site.
 4. Clique em **Save** (Salvar).
 
@@ -102,12 +106,20 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 5. Para mudar a ordem, arraste as perguntas. Para esconder o quiz, remova todas as perguntas.
 6. Clique em **Save** (Salvar).
 
-## 11. Quando a mudança aparece no site?
+## 11. Dúvidas comuns
+
+1. No menu do painel, abra **Dúvidas comuns**.
+2. Para incluir uma dúvida, clique em **Add** e preencha **Pergunta** e **Resposta**.
+3. Para editar, abra a dúvida e altere os campos necessários. Para remover, use a opção de excluir.
+4. Para mudar a ordem, arraste as dúvidas para a ordem desejada.
+5. Clique em **Save** (Salvar).
+
+## 12. Quando a mudança aparece no site?
 
 Cerca de **2 minutos** depois de salvar. Recarregue a página do site: **https://blima-p.github.io/SocialTech/**
 
 Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto). Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
 
-## 12. Dúvidas
+## 13. Dúvidas
 
 Fale com o Pedro, responsável técnico do projeto.

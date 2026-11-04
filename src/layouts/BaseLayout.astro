@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/animacoes.css";
 
 // Código do site no GoatCounter (ADR-003). Não é segredo.
 const CODIGO_GOATCOUNTER = "socialtech-ucb";
@@ -7,9 +8,17 @@ const CODIGO_GOATCOUNTER = "socialtech-ucb";
 interface Props {
   title: string;
   description?: string;
+  /** Página de erro (404): não é indexada pelo Google nem contada no GoatCounter. */
+  erro?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, erro = false } = Astro.props;
+const enderecoPagina = new URL(Astro.url.pathname, Astro.site);
+// Prévia do link no WhatsApp e nas redes (Open Graph). A imagem fica em public/.
+const imagemCompartilhar = new URL(
+  `${import.meta.env.BASE_URL}compartilhar.png`,
+  Astro.site,
+);
 ---
 
 <!doctype html>
@@ -26,14 +35,50 @@ const { title, description } = Astro.props;
       href={`${import.meta.env.BASE_URL}favicon.svg`}
     />
     <title>{title}</title>
+    {erro ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <link rel="canonical" href={enderecoPagina} />
+    )}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="SocialTech" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {!erro && <meta property="og:url" content={enderecoPagina} />}
+    <meta property="og:image" content={imagemCompartilhar} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="SocialTech: descarte correto de resíduos orgânicos. Projeto de extensão UCB + Enactus."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
     {/* Contagem de acessos sem cookies, só no site publicado (ADR-003). */}
-    {import.meta.env.PROD && (
-      <script
-        is:inline
-        async
-        data-goatcounter={`https://${CODIGO_GOATCOUNTER}.goatcounter.com/count`}
-        src="https://gc.zgo.at/count.js"
-      ></script>
+    {import.meta.env.PROD && !erro && (
+      <>
+        <script is:inline>
+          window.goatcounter = {
+            path: () => {
+              const parametros = new URLSearchParams(window.location.search);
+              const origem = new URLSearchParams();
+              for (const chave of ["campaign", "ref"]) {
+                const valor = parametros.get(chave);
+                if (valor) origem.set(chave, valor);
+              }
+              const sufixo = origem.toString();
+              return `${window.location.pathname}${sufixo ? `?${sufixo}` : ""}`;
+            },
+          };
+        </script>
+        <script
+          is:inline
+          async
+          data-goatcounter={`https://${CODIGO_GOATCOUNTER}.goatcounter.com/count`}
+          src="https://gc.zgo.at/count.js"
+        ></script>
+      </>
     )}
   </head>
   <body>
