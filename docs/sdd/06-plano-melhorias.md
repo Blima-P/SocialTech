@@ -4,7 +4,7 @@
 |---|---|
 | Projeto | SocialTech (UCB + Projeto Enactus) |
 | Fase SDD | 6 (Plano de tarefas): melhorias de código, acessibilidade e manutenção depois da release final (#47) |
-| Versão | 1.0 (29/10/2026) |
+| Versão | 1.1 (29/10/2026): inclui a T-24 |
 | Status | 🚦 Em revisão pela equipe |
 | Base | [Requisitos](../requisitos.md), [Arquitetura](../arquitetura.md), [Revisão](04-revisao.md), [Plano da entrega final](05-plano-entrega-final.md) |
 
@@ -38,7 +38,31 @@ Revisão do código da `develop` e do site publicado em 29/10/2026, depois da re
 
 Testado em 29/10: `image()` funciona com o `file()` loader do Astro (JSON em `src/content/`, caminho `../assets/conteudo/<arquivo>`, WebP gerado), e o Pages CMS aceita várias fontes de mídia com nome (`media` em lista e `options.media` no campo).
 
+Tarefas acrescentadas depois, em 29/10 e 30/10/2026, já com issue (o texto completo está nas seções 3 e 5):
+
+| Achado | Onde | Tarefa |
+|---|---|---|
+| Pedido do Pedro: deixar o site mais dinâmico, com animações marcantes, sem pesar | Todos os componentes (só CSS) | T-24 |
+| O link enviado no WhatsApp aparece sem imagem e sem descrição, e um endereço errado mostra a 404 genérica do GitHub | `BaseLayout.astro`, `404.astro` | T-25 |
+| No quiz, o resultado fica numa região `aria-live` **e** recebe o foco: o leitor de tela anuncia duas vezes | `Quiz.astro` | T-26 |
+| No celular, o menu do cabeçalho fica escondido: quem chega pelo QR Code rola a página inteira para achar a lixeira | `Cabecalho.astro`, `Rodape.astro` | T-27 |
+
 ## 2. Ordem e responsáveis
+
+Situação em 01/11/2026 (as T-25 a T-27 estão na [seção 5](#5-tarefas-acrescentadas-depois-da-revisão-do-plano)):
+
+| Tarefa | Responsável | Depende de | Issue / PR | Situação |
+|---|---|---|---|---|
+| T-18 | Pedro | — | #49 / PR #55 | ✅ Concluída |
+| T-19 | Pedro | T-18 | #50 | 🔨 Em andamento |
+| T-20 | Nicole | T-18 | #51 / PR #58 | 🔨 Ajustes pedidos na revisão |
+| T-21 | Nicole | T-18 | #52 / PR #59 | 🔨 Ajustes pedidos na revisão |
+| T-22 | Luiz | — | #53 / PR #60 | ✅ Concluída |
+| T-23 | Luiz | T-18 | #54 / PR #61 | 🔨 Corrigido, aguardando nova revisão |
+| T-24 | Pedro | T-18 | #56 / PR #57 | 🔨 Corrigido, aguardando nova revisão |
+| T-25 · Prévia de compartilhamento e página 404 | Pedro | T-18 | #64 / PR #65 | ✅ Concluída |
+| T-26 · Quiz sem anúncio duplicado no leitor de tela | Pedro | — | #66 / PR #67 | ✅ Concluída |
+| T-27 · Navegação no celular | Nicole | T-20 (mesmos arquivos) | #68 | ⏳ Aguarda a T-20 |
 
 | Tarefa | Responsável | Depende de | Arquivos principais |
 |---|---|---|---|
@@ -48,8 +72,11 @@ Testado em 29/10: `image()` funciona com o `file()` loader do Astro (JSON em `sr
 | T-21 · Fotos no ciclo e nome da etapa no anúncio | Nicole | T-18 | `CicloResiduo`, `content.config.ts`, `.pages.yml`, guia de edição |
 | T-22 · Busca do guia só pelo nome | Luiz | — (pode começar já) | `GuiaPodeNaoPode`, `docs/requisitos.md` |
 | T-23 · Foto da lixeira | Luiz | T-18 | `PontoColeta`, `content.config.ts`, `.pages.yml`, guia de edição |
+| T-24 · Animações leves | Pedro | T-18 | `src/styles/animacoes.css` (novo), `BaseLayout`, docs |
 
 A T-21 e a T-23 mexem em blocos diferentes do `content.config.ts`, do `.pages.yml` e do guia de edição. Quem fizer o merge depois atualiza a branch com a `develop` (`git merge origin/develop`) antes de pedir a revisão.
+
+A T-24 fica toda em `src/styles/animacoes.css` e não mexe nos componentes. Na T-20, o `:hover` do `.botao` não usa `transform` nem `box-shadow` (use, por exemplo, o sublinhado), porque o movimento (subir, sombra e afundar ao tocar) já vem da T-24. A T-21 e a T-22 não precisam mudar nada por causa dela: a etapa do ciclo e os cartões do guia animam sozinhos ao reaparecer.
 
 ## 3. Tarefas
 
@@ -280,10 +307,120 @@ Teste com uma imagem temporária e desfaça antes do commit. Sem dependência no
 Não faça commit. Rode npm run format e npm run verify.
 ```
 
+### T-24 · Animações leves
+
+| Campo | Valor |
+|---|---|
+| Tipo | Funcionalidade (feat) |
+| Responsável | Pedro |
+| Componente | Todos (só CSS) |
+| Requisitos | RNF-01, RNF-09, RNF-10, RNF-12; RF-10 (números sem contagem animada) |
+| Depende de | T-18 |
+| Validação Enactus | Não |
+
+**Descrição.** Pedido do Pedro em 29/10/2026: deixar o site mais dinâmico, com animações marcantes, sem pesar. Tudo é feito em CSS puro, num arquivo só, sem JavaScript e sem dependência.
+
+**Critérios de aceite**
+
+- [ ] `src/styles/animacoes.css`, importado no `BaseLayout.astro` depois do `global.css`, com todo o conteúdo dentro de `@media (prefers-reduced-motion: no-preference)` (RNF-09).
+- [ ] Só `transform` e `opacity` (e `box-shadow`/`background-color` em transição de botão). Nenhuma animação infinita.
+- [ ] Topo: barra do logo, selo, título, frase e botão entram em cascata; o recorte escuro desliza da direita.
+- [ ] Botões: sobem com sombra no *hover* (só em `@media (hover: hover)`) e afundam ao tocar; desabilitados não se mexem.
+- [ ] Rolagem: cada bloco das seções surge ao entrar na tela, e o traço amarelo do `<h2>` cresce. Feito com `animation-timeline: view()` dentro de `@supports`; sem suporte, o conteúdo aparece parado.
+- [ ] Números de impacto entram um depois do outro, crescendo. **Sem contagem animada** (RF-10).
+- [ ] Ciclo: a etapa entra a cada troca, e o número "estala"; o atalho da etapa atual fica maior. Guia: os cartões entram ao carregar e ao reaparecer na busca. Quiz: o resultado "estala", o "Errado" treme de leve e a explicação sobe.
+- [ ] Sem JavaScript, todo o conteúdo fica visível (RNF-10). Com "reduzir movimento", `document.getAnimations()` fica vazio.
+- [ ] O JS do site não muda; o CSS cresce menos de 3 KB (menos de 1 KB com gzip). Sem rolagem horizontal em 360 px e em 1366 px.
+- [ ] `docs/arquitetura.md` (§5.4, §5.5 e estrutura), `AGENTS.md` §5 e os mapas de arquivos dos guias da equipe citam o novo arquivo.
+
 ## 4. Fora deste plano (precisam de decisão antes)
 
 | Ideia | Por que não entrou |
 |---|---|
-| Prévia do link no WhatsApp (`og:title`, `og:image`) | Não está na especificação; ajudaria a divulgação (meta S-01), mas precisa de aprovação e de uma imagem de compartilhamento |
 | Lighthouse no CI | Usa uma *action* de terceiros (DT-03); a T-19 cobre o peso e parte da acessibilidade sem dependência |
 | Testes de comportamento no navegador (busca, ciclo, quiz) | Exigem um pacote como o Playwright (`AGENTS.md` §4.4, DT-01) |
+
+A prévia do link no WhatsApp, que estava nesta lista, foi aprovada e entregue pela T-25.
+
+## 5. Tarefas acrescentadas depois da revisão do plano
+
+As T-25 a T-27 surgiram em 29/10 e 30/10/2026, depois da T-24, e já têm issue. Seguem o mesmo fluxo da seção 0.
+
+### T-25 · Prévia de compartilhamento e página 404
+
+| Campo | Valor |
+|---|---|
+| Tipo | Funcionalidade (feat) |
+| Responsável | Pedro |
+| Componente | `BaseLayout.astro`, `src/pages/404.astro`, `public/` |
+| Requisitos | RNF-01, RNF-05, RNF-06, RNF-07; meta de divulgação (S-01) |
+| Depende de | T-18 |
+| Validação Enactus | Não |
+
+**Descrição.** O link do site enviado no WhatsApp aparecia sem imagem e sem descrição, e um endereço errado mostrava a página 404 genérica do GitHub. A tarefa acrescenta a prévia de compartilhamento (Open Graph) e uma página 404 própria, que leva de volta ao site.
+
+**Critérios de aceite**
+
+- [ ] `public/compartilhar.png` com 1200 × 630 px e menos de 300 KB (limite do WhatsApp), nas cores da Enactus, com o nome do projeto e a URL.
+- [ ] `BaseLayout.astro` gera `og:type`, `og:locale`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:image` (com largura, altura e `alt`), `twitter:card` e `link rel="canonical"`, todos com **endereço absoluto** (`Astro.site` + `BASE_URL`).
+- [ ] A descrição da página inicial explica o site em uma frase (aparece na prévia e no Google).
+- [ ] `src/pages/404.astro` gera o `404.html`: um único `<h1>`, botão "Ir para o início" e atalhos para `#guia`, `#ponto-de-coleta` e `#ciclo`, com `BASE_URL` completo.
+- [ ] A 404 tem `noindex`, não tem `canonical` nem `og:url` e **não** é contada no GoatCounter.
+- [ ] Sem rolagem horizontal em 360 px; alvos de toque de 44 px.
+- [ ] Sem `robots.txt` nem `sitemap.xml` (motivo registrado na arquitetura §3.2).
+- [ ] `docs/arquitetura.md` (§3.2 e estrutura) e `AGENTS.md` §2 atualizados.
+
+### T-26 · Quiz sem anúncio duplicado no leitor de tela
+
+| Campo | Valor |
+|---|---|
+| Tipo | Correção (fix) |
+| Responsável | Pedro |
+| Componente | `Quiz.astro` |
+| Requisitos | RNF-07, RNF-08 |
+| Depende de | — |
+| Validação Enactus | Não |
+
+**Descrição.** No quiz, o resultado ("✓ Certo." / "✕ Errado.") ficava dentro de uma região `aria-live` **e** recebia o foco. Com isso, o leitor de tela anunciava o resultado duas vezes. O aviso "Escolha uma alternativa." também aparecia no lugar do resultado.
+
+**Critérios de aceite**
+
+- [ ] O `.feedback` não tem mais `aria-live`; ele recebe `tabindex="-1"` e o foco ao responder, e o leitor lê o resultado e a explicação **uma vez**.
+- [ ] O aviso "Escolha uma alternativa." fica num `<p class="aviso" aria-live="polite">` próprio, sempre presente na página, e é limpo ao responder e ao refazer.
+- [ ] As classes `.resultado`, `.explicacao`, `.certo`, `.errado` e `[data-refazer]` continuam iguais (as animações da T-24 usam essas classes).
+- [ ] Teste com perguntas temporárias, desfeitas antes do commit; `npm run verify` passa.
+
+### T-27 · Navegação no celular
+
+| Campo | Valor |
+|---|---|
+| Tipo | Funcionalidade (feat) |
+| Responsável | Nicole |
+| Componente | `Cabecalho.astro`, `Rodape.astro` |
+| Requisitos | RNF-05, RNF-06, RNF-07; jornada J1 (achar o guia rápido no celular) |
+| Depende de | T-20 (mexe nos mesmos arquivos) |
+| Validação Enactus | Não |
+
+**Descrição.** No celular (abaixo de `48rem`), o menu do cabeçalho fica escondido (`nav { display: none }`). Quem chega pelo QR Code precisa rolar a página inteira para achar a lixeira ou o ciclo e, no fim, rolar tudo de volta. A tarefa traz a navegação para o celular **sem JavaScript**.
+
+**Critérios de aceite**
+
+- [ ] No celular, os 3 links do menu (`#guia`, `#ponto-de-coleta`, `#ciclo`) aparecem numa **faixa horizontal** logo abaixo da barra do logo, com rolagem lateral se não couberem (`overflow-x: auto`), **sem** menu sanduíche e sem JavaScript.
+- [ ] No computador (a partir de `48rem`), o menu continua como hoje.
+- [ ] Link "Voltar ao topo" no rodapé, apontando para o início da página com `BASE_URL` (ex.: `${import.meta.env.BASE_URL}#topo`, com `id="topo"` no `<header>`).
+- [ ] Alvos de toque de 44 px; foco visível; sem rolagem horizontal **da página** em 360 px.
+- [ ] Ao seguir uma âncora, o título da seção não fica escondido atrás de nada (se o cabeçalho ficar fixo, usar `scroll-margin-top`).
+- [ ] Animações só no `src/styles/animacoes.css` (T-24); o `nav a` já tem transição lá.
+- [ ] `docs/arquitetura.md` §4 (navegação) e os componentes da §3.2 atualizados; `npm run verify` passa.
+
+**Prompt de implementação**
+
+```text
+Leia o AGENTS.md e a tarefa T-27 em docs/sdd/06-plano-melhorias.md. Crie a branch
+feature/68-navegacao-celular a partir da develop atualizada (depois do merge da T-20).
+No Cabecalho.astro, mostre o <nav> também no celular, como uma faixa horizontal abaixo
+da barra do logo, com overflow-x: auto e sem JavaScript.
+No Rodape.astro, acrescente o link "Voltar ao topo" com import.meta.env.BASE_URL.
+Mantenha alvos de 44 px, foco visível e nenhuma rolagem horizontal da página em 360 px.
+Atualize docs/arquitetura.md. Rode npm run verify e me proponha a mensagem de commit, sem commitar.
+```

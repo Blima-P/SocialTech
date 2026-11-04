@@ -28,12 +28,12 @@ Este documento diz **o que** o site precisa fazer (requisitos funcionais), **com
 
 **Fora:** o que está em [especificação §4.1](sdd/01-especificacao.md#41-fora-do-escopo-wont-neste-semestre) (login, dados em tempo real, aplicativo, ranking, outros idiomas, mapa com geolocalização, chatbot). As atividades fora do site (ação no campus, cartazes, análise do formulário) estão na [especificação §4.2](sdd/01-especificacao.md#42-fora-do-site-mas-dentro-do-projeto).
 
-### 1.3 Situação em 31/10/2026
+### 1.3 Situação em 01/11/2026
 
 - O **MVP** (requisitos **Must**) foi publicado na `main` em 26/10/2026 (PR #29) e está em `https://blima-p.github.io/SocialTech/`.
 - Os requisitos **Should** foram entregues pelas tarefas T-11 a T-16 ([plano da entrega final](sdd/05-plano-entrega-final.md)) e publicados na release final de 29/10/2026 (PR #47).
-- As melhorias depois da entrega (T-18 a T-23) estão no [plano de melhorias](sdd/06-plano-melhorias.md).
-- Em 31/10/2026, o Prof. Marcus respondeu às perguntas de conteúdo ([clarificações](sdd/02-clarificacoes.md), Q-01 a Q-05 e Q-15). O conteúdo validado, o nome "Compostagem Enactus UCB", a seção "Dúvidas comuns" (RF-16), as fotos, o cartaz e o quiz estão no [plano 07](sdd/07-plano-conteudo-enactus.md) (T-28 a T-35). O que ainda falta está na [seção 6](#6-requisitos-de-conteúdo).
+- As melhorias depois da entrega (T-18 a T-27) estão no [plano de melhorias](sdd/06-plano-melhorias.md). As T-18, T-22, T-25 e T-26 já estão na `main`; a situação das outras está na [seção 8.2](#82-tarefa--requisitos).
+- Em 31/10/2026, o Prof. Marcus respondeu às perguntas de conteúdo ([clarificações](sdd/02-clarificacoes.md), Q-01 a Q-05 e Q-15). O conteúdo validado, o nome "Compostagem Enactus UCB", a seção "Dúvidas comuns" (RF-16), as fotos, o cartaz e o quiz estão no [plano 07](sdd/07-plano-conteudo-enactus.md) (T-28 a T-35). O conteúdo validado (T-29) e a faixa de parceria (T-35) foram publicados na release de 01/11/2026 (PR #78). O que ainda falta está na [seção 6](#6-requisitos-de-conteúdo).
 - O plano do MVP foi feito antes deste documento (exceção aprovada em [03-plano-tarefas.md §0.1](sdd/03-plano-tarefas.md#01-exceção-aprovada-à-definição-de-preparado)). A [seção 8](#8-matriz-de-rastreabilidade) liga cada tarefa já feita aos requisitos daqui.
 
 ### 1.4 Convenções
@@ -329,7 +329,7 @@ Funcionalidade: Contatos e links
 | Prioridade | Should |
 | Origem | C-12 (transversal, todas as jornadas) · Q-15 |
 | Conteúdo | RC-14 |
-| Situação | ✅ Cabeçalho e rodapé (T-02, PR #23); redesign, menu e Roboto (T-11, PR #44) · 🔨 nome "Compostagem Enactus UCB" (T-30) e faixa de parceria (T-35) |
+| Situação | ✅ Cabeçalho e rodapé (T-02, PR #23); redesign, menu e Roboto (T-11, PR #44); faixa de parceria (T-35, PR #63) · 🔨 nome "Compostagem Enactus UCB" (T-30) |
 
 ```gherkin
 Funcionalidade: Identidade e navegação
@@ -565,9 +565,9 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 
 | ID | Categoria | Requisito | Como medir | Prioridade | Situação |
 |---|---|---|---|---|---|
-| RNF-01 | Desempenho | Página inicial com **menos de 500 KB** transferidos (HTML, CSS, JS, imagens e fontes) [CONFIRMADO, H2-6] | Lighthouse "Total byte weight" ou aba Rede. Medido em 26/10/2026 na `develop`: cerca de 19 KB do site + o script do GoatCounter; a T-11 acrescenta cerca de 44 KB de fonte | **Must** | ✅ |
-| RNF-02 | Desempenho | No Lighthouse em modo celular (4G simulado): **Desempenho ≥ 90** e **LCP ≤ 3 s** [SUPOSIÇÃO: meta proposta pela T-16, a confirmar na H2] | Lighthouse, modo celular, na página publicada | Should | A medir na H2 |
-| RNF-03 | Acessibilidade | Lighthouse em modo celular: **Acessibilidade ≥ 90** [CONFIRMADO, H2-6] | Lighthouse | **Must** | A medir na H2 |
+| RNF-01 | Desempenho | Página inicial com **menos de 500 KB** transferidos (HTML, CSS, JS, imagens e fontes) [CONFIRMADO, H2-6] | Lighthouse "Total byte weight" ou aba Rede. Medido em 26/10/2026 na `develop`: cerca de 19 KB do site + o script do GoatCounter; a T-11 acrescenta cerca de 44 KB de fonte. Lighthouse no site publicado em 01/11/2026: **65 KiB** transferidos | **Must** | ✅ |
+| RNF-02 | Desempenho | No Lighthouse em modo celular (4G simulado): **Desempenho ≥ 90** e **LCP ≤ 3 s** [SUPOSIÇÃO: meta proposta pela T-16, a confirmar na H2] | Lighthouse, modo celular, na página publicada | Should | ✅ Medido em 01/11/2026 (Lighthouse 12, modo celular): Desempenho **100**, LCP **1,7 s**, CLS 0,006 |
+| RNF-03 | Acessibilidade | Lighthouse em modo celular: **Acessibilidade ≥ 90** [CONFIRMADO, H2-6] | Lighthouse | **Must** | ✅ Medido em 01/11/2026: Acessibilidade **100** (Boas práticas 96, por causa do `favicon.ico` ausente, que a T-20 resolve; SEO 100) |
 | RNF-04 | Acessibilidade | Contraste de texto **≥ 4,5:1** (WCAG 2.1 AA); só os pares de cor da [arquitetura §5.1](arquitetura.md#51-cores-e-contraste) | Tabela de pares; verificador de contraste | **Must** | ✅ |
 | RNF-05 | Acessibilidade | Em **360 px** não há rolagem horizontal; em **1366 px** o conteúdo fica centralizado em até `72rem` | Modo responsivo do navegador e celular real | **Must** (360 px) · Should (1366 px, T-11) | ✅ (1366 px: T-11, PR #44) |
 | RNF-06 | Acessibilidade | Botões, links de ação, campos e alternativas com alvo de toque **≥ 44 × 44 px** (`--alvo-toque`) | Ferramentas do navegador (medir o elemento) | **Must** | ✅ |
@@ -681,18 +681,28 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 | T-16 Documentação do SDD | Rastreabilidade de todos os requisitos | #37 / PR #40 | ✅ Concluída |
 | T-17 Release final e H2 | Todos os **Must** e **Should** entregues; RNF-01 a RNF-03 | #38 / PR #47 | ✅ Release feita |
 
-As tarefas T-18 a T-27 estão no [plano de melhorias](sdd/06-plano-melhorias.md) e nas issues. As do [plano 07](sdd/07-plano-conteudo-enactus.md), em 31/10/2026:
+As tarefas do [plano de melhorias](sdd/06-plano-melhorias.md) e do [plano 07](sdd/07-plano-conteudo-enactus.md), em 01/11/2026:
 
-| Tarefa | Requisitos | Issue / PR | Situação em 31/10/2026 |
+| Tarefa | Requisitos | Issue / PR | Situação em 01/11/2026 |
 |---|---|---|---|
-| T-28 Documentação das respostas do professor | RF-01, RF-03, RF-04, RF-06, RF-09, RF-16, RN-01, RC | Este PR | 🔨 Em revisão |
-| T-29 Conteúdo validado | RF-01, RF-03, RF-04, RF-06, RF-07 | — | 🔨 Planejada |
-| T-30 Identidade "Compostagem Enactus UCB" | RF-09 | — | 🔨 Planejada |
-| T-31 Dúvidas comuns | RF-16, RF-15 | — | 🔨 Planejada |
-| T-32 Fotos do professor | RF-05, RF-06, RN-10 | — | 🔨 Planejada |
-| T-33 Cartaz A4 com QR Code | RF-14, RN-09 | — | 🔨 Planejada |
-| T-34 Perguntas do quiz | RF-11, RN-06 | — | 🔨 Planejada |
-| T-35 Faixa de parceria | RF-09 | #62 / PR #63 | 🔨 Em revisão |
+| T-18 Limpeza pós-entrega | RNF-14, RF-15 | #49 / PR #55 | ✅ Concluída |
+| T-19 Verificação automática do site gerado | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 | #50 | 🔨 Em andamento |
+| T-20 Botão único e favicon | RF-09, RNF-04, RNF-06 | #51 / PR #58 | 🔨 Ajustes pedidos na revisão |
+| T-21 Fotos no ciclo e nome da etapa no anúncio | RF-05, RC-06, RN-10, RNF-07, RNF-10 | #52 / PR #59 | 🔨 Ajustes pedidos na revisão |
+| T-22 Busca do guia só pelo nome | RF-02, RF-03, RNF-07 | #53 / PR #60 | ✅ Concluída |
+| T-23 Foto da lixeira | RF-06, RC-08, RN-10, RNF-05 | #54 / PR #61 | 🔨 Corrigido, aguardando nova revisão |
+| T-24 Animações leves | RNF-01, RNF-09, RNF-10, RNF-12, RF-10 | #56 / PR #57 | 🔨 Corrigido, aguardando nova revisão |
+| T-25 Prévia de compartilhamento e página 404 | RNF-01, RNF-05, RNF-06, RNF-07 | #64 / PR #65 | ✅ Concluída |
+| T-26 Quiz sem anúncio duplicado | RNF-07, RNF-08 | #66 / PR #67 | ✅ Concluída |
+| T-27 Navegação no celular | RNF-05, RNF-06, RNF-07 | #68 | ⏳ Aguarda a T-20 |
+| T-28 Documentação das respostas do professor | RF-01, RF-03, RF-04, RF-06, RF-09, RF-16, RN-01, RC | #69 / PR #70 | ✅ Concluída |
+| T-29 Conteúdo validado | RF-01, RF-03, RF-04, RF-06, RF-07 | #71 / PR #72 | ✅ Concluída (release #78) |
+| T-30 Identidade "Compostagem Enactus UCB" | RF-09 | #73 | ⏳ Aguarda as T-20 e T-27 |
+| T-31 Dúvidas comuns | RF-16, RF-15 | #74 | Pode começar |
+| T-32 Fotos do professor | RF-05, RF-06, RN-10 | #75 | ⏳ Aguarda as T-21 e T-23 |
+| T-33 Cartaz A4 com QR Code | RF-14, RN-09 | #76 | Pode começar |
+| T-34 Perguntas do quiz | RF-11, RN-06 | #77 | Pode começar (aprovação do Prof. Marcus antes do merge) |
+| T-35 Faixa de parceria | RF-09 | #62 / PR #63 | ✅ Concluída (release #78) |
 
 ## 9. Pendências e riscos
 
@@ -706,7 +716,7 @@ Os riscos de produto R-01 a R-06 estão na [especificação §7](sdd/01-especifi
 
 | ID | Risco | Impacto | Mitigação |
 |---|---|---|---|
-| R-07 | O formulário (RC-11) não existe a 3 dias da entrega | Meta S-02 (≥ 80 respostas) sem tempo de coleta | Criar o Forms (E-02) antes da ação no campus (E-09); o Prof. Marcus cola o link pelo painel |
-| R-08 | A T-12 só começa depois do merge da T-11 (mesmo arquivo) | Ciclo interativo fora da release de 28/10 | Revisar a T-11 assim que o PR abrir; se a T-12 atrasar, a release sai com o ciclo simples (RF-04 já cumpre o Must) |
+| R-07 | O formulário (RC-11) ainda não existe: em 01/11/2026, o link em `avaliacao.json` continua vazio e o botão de avaliação fica oculto | Meta S-02 (≥ 80 respostas) sem tempo de coleta | Criar o Forms (E-02, Q-07) antes da ação no campus (E-09); o Prof. Marcus cola o link pelo painel |
+| R-08 | A T-12 só começa depois do merge da T-11 (mesmo arquivo) | Ciclo interativo fora da release de 28/10 | Resolvido: a T-12 entrou na release final (PR #46, release #47) |
 | R-09 | Bloqueadores de anúncio impedem o script do GoatCounter | Acessos contados a menos (S-01) | Aceito: a contagem é um mínimo; registrar a limitação no relatório |
 | R-10 | Guia sem nenhum item "Pode" na H2 | Jornada J1 só parcialmente cumprida | Resolvido em 31/10/2026: lista validada pelo Prof. Marcus (Q-01), publicada pela T-29 |
