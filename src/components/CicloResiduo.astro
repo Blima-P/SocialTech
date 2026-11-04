@@ -36,7 +36,9 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
               src={data.imagem}
               alt={data.descricaoImagem ?? ""}
               widths={[360, 720]}
-              sizes="(min-width: 48rem) 640px, 100vw"
+              width={720}
+              quality={70}
+              sizes="(min-width: 48rem) 21rem, 100vw"
             />
           )}
         </div>
@@ -144,9 +146,12 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     align-items: flex-start;
   }
 
+  /* Fotos em pé (3:4) ficam com no máximo 28rem de altura, sem cortar. */
   .foto {
     display: block;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
+    max-height: 28rem;
     height: auto;
     margin-top: 0.5rem;
     border-radius: var(--raio);
