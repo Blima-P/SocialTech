@@ -569,12 +569,52 @@ Funcionalidade: Dúvidas comuns
     Então a seção não aparece
 ```
 
+### RF-17 · Modo escuro
+
+| Campo | Valor |
+|---|---|
+| Descrição | Tema escuro para o site inteiro. Sem escolha, o site segue o tema do sistema ou do celular; um botão no cabeçalho alterna entre claro e escuro, e a escolha fica guardada no navegador |
+| Prioridade | Could |
+| Origem | Pedido da equipe em 04/11/2026 · C-12 (identidade, transversal) |
+| Conteúdo | — |
+| Situação | ✅ Implementado em 04/11/2026 (tokens em `global.css`, botão em `Cabecalho.astro`) |
+
+```gherkin
+Funcionalidade: Modo escuro
+
+  Cenário: Seguir o sistema
+    Dado que o meu celular está no tema escuro e eu nunca escolhi um tema no site
+    Quando abro o site
+    Então a página aparece no tema escuro
+
+  Cenário: Escolher o tema
+    Dado que a página está no tema claro
+    Quando toco no botão "Modo escuro" do cabeçalho
+    Então a página passa para o tema escuro e o botão fica marcado como ligado
+    E, quando toco de novo, ela volta para o tema claro
+
+  Cenário: Lembrar a escolha
+    Dado que escolhi o tema escuro
+    Quando recarrego a página ou volto ao site depois
+    Então ela já abre no tema escuro, sem piscar no claro
+    E o navegador guarda só a palavra "escuro" (chave "tema"), sem dado pessoal
+
+  Cenário: Contraste nos dois temas
+    Quando a página está no tema escuro
+    Então todo texto tem contraste de pelo menos 4,5:1
+    E as faixas amarelas e o cartão de logos da parceria continuam com as cores do tema claro
+
+  Cenário: Sem JavaScript
+    Dado que o JavaScript está desativado
+    Então o botão não aparece e a página segue o tema do sistema
+```
+
 ### 3.1 Capacidades sem requisito nesta entrega
 
 | Capacidade | Prioridade | Motivo |
 |---|---|---|
 | C-13 Números do próprio projeto (kg compostados) | Removido | O dado não existe (Q-19) |
-| C-14 Depoimentos e carrossel de fotos da ação | Could | ⏸ Sem fotos da ação com autorização de uso e sem tarefa no plano. Pode virar `RF-17` depois |
+| C-14 Depoimentos e carrossel de fotos da ação | Could | ⏸ Sem fotos da ação com autorização de uso e sem tarefa no plano. Pode virar `RF-18` depois |
 
 ## 4. Requisitos não funcionais
 
@@ -585,7 +625,7 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 | RNF-01 | Desempenho | Página inicial com **menos de 500 KB** transferidos (HTML, CSS, JS, imagens e fontes) [CONFIRMADO, H2-6] | Lighthouse "Total byte weight" ou aba Rede. Medido em 26/10/2026 na `develop`: cerca de 19 KB do site + o script do GoatCounter; a T-11 acrescenta cerca de 44 KB de fonte. Lighthouse no site publicado em 01/11/2026: **65 KiB** transferidos | **Must** | ✅ |
 | RNF-02 | Desempenho | No Lighthouse em modo celular (4G simulado): **Desempenho ≥ 90** e **LCP ≤ 3 s** [SUPOSIÇÃO: meta proposta pela T-16, a confirmar na H2] | Lighthouse, modo celular, na página publicada | Should | ✅ Medido em 01/11/2026 (Lighthouse 12, modo celular): Desempenho **100**, LCP **1,7 s**, CLS 0,006 |
 | RNF-03 | Acessibilidade | Lighthouse em modo celular: **Acessibilidade ≥ 90** [CONFIRMADO, H2-6] | Lighthouse | **Must** | ✅ Medido em 01/11/2026: Acessibilidade **100** (Boas práticas 96, por causa do `favicon.ico` ausente, que a T-20 resolve; SEO 100) |
-| RNF-04 | Acessibilidade | Contraste de texto **≥ 4,5:1** (WCAG 2.1 AA); só os pares de cor da [arquitetura §5.1](arquitetura.md#51-cores-e-contraste) | Tabela de pares; verificador de contraste | **Must** | ✅ |
+| RNF-04 | Acessibilidade | Contraste de texto **≥ 4,5:1** (WCAG 2.1 AA), nos temas claro e escuro (RF-17); só os pares de cor da [arquitetura §5.1](arquitetura.md#51-cores-e-contraste) | Tabela de pares; verificador de contraste | **Must** | ✅ |
 | RNF-05 | Acessibilidade | Em **360 px** não há rolagem horizontal; em **1366 px** o conteúdo fica centralizado em até `72rem` | Modo responsivo do navegador e celular real | **Must** (360 px) · Should (1366 px, T-11) | ✅ (1366 px: T-11, PR #44) |
 | RNF-06 | Acessibilidade | Botões, links de ação, campos e alternativas com alvo de toque **≥ 44 × 44 px** (`--alvo-toque`) | Ferramentas do navegador (medir o elemento) | **Must** | ✅ |
 | RNF-07 | Acessibilidade | Tudo que é interativo funciona **só com teclado** (Tab, Enter, Espaço), com **foco visível**; um único `<h1>`; cada seção com `<h2>` ligado por `aria-labelledby`; testado com leitor de tela (TalkBack ou VoiceOver) | Teste manual com teclado e leitor de tela | **Must** | ✅ (T-12, T-14 e T-15 incluídas) |
@@ -593,7 +633,7 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 | RNF-09 | Acessibilidade | Com `prefers-reduced-motion: reduce`, nenhuma animação nem rolagem suave | Emular a preferência nas ferramentas do navegador | **Must** | ✅ |
 | RNF-10 | Robustez | **Sem JavaScript**, todo o conteúdo continua legível (guia completo, todas as etapas do ciclo, perguntas do quiz com aviso) (ADR-008) | Desativar o JavaScript no navegador | **Must** | ✅ (T-12, T-14 e T-15 incluídas) |
 | RNF-11 | Compatibilidade | Funciona nas versões atuais de Chrome (Android) e Safari (iOS) e de Chrome, Edge e Firefox no computador; testado em **2 celulares reais** com 4G | Roteiro de homologação ([arquitetura §10.2](arquitetura.md#102-roteiro-de-homologação)) | **Must** | H1 e H2 |
-| RNF-12 | Privacidade (LGPD) | **Nenhum dado pessoal** coletado; **nenhum cookie**; as únicas requisições a terceiros são as do GoatCounter (`gc.zgo.at` e `socialtech-ucb.goatcounter.com`); busca e quiz não enviam nem guardam nada | Aba Rede e aba Aplicação (Cookies, Local Storage) | **Must** | ✅ |
+| RNF-12 | Privacidade (LGPD) | **Nenhum dado pessoal** coletado; **nenhum cookie**; as únicas requisições a terceiros são as do GoatCounter (`gc.zgo.at` e `socialtech-ucb.goatcounter.com`); busca e quiz não enviam nem guardam nada; o único item no Local Storage é a escolha de tema (`tema` = `claro` ou `escuro`, RF-17), que não identifica ninguém | Aba Rede e aba Aplicação (Cookies, Local Storage) | **Must** | ✅ |
 | RNF-13 | Segurança | Nenhum segredo no repositório; nenhum `set:html`, `innerHTML`, `eval` ou `new Function` com conteúdo do painel (bloqueado pelo ESLint); links que abrem nova aba com `rel="noopener"`; site só em HTTPS | `npm run lint`; revisão de PR | **Must** | ✅ |
 | RNF-14 | Manutenibilidade | Todo texto, item, etapa, número e pergunta em `src/content/`, validado por schema; `src/content.config.ts` e `.pages.yml` mudam no mesmo PR; `npm run verify` e o CI (`lint` e `links`) passam em todo PR | CI no PR | **Must** | ✅ |
 | RNF-15 | Disponibilidade | Edição salva no painel publicada em **até 5 minutos**; um build que falha **não** derruba o site (a versão anterior continua no ar) | Tempo entre o commit e o fim do workflow `Deploy GitHub Pages` | **Must** | ✅ |
@@ -673,7 +713,7 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 | **OE-5** Espaços de conscientização | RF-06, RF-07, RF-10, RF-11, RF-16 | `PontoColeta.astro`, `Secao.astro`, `NumerosImpacto.astro`, `Quiz.astro`, `DuvidasComuns.astro` | T-06, T-13, T-15, T-31 (E-09: ação presencial) | H1-4, H2-4, H2-5, RH-06, RH-07, RH-08 |
 | **OE-6** Incentivar métodos sustentáveis | RF-04, RF-07, RF-11 | `CicloResiduo.astro`, `Secao.astro`, `Quiz.astro` | T-03, T-15 | H1-3, H2-5 |
 | **OE-7** Divulgar o ponto de coleta | RF-06 | `PontoColeta.astro`, `ponto-coleta.json` | T-06 (E-05) | H1-4, RH-06 |
-| Transversal: edição e identidade | RF-08, RF-09, RF-15 | `Cabecalho.astro`, `Rodape.astro`, `ListaLinks.astro`, `.pages.yml`, `content.config.ts` | T-01, T-02, T-10, T-11 | H1-4, H2-1, H2-8, RH-10 |
+| Transversal: edição e identidade | RF-08, RF-09, RF-15, RF-17 | `Cabecalho.astro`, `Rodape.astro`, `ListaLinks.astro`, `global.css`, `.pages.yml`, `content.config.ts` | T-01, T-02, T-10, T-11 | H1-4, H2-1, H2-8, RH-10 |
 | Transversal: qualidade | RNF-01 a RNF-17 | `global.css`, `BaseLayout.astro`, `.github/workflows/` | T-01, T-08, T-10, T-11, T-17 | CI (`lint`, `links`), H2-1, H2-6, RH-11, RH-12 |
 
 ### 8.2 Tarefa → requisitos

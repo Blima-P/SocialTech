@@ -6,7 +6,11 @@ const endereco = formulario?.data.endereco;
 ---
 
 {endereco && (
-  <section id="avaliacao" aria-labelledby="titulo-avaliacao">
+  <section
+    id="avaliacao"
+    class="tema-fixo-claro"
+    aria-labelledby="titulo-avaliacao"
+  >
     <h2 id="titulo-avaliacao">Avalie o projeto</h2>
     <p>{formulario.data.texto}</p>
     <a class="botao" href={endereco} target="_blank" rel="noopener">

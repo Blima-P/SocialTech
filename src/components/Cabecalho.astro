@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import logo from "../assets/marca/logo-enactus-brasil.svg";
+import logoEscuro from "../assets/marca/logo-enactus-brasil-footer.svg";
 
 const atalhos = [
   { texto: "Ciclo do resíduo", ancora: "#ciclo" },
@@ -11,7 +12,20 @@ const atalhos = [
 
 <header id="topo">
   <div class="barra">
-    <Image src={logo} alt="Enactus Brasil" height={40} loading="eager" />
+    <Image
+      class="logo-claro"
+      src={logo}
+      alt="Enactus Brasil"
+      height={40}
+      loading="eager"
+    />
+    <Image
+      class="logo-escuro"
+      src={logoEscuro}
+      alt="Enactus Brasil"
+      height={40}
+      loading="eager"
+    />
     <nav aria-label="Seções da página">
       <ul>
         {atalhos.map(({ texto, ancora }) => (
@@ -21,8 +35,26 @@ const atalhos = [
         ))}
       </ul>
     </nav>
+    {/* Sem JavaScript o botão fica escondido e o tema segue o do sistema (RF-17, RNF-10). */}
+    <button
+      class="tema"
+      type="button"
+      aria-pressed="false"
+      title="Modo escuro"
+      data-alternar-tema
+      hidden
+    >
+      <svg class="lua" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7Z" />
+      </svg>
+      <svg class="sol" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2" />
+        <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" />
+      </svg>
+      <span class="visualmente-oculto">Modo escuro</span>
+    </button>
   </div>
-  <div class="destaque">
+  <div class="destaque tema-fixo-claro">
     <p class="selo">Projeto de extensão UCB + Enactus</p>
     <h1>Compostagem Enactus UCB</h1>
     <p class="frase">Descarte correto de resíduos orgânicos</p>
@@ -31,6 +63,36 @@ const atalhos = [
     </a>
   </div>
 </header>
+
+<script>
+  // RF-17: alterna o tema e guarda só a escolha ("claro" ou "escuro") neste navegador (RNF-12).
+  const botao = document.querySelector<HTMLButtonElement>(
+    "[data-alternar-tema]",
+  );
+
+  if (botao) {
+    const raiz = document.documentElement;
+    const sistemaEscuro = window.matchMedia("(prefers-color-scheme: dark)");
+    const temaAtual = () =>
+      raiz.dataset.tema ?? (sistemaEscuro.matches ? "escuro" : "claro");
+    const mostrar = () =>
+      botao.setAttribute("aria-pressed", String(temaAtual() === "escuro"));
+
+    botao.addEventListener("click", () => {
+      const novo = temaAtual() === "escuro" ? "claro" : "escuro";
+      raiz.dataset.tema = novo;
+      try {
+        localStorage.setItem("tema", novo);
+      } catch {
+        // Armazenamento bloqueado: a escolha vale só nesta visita.
+      }
+      mostrar();
+    });
+    sistemaEscuro.addEventListener("change", mostrar);
+    mostrar();
+    botao.hidden = false;
+  }
+</script>
 
 <style>
   header {
@@ -53,8 +115,54 @@ const atalhos = [
     height: 2.25rem;
   }
 
+  .logo-claro {
+    display: var(--exibir-no-claro);
+  }
+
+  .logo-escuro {
+    display: var(--exibir-no-escuro);
+  }
+
+  .tema {
+    display: inline-grid;
+    place-items: center;
+    width: var(--alvo-toque);
+    height: var(--alvo-toque);
+    border: 2px solid var(--cor-borda);
+    border-radius: 50%;
+    padding: 0;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    cursor: pointer;
+  }
+
+  .tema[hidden] {
+    display: none;
+  }
+
+  .tema:hover {
+    border-color: var(--cor-destaque);
+  }
+
+  .tema svg {
+    width: 1.375rem;
+    height: 1.375rem;
+    fill: none;
+    stroke: currentcolor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+  }
+
+  /* Mostra o tema para onde o botão leva: lua no claro, sol no escuro. */
+  .tema[aria-pressed="true"] .lua,
+  .tema[aria-pressed="false"] .sol {
+    display: none;
+  }
+
   /* Faixa horizontal sem JavaScript: se os links não couberem, só ela rola de lado. */
   nav {
+    order: 1;
     width: 100%;
     overflow-x: auto;
   }
@@ -141,7 +249,9 @@ const atalhos = [
     }
 
     nav {
+      order: 0;
       width: auto;
+      margin-left: auto;
       overflow-x: visible;
     }
 

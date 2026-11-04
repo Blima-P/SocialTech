@@ -27,19 +27,80 @@
     U+2215, U+FEFF, U+FFFD;
 }
 
-:root {
+/* Tema claro (padrão). .tema-fixo-claro mantém essas cores numa faixa mesmo no tema escuro
+   (faixas amarelas e o cartão de logos). */
+:root,
+.tema-fixo-claro {
+  color-scheme: light;
   --cor-texto: #30333c;
   --cor-texto-suave: #515356;
   --cor-fundo: #ffffff;
   --cor-fundo-suave: #f2f2f2;
+  /* Cor forte de contorno, foco e borda (escura no claro, clara no escuro). */
   --cor-escura: #30333c;
-
-  /* Amarelo Enactus: só como fundo (com --cor-texto) ou como texto sobre --cor-escura. */
-  --cor-destaque: #ffc222;
+  --cor-borda: #d5d5d5;
   --cor-pode: #1e6b34;
   --cor-pode-fundo: #e8f5ec;
   --cor-nao-pode: #b42318;
   --cor-nao-pode-fundo: #fdecea;
+  --cor-botao: #30333c;
+  --cor-botao-texto: #ffffff;
+  /* Mostra ou esconde elementos conforme o tema (ex.: logo do cabeçalho). */
+  --exibir-no-claro: inline;
+  --exibir-no-escuro: none;
+}
+
+.tema-fixo-claro {
+  color: var(--cor-texto);
+}
+
+/* Tema escuro (RF-17): pela escolha no botão do cabeçalho ou, sem escolha, pelo sistema.
+   Os dois blocos abaixo precisam ficar iguais. */
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --cor-texto: #eceef1;
+  --cor-texto-suave: #b4b8c0;
+  --cor-fundo: #17191e;
+  --cor-fundo-suave: #23262c;
+  --cor-escura: #eceef1;
+  --cor-borda: #3b3f47;
+  --cor-pode: #6fcf8a;
+  --cor-pode-fundo: #16301f;
+  --cor-nao-pode: #ff8f80;
+  --cor-nao-pode-fundo: #3b1b18;
+  --cor-botao: #ffc222;
+  --cor-botao-texto: #30333c;
+  --exibir-no-claro: none;
+  --exibir-no-escuro: inline;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    color-scheme: dark;
+    --cor-texto: #eceef1;
+    --cor-texto-suave: #b4b8c0;
+    --cor-fundo: #17191e;
+    --cor-fundo-suave: #23262c;
+    --cor-escura: #eceef1;
+    --cor-borda: #3b3f47;
+    --cor-pode: #6fcf8a;
+    --cor-pode-fundo: #16301f;
+    --cor-nao-pode: #ff8f80;
+    --cor-nao-pode-fundo: #3b1b18;
+    --cor-botao: #ffc222;
+    --cor-botao-texto: #30333c;
+    --exibir-no-claro: none;
+    --exibir-no-escuro: inline;
+  }
+}
+
+:root {
+  /* Iguais nos dois temas. Amarelo Enactus: só como fundo (com --cor-sobre-destaque) ou
+     como texto sobre --cor-faixa-escura. */
+  --cor-destaque: #ffc222;
+  --cor-sobre-destaque: #30333c;
+  --cor-faixa-escura: #30333c;
+  --cor-sobre-escura: #ffffff;
   --alvo-toque: 2.75rem;
   --espaco: 1rem;
   --raio: 0.5rem;
@@ -119,8 +180,8 @@ h3 {
   border: 0;
   border-radius: var(--raio);
   padding-inline: var(--espaco);
-  background: var(--cor-escura);
-  color: var(--cor-fundo);
+  background: var(--cor-botao);
+  color: var(--cor-botao-texto);
   font: inherit;
   font-weight: 700;
   text-decoration: none;

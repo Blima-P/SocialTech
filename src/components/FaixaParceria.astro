@@ -29,7 +29,7 @@ import fotoLixeira from "../assets/conteudo/lixeira-verde.jpg";
     <path d="M32 60c0-20 10-38 28-46-2 24-12 40-28 46Z" />
   </svg>
 
-  <div class="cartao">
+  <div class="cartao tema-fixo-claro">
     <h2 id="parceria-titulo">Um projeto de parceria</h2>
     <ul class="marcas">
       <li class="marca">
@@ -48,13 +48,21 @@ import fotoLixeira from "../assets/conteudo/lixeira-verde.jpg";
 <style>
   .parceria {
     --cor-ucb: #003f7d;
+    --bolha: #cfe9d6;
 
     position: relative;
     overflow: hidden;
     background:
-      radial-gradient(circle at 15% 120%, #cfe9d6 0 30%, transparent 31%),
-      radial-gradient(circle at 90% -20%, #cfe9d6 0 25%, transparent 26%),
+      radial-gradient(circle at 15% 120%, var(--bolha) 0 30%, transparent 31%),
+      radial-gradient(circle at 90% -20%, var(--bolha) 0 25%, transparent 26%),
       var(--cor-pode-fundo);
+  }
+
+  /* No tema escuro, as bolhas e o véu acompanham o verde do tema. */
+  @supports (color: color-mix(in srgb, red, blue)) {
+    .parceria {
+      --bolha: color-mix(in srgb, var(--cor-pode) 12%, var(--cor-pode-fundo));
+    }
   }
 
   /* Foto decorativa com véu verde por cima; sem ela, fica o gradiente acima. */
@@ -77,6 +85,10 @@ import fotoLixeira from "../assets/conteudo/lixeira-verde.jpg";
     position: absolute;
     inset: 0;
     background: linear-gradient(rgb(232 245 236 / 72%), rgb(207 233 214 / 82%));
+    background: linear-gradient(
+      color-mix(in srgb, var(--cor-pode-fundo) 72%, transparent),
+      color-mix(in srgb, var(--bolha) 82%, transparent)
+    );
   }
 
   .cartao {
