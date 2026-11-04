@@ -452,7 +452,7 @@ flowchart LR
 | Endereço | `https://blima-p.github.io/SocialTech/?campaign=lixeira&ref=qr` (cartazes: `ref=cartaz`) |
 | Tipo | **Estático**: o endereço está no próprio desenho; sem encurtador, redirecionamento ou "QR dinâmico" |
 | Geração | Script Python avulso com a biblioteca `qrcode` (fora do site e do `package.json`): correção de erro M, margem de 4 módulos, preto sobre branco |
-| Versionamento | `docs/materiais/qr-lixeira.png` e `docs/materiais/adesivo-lixeira.pdf` no repositório (T-04) |
+| Versionamento | `docs/materiais/qr-lixeira.png` e `docs/materiais/adesivo-lixeira.pdf` (T-04); `docs/materiais/qr-cartaz.png` e `docs/materiais/cartaz-a4.pdf` (T-33) |
 | Teste | Escanear o **papel impresso** em 2 celulares antes de divulgar (constituição §7; RH-01) |
 
 ### 9.4 Reversão
@@ -559,7 +559,7 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 | Contador próprio | Exige servidor e banco de dados; conflita com ADR-001 |
 | **GoatCounter (escolhida)** | Gratuito para uso não comercial, sem cookies, sem dado pessoal; separa campanha e origem pela URL; um script `async` pequeno |
 
-- **Decisão:** script `count.js` do GoatCounter no `<head>` do `BaseLayout.astro`, com `is:inline` e `async`, **só no build de produção**, para o site `socialtech-ucb`. Os acessos do QR são separados pelos parâmetros `?campaign=lixeira&ref=qr` (cartazes: `ref=cartaz`).
+- **Decisão:** script `count.js` do GoatCounter no `<head>` do `BaseLayout.astro`, com `is:inline` e `async`, **só no build de produção**, para o site `socialtech-ucb`. A função `window.goatcounter.path` preserva no caminho contado somente `campaign` e `ref`, inclusive quando existe um canonical sem query string. Os acessos do QR são separados pelos parâmetros `?campaign=lixeira&ref=qr` (cartazes: `ref=cartaz`).
 - **Consequências:** é um script de terceiro aprovado pela equipe (`AGENTS.md` §4.4); o código do site não é segredo; bloqueadores de anúncio podem impedir a contagem, então o número é um **mínimo** (R-09); o quiz e a busca não mandam eventos (RN-06); a evidência para o relatório são prints do painel do GoatCounter (E-10).
 - **Requisitos:** RF-13, RNF-12, RNF-16.
 
