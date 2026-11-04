@@ -9,7 +9,7 @@ const atalhos = [
 ];
 ---
 
-<header>
+<header id="topo">
   <div class="barra">
     <Image src={logo} alt="Enactus Brasil" height={40} loading="eager" />
     <nav aria-label="Seções da página">
@@ -38,12 +38,14 @@ const atalhos = [
     background: var(--cor-fundo);
   }
 
+  /* No celular o menu quebra para uma faixa própria abaixo do logo. */
   .barra {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--espaco);
-    padding: 0.625rem var(--recuo-lateral);
+    gap: 0.25rem var(--espaco);
+    padding: 0.625rem var(--recuo-lateral) 0.25rem;
   }
 
   .barra img {
@@ -51,9 +53,10 @@ const atalhos = [
     height: 2.25rem;
   }
 
-  /* No celular o botão do destaque leva ao guia; o menu aparece a partir de 48rem. */
+  /* Faixa horizontal sem JavaScript: se os links não couberem, só ela rola de lado. */
   nav {
-    display: none;
+    width: 100%;
+    overflow-x: auto;
   }
 
   nav ul {
@@ -72,7 +75,17 @@ const atalhos = [
     color: var(--cor-texto);
     font-size: 0.9375rem;
     font-weight: 700;
+    white-space: nowrap;
     text-decoration: none;
+  }
+
+  nav li:first-child a {
+    padding-inline-start: 0;
+  }
+
+  /* Contorno por dentro do link, para a rolagem da faixa não cortá-lo. */
+  nav a:focus-visible {
+    outline-offset: -3px;
   }
 
   nav a:hover {
@@ -122,8 +135,22 @@ const atalhos = [
   }
 
   @media (min-width: 48rem) {
+    .barra {
+      flex-wrap: nowrap;
+      padding-bottom: 0.625rem;
+    }
+
     nav {
-      display: block;
+      width: auto;
+      overflow-x: visible;
+    }
+
+    nav a:focus-visible {
+      outline-offset: 2px;
+    }
+
+    nav li:first-child a {
+      padding-inline-start: 0.75rem;
     }
 
     .destaque {
