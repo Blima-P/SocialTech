@@ -96,7 +96,7 @@ Os requisitos estão na ordem em que aparecem na página.
 | Prioridade | **Must** |
 | Origem | OE-2 · C-01 · Jornada J1 |
 | Conteúdo | RC-01, RC-02 |
-| Situação | ✅ Implementado (T-05, PR #20); lista validada pelo Prof. Marcus em 31/10/2026 (T-29) |
+| Situação | ✅ Implementado (T-05, PR #20); lista validada pelo Prof. Marcus em 31/10/2026 (T-29); 3 itens por grupo com "Ver mais" (04/11/2026) |
 
 ```gherkin
 Funcionalidade: Guia "Pode / Não pode"
@@ -107,6 +107,15 @@ Funcionalidade: Guia "Pode / Não pode"
     Então a página vai até o título "O que pode ir nesta lixeira?"
     E os itens aparecem em dois grupos com os títulos "✓ Pode" e "✕ Não pode"
     E cada item mostra o nome e o motivo
+
+  Cenário: Lista compacta com "Ver mais"
+    Dado que um grupo tem mais de 3 itens
+    Quando abro o guia
+    Então o grupo mostra só os 3 primeiros itens e o botão "Ver mais N itens"
+    Quando toco no botão
+    Então o grupo mostra todos os itens e o botão passa a dizer "Ver menos"
+    E sem JavaScript todos os itens aparecem, sem o botão (RNF-10)
+    E a busca (RF-02) procura em todos os itens, aberto ou não
 
   Cenário: Lista "Pode" ainda não validada
     Dado que nenhum item tem a classificação "pode"

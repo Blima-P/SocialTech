@@ -172,9 +172,11 @@ Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não 
 │ O que pode ir nesta lixeira? │  título visível sem rolar (até ~400 px)
 │ [Procure um item.........]   │  busca (só com JavaScript)
 │ ✓ Pode                       │
-│  ┌ item · motivo ┐           │
+│  ┌ item · motivo ┐ (3 itens)  │
+│ [ Ver mais N itens que podem ]│  só com JavaScript; sem ele, todos os itens
 │ ✕ Não pode                   │
-│  ┌ Frutas cítricas · motivo ┐│
+│  ┌ Carnes… · motivo ┐ (3)    │
+│ [ Ver mais N itens… ]        │
 │ Não achou seu item?          │
 ├──────────────────────────────┤
 │ Onde está a lixeira agora    │  faixa cinza
@@ -262,6 +264,7 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 | Botão de ação | Fundo `--cor-escura` com texto branco, ou fundo `--cor-destaque` com texto `--cor-texto`; altura ≥ `--alvo-toque`; foco visível |
 | Cartão "Pode" / "Não pode" | Fundo `--cor-pode-fundo` ou `--cor-nao-pode-fundo`, borda e título na cor forte; grupo com título "✓ Pode" ou "✕ Não pode" (símbolo com `aria-hidden`) |
 | Campo de busca | `<label>` visível "Procure um item" + `<input type="search">`; contagem de resultados em `aria-live="polite"` |
+| "Ver mais" do guia | Botão de ação abaixo de cada grupo com mais de 3 itens, com `aria-expanded` e `aria-controls` apontando para a lista; alterna para "Ver menos". Só existe com JavaScript; some durante a busca, que procura em todos os itens |
 | Etapa do ciclo | Número em círculo (`aria-hidden`), nome e frase; seta entre etapas (decorativa) |
 | Controles do ciclo | Botões numerados com `aria-label="Etapa X: <nome>"` e `aria-current="step"`; "Anterior" e "Próxima" desabilitados nas pontas |
 | Número de impacto | Número grande em `--cor-destaque` sobre `--cor-escura`; descrição e fonte em `--cor-fundo`; entram um a um ao rolar, sem contagem animada |
