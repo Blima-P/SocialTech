@@ -7,6 +7,8 @@ const itens = (await getCollection("guia")).sort(
 const pode = itens.filter(({ data }) => data.classificacao === "pode");
 const naoPode = itens.filter(({ data }) => data.classificacao === "nao-pode");
 const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
+// Com JavaScript, cada grupo mostra só os primeiros itens e um botão "Ver mais".
+const visiveis = 3;
 ---
 
 <section id="guia" aria-labelledby="titulo-guia" data-guia>
@@ -22,9 +24,9 @@ const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
         <span aria-hidden="true">✓</span> Pode
       </h3>
       {pode.length > 0 ? (
-        <ul>
-          {pode.map(({ data }) => (
-            <li class="cartao">
+        <ul id="lista-pode">
+          {pode.map(({ data }, indice) => (
+            <li class="cartao" data-extra={indice >= visiveis || undefined}>
               <strong>{data.nome}</strong>
               <p>{data.motivo}</p>
             </li>
@@ -33,19 +35,43 @@ const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
       ) : (
         <p>Lista do que pode ir na lixeira em validação com a Enactus.</p>
       )}
+      {pode.length > visiveis && (
+        <button
+          class="botao ver-mais"
+          type="button"
+          aria-controls="lista-pode"
+          aria-expanded="false"
+          data-ver-mais={pode.length - visiveis}
+          hidden
+        >
+          Ver mais {pode.length - visiveis} itens que podem
+        </button>
+      )}
     </div>
     <div class="grupo grupo--nao-pode">
       <h3>
         <span aria-hidden="true">✕</span> Não pode
       </h3>
-      <ul>
-        {naoPode.map(({ data }) => (
-          <li class="cartao">
+      <ul id="lista-nao-pode">
+        {naoPode.map(({ data }, indice) => (
+          <li class="cartao" data-extra={indice >= visiveis || undefined}>
             <strong>{data.nome}</strong>
             <p>{data.motivo}</p>
           </li>
         ))}
       </ul>
+      {naoPode.length > visiveis && (
+        <button
+          class="botao ver-mais"
+          type="button"
+          aria-controls="lista-nao-pode"
+          aria-expanded="false"
+          data-ver-mais={naoPode.length - visiveis}
+          hidden
+        >
+          Ver mais {naoPode.length - visiveis} itens que não podem
+        </button>
+      )}
     </div>
   </div>
   <aside class="nao-listado" aria-labelledby="titulo-nao-listado">
@@ -75,16 +101,29 @@ const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
       semAcento(cartao.querySelector("strong")?.textContent ?? ""),
     );
     const grupos = [...guia.querySelectorAll<HTMLElement>(".grupo")];
+    const botoes = [
+      ...guia.querySelectorAll<HTMLButtonElement>("[data-ver-mais]"),
+    ];
     busca.hidden = false;
 
-    campo.addEventListener("input", () => {
+    // Sem busca, os itens extras só aparecem no grupo aberto pelo "Ver mais".
+    // Com busca, o resultado considera todos os itens e os botões somem.
+    const atualizar = () => {
       const termo = semAcento(campo.value);
       let achados = 0;
       cartoes.forEach((cartao, indice) => {
-        const mostra = textos[indice].includes(termo);
+        const aberto =
+          cartao
+            .closest(".grupo")
+            ?.querySelector("[data-ver-mais]")
+            ?.getAttribute("aria-expanded") === "true";
+        const mostra = termo
+          ? textos[indice].includes(termo)
+          : !cartao.hasAttribute("data-extra") || aberto;
         cartao.hidden = !mostra;
-        if (mostra) achados += 1;
+        if (termo && mostra) achados += 1;
       });
+      for (const botao of botoes) botao.hidden = termo.length > 0;
       for (const grupo of grupos) {
         grupo.hidden =
           termo.length > 0 &&
@@ -97,7 +136,21 @@ const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
           achados === 1
             ? "1 item encontrado."
             : `${achados} itens encontrados.`;
-    });
+    };
+
+    for (const botao of botoes) {
+      const textoFechado = botao.textContent!.trim();
+      botao.addEventListener("click", () => {
+        const abrir = botao.getAttribute("aria-expanded") !== "true";
+        botao.setAttribute("aria-expanded", String(abrir));
+        botao.textContent = abrir ? "Ver menos" : textoFechado;
+        atualizar();
+        if (!abrir) botao.scrollIntoView({ block: "nearest" });
+      });
+    }
+
+    campo.addEventListener("input", atualizar);
+    atualizar();
   }
 </script>
 
@@ -188,6 +241,10 @@ const naoListado = (await getEntry("guiaOrientacao", "atual"))?.data.naoListado;
   .grupo > p {
     margin: 0.125rem 0 0;
     color: var(--cor-texto-suave);
+  }
+
+  .ver-mais {
+    margin-top: 0.5rem;
   }
 
   @media (min-width: 48rem) {
