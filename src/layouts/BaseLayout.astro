@@ -29,6 +29,17 @@ const imagemCompartilhar = new URL(
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#ffc222" />
+    {/* RF-17: aplica o tema escolhido antes de desenhar a página, sem piscar. */}
+    <script is:inline>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema === "claro" || tema === "escuro") {
+          document.documentElement.dataset.tema = tema;
+        }
+      } catch {
+        // Sem acesso ao armazenamento: segue o tema do sistema.
+      }
+    </script>
     <link
       rel="icon"
       type="image/svg+xml"
