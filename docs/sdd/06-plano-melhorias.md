@@ -4,8 +4,8 @@
 |---|---|
 | Projeto | SocialTech (UCB + Projeto Enactus) |
 | Fase SDD | 6 (Plano de tarefas): melhorias de código, acessibilidade e manutenção depois da release final (#47) |
-| Versão | 1.1 (29/10/2026): inclui a T-24 |
-| Status | 🚦 Em revisão pela equipe |
+| Versão | 1.2 (04/11/2026): situação final das T-18 a T-27 |
+| Status | ✅ Concluído (04/11/2026) |
 | Base | [Requisitos](../requisitos.md), [Arquitetura](../arquitetura.md), [Revisão](04-revisao.md), [Plano da entrega final](05-plano-entrega-final.md) |
 
 ## 0. Como usar este plano
@@ -49,20 +49,20 @@ Tarefas acrescentadas depois, em 29/10 e 30/10/2026, já com issue (o texto comp
 
 ## 2. Ordem e responsáveis
 
-Situação em 01/11/2026 (as T-25 a T-27 estão na [seção 5](#5-tarefas-acrescentadas-depois-da-revisão-do-plano)):
+Situação em 04/11/2026 (as T-25 a T-27 estão na [seção 5](#5-tarefas-acrescentadas-depois-da-revisão-do-plano)). Todas as tarefas deste plano estão concluídas e entram na `main` na release de 04/11/2026:
 
 | Tarefa | Responsável | Depende de | Issue / PR | Situação |
 |---|---|---|---|---|
 | T-18 | Pedro | — | #49 / PR #55 | ✅ Concluída |
-| T-19 | Pedro | T-18 | #50 | 🔨 Em andamento |
-| T-20 | Nicole | T-18 | #51 / PR #58 | 🔨 Ajustes pedidos na revisão |
-| T-21 | Nicole | T-18 | #52 / PR #59 | 🔨 Ajustes pedidos na revisão |
+| T-19 | Pedro | T-18 | #50 / PR #79 | ✅ Concluída |
+| T-20 | Nicole | T-18 | #51 / PR #58 | ✅ Concluída (conflito com a T-24 resolvido por Pedro) |
+| T-21 | Nicole | T-18 | #52 / PR #59 | ✅ Concluída |
 | T-22 | Luiz | — | #53 / PR #60 | ✅ Concluída |
-| T-23 | Luiz | T-18 | #54 / PR #61 | 🔨 Corrigido, aguardando nova revisão |
-| T-24 | Pedro | T-18 | #56 / PR #57 | 🔨 Corrigido, aguardando nova revisão |
+| T-23 | Luiz | T-18 | #54 / PR #61 | ✅ Concluída |
+| T-24 | Pedro | T-18 | #56 / PR #57 | ✅ Concluída |
 | T-25 · Prévia de compartilhamento e página 404 | Pedro | T-18 | #64 / PR #65 | ✅ Concluída |
 | T-26 · Quiz sem anúncio duplicado no leitor de tela | Pedro | — | #66 / PR #67 | ✅ Concluída |
-| T-27 · Navegação no celular | Nicole | T-20 (mesmos arquivos) | #68 | ⏳ Aguarda a T-20 |
+| T-27 · Navegação no celular | Nicole | T-20 (mesmos arquivos) | #68 / PR #84 | ✅ Concluída (implementada por Pedro) |
 
 | Tarefa | Responsável | Depende de | Arquivos principais |
 |---|---|---|---|
