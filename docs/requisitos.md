@@ -390,10 +390,18 @@ Funcionalidade: Números de impacto
 | Prioridade | Should |
 | Origem | OE-5, OE-6 · C-07 · Jornada J3 |
 | Conteúdo | RC-12 |
-| Situação | ✅ Implementado (T-15, PR #42); 5 perguntas (T-34, PR #83), aceite registrado por Pedro em 04/11/2026 (Q-06) |
+| Situação | ✅ Implementado (T-15, PR #42); 5 perguntas (T-34, PR #83), aceite registrado por Pedro em 04/11/2026 (Q-06); uma pergunta de cada vez (04/11/2026) |
 
 ```gherkin
 Funcionalidade: Quiz
+
+  Cenário: Uma pergunta de cada vez
+    Dado que o quiz tem 5 perguntas
+    Quando chego ao quiz
+    Então leio "São 5 perguntas" e vejo só a primeira pergunta
+    Quando respondo uma pergunta
+    Então a próxima aparece logo abaixo, com uma animação leve (sem animação se o celular pede menos movimento, RNF-09)
+    E sem JavaScript todas as perguntas aparecem, com o aviso (RNF-10)
 
   Cenário: Responder uma pergunta
     Dado que o quiz tem 3 perguntas validadas
@@ -405,7 +413,7 @@ Funcionalidade: Quiz
     Quando respondo a última pergunta
     Então vejo "Você acertou X de Y."
     Quando toco em "Refazer"
-    Então as respostas são apagadas e o foco volta para a primeira pergunta
+    Então as respostas são apagadas, só a primeira pergunta fica visível e o foco volta para ela
 
   Cenário: Nada é registrado
     Quando respondo o quiz com a aba Rede (Network) aberta
