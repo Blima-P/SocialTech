@@ -44,7 +44,7 @@ Requer Node.js 22.22 ou superior.
 ```bash
 npm ci
 npm run dev      # http://localhost:4321/SocialTech/
-npm run verify   # formatação, lint, tipos e build (o mesmo que o CI)
+npm run verify   # formatação, lint, tipos, build e verificação do site gerado (o mesmo que o CI)
 ```
 
 ## Documentação

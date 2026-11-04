@@ -71,6 +71,7 @@ src/
 ├── assets/           # imagens otimizadas pelo Astro (astro:assets); assets/conteudo/ recebe os uploads do painel
 └── styles/           # CSS global e tokens do design system
 public/               # arquivos copiados sem processamento (favicon, compartilhar.png da prévia nas redes)
+scripts/              # ferramentas do build e do CI em Node puro (ex.: verificar-site.mjs); não vão para o site
 docs/                 # especificação SDD: requisitos, arquitetura, ADRs, plano de tarefas
 ```
 
@@ -82,11 +83,11 @@ CI em `.github/workflows/` (`ci.yml`, `deploy-pages.yml`, `controle-merge-main.y
 ```bash
 npm ci            # instala exatamente as versões do package-lock.json
 npm run dev       # servidor local: http://localhost:4321/SocialTech/
-npm run verify    # formatação + lint + tipos + build (o mesmo que o CI)
+npm run verify    # formatação + lint + tipos + build + verificação do site gerado (o mesmo que o CI)
 npm run format    # corrige a formatação automaticamente
 ```
 
-Rode `npm run verify` antes de propor qualquer commit. O CI também verifica links quebrados (lychee). Todos os checks precisam passar.
+Rode `npm run verify` antes de propor qualquer commit. A verificação do site gerado (`npm run verificar:site`) confere no `dist/` o peso da página inicial, o `<h1>` único, o `alt` das imagens, os caminhos com `/SocialTech/`, os scripts de terceiros e o `rel="noopener"`. O CI também verifica links quebrados (lychee), inclusive os do conteúdo em `src/content/`. Todos os checks precisam passar.
 
 ---
 
