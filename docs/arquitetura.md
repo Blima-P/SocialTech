@@ -112,7 +112,7 @@ flowchart TB
 | Scripts dos componentes | TypeScript em `<script>` de cada componente, empacotado pelo Astro | Busca no guia, ciclo passo a passo e quiz; nada é enviado |
 | `count.js` | Script do GoatCounter, `async`, só em produção | Registrar a visita (RF-13) |
 | Repositório | Git (branches `main`, `develop`, `feature/*`, `fix/*`, `docs/*`) | Código, conteúdo, documentação e materiais do QR |
-| CI | GitHub Actions (`ci.yml`) | Prettier, ESLint com regras de acessibilidade, `astro check`, build e lychee |
+| CI | GitHub Actions (`ci.yml`) | Prettier, ESLint com regras de acessibilidade, `astro check`, build, verificação do site gerado (`scripts/verificar-site.mjs`) e lychee |
 | Controle de merge | GitHub Actions (`controle-merge-main.yml`) | A `main` só recebe PR de `develop` ou `fix/*` com aprovação de um mantenedor |
 | Deploy | GitHub Actions (`deploy-pages.yml`) | Build e publicação a cada push na `main` |
 
@@ -121,7 +121,7 @@ flowchart TB
 | Componente | Arquivo | Coleção | Seção (`id`) | JavaScript | Tarefa | Situação |
 |---|---|---|---|---|---|---|
 | Layout base | `src/layouts/BaseLayout.astro` | — | `<html>`, `<head>`, prévia de compartilhamento | `count.js` (produção) | T-01, T-08, T-25 | ✅ |
-| Cabeçalho | `src/components/Cabecalho.astro` | — | `<header>` | Não | T-02, T-11 | ✅ · 🔨 redesign |
+| Cabeçalho | `src/components/Cabecalho.astro` | — | `<header id="topo">`; no celular, o menu vira uma faixa com rolagem lateral | Não | T-02, T-11, T-27 | ✅ |
 | Guia "Pode / Não pode" | `src/components/GuiaPodeNaoPode.astro` | `guia`, `guiaOrientacao` | `guia` | Busca (T-14) | T-05, T-14 | ✅ · 🔨 busca |
 | Onde está a lixeira | `src/components/PontoColeta.astro` | `pontoColeta` | `ponto-de-coleta` | Não | T-06, T-11 | ✅ |
 | Ciclo do resíduo | `src/components/CicloResiduo.astro` | `ciclo` | `ciclo` | Passo a passo (T-12) | T-03, T-12 | ✅ · 🔨 interativo |
@@ -129,13 +129,13 @@ flowchart TB
 | Quiz | `src/components/Quiz.astro` | `quiz` | `quiz` | Sim (T-15) | T-15 | 🔨 |
 | Avalie o projeto | `src/components/Avaliacao.astro` | `avaliacao` | `avaliacao` | Não | T-07, T-11 | ✅ |
 | Seção do painel | `src/components/Secao.astro` | `secoes` | título `secao-<id>` | Não | Base | ✅ |
-| Rodapé | `src/components/Rodape.astro` + `ListaLinks.astro` | `links` | `<footer>` | Não | T-02, T-11 | ✅ |
+| Rodapé | `src/components/Rodape.astro` + `ListaLinks.astro` | `links` | `<footer>`, link "Voltar ao topo" (`#topo`) | Não | T-02, T-11, T-27 | ✅ |
 
 A página `src/pages/index.astro` só compõe os componentes, na ordem da seção 4.
 
 A página `src/pages/404.astro` vira o `404.html`, que o GitHub Pages mostra em qualquer endereço inexistente dentro de `/SocialTech/`. Ela leva de volta ao início e às seções principais (links com `BASE_URL` completo), não é indexada (`noindex`) e não é contada no GoatCounter (T-25).
 
-**Prévia de compartilhamento (T-25).** O `BaseLayout` gera as metatags Open Graph (`og:title`, `og:description`, `og:url`, `og:image`) e o `link rel="canonical"`, sempre com endereço absoluto (`Astro.site` + `BASE_URL`). A imagem é `public/compartilhar.png` (1200 × 630 px, menos de 300 KB, como o WhatsApp exige). Não há `robots.txt` nem `sitemap.xml`: num site de projeto do GitHub Pages, o `robots.txt` só vale na raiz do domínio (`blima-p.github.io`, que é outro repositório), e o sitemap só ajudaria se fosse enviado ao Google Search Console.
+**Prévia de compartilhamento (T-25).** O `BaseLayout` gera as metatags Open Graph (`og:title`, `og:description`, `og:url`, `og:image`) e o `link rel="canonical"`, sempre com endereço absoluto (`Astro.site` + `BASE_URL`). A imagem é `public/compartilhar.png` (1200 × 630 px, até 100 KB desde a T-30, com o nome "Compostagem Enactus UCB"; o WhatsApp aceita até 300 KB). Não há `robots.txt` nem `sitemap.xml`: num site de projeto do GitHub Pages, o `robots.txt` só vale na raiz do domínio (`blima-p.github.io`, que é outro repositório), e o sitemap só ajudaria se fosse enviado ao Google Search Console.
 
 ## 4. Arquitetura da informação
 
@@ -145,7 +145,7 @@ Página única (ADR-005) em faixas de largura total (ADR-007). A ordem segue a j
 
 | Ordem | Seção | `id` | Fundo da faixa | Tarefas | Situação |
 |---|---|---|---|---|---|
-| 1 | Cabeçalho: barra branca com logo e menu; destaque amarelo com o título e o botão "O que pode ir na lixeira?" | `<header>` | Branco e amarelo | T-02, T-11 | ✅ · 🔨 |
+| 1 | Cabeçalho: barra branca com logo e menu (no celular, o menu vira uma faixa abaixo do logo, sem JavaScript); destaque amarelo com o título e o botão "O que pode ir na lixeira?" | `<header>` | Branco e amarelo | T-02, T-11 | ✅ · 🔨 |
 | 2 | Guia "Pode / Não pode", com busca e item não listado | `guia` | Branco | T-05, T-14 | ✅ · 🔨 |
 | 3 | Onde está a lixeira agora | `ponto-de-coleta` | Cinza (`--cor-fundo-suave`) | T-06, T-11 | ✅ |
 | 4 | Ciclo do resíduo | `ciclo` | Branco | T-03, T-12 | ✅ · 🔨 |
@@ -153,7 +153,7 @@ Página única (ADR-005) em faixas de largura total (ADR-007). A ordem segue a j
 | 6 | Quiz | `quiz` | Branco | T-15 | 🔨 |
 | 7 | Avalie o projeto | `avaliacao` | Amarelo (`--cor-destaque`) | T-07, T-11 | ✅ |
 | 8 | Seções do painel ("Sobre o projeto" etc.) | `secao-<id>` | Cinza | Base, T-11 | ✅ |
-| 9 | Rodapé com contatos e logo | `<footer>` | Escuro | T-02, T-11 | ✅ |
+| 9 | Rodapé com contatos, logo e "Voltar ao topo" | `<footer>` | Escuro | T-02, T-11, T-27 | ✅ |
 
 Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não aparecem** (RN-04).
 
@@ -163,8 +163,9 @@ Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não 
 ┌──────────────────────────────┐
 │▀▀▀▀▀▀ linha amarela ▀▀▀▀▀▀▀▀▀│
 │ [logo Enactus]               │  barra branca
+│ O que pode · Onde está a l…→ │  menu em faixa (rola de lado, T-27)
 ├──────────────────────────────┤
-│ SocialTech            (h1)   │  destaque amarelo
+│ Compostagem Enactus UCB (h1) │  destaque amarelo
 │ Descarte correto de resíduos │
 │ [ O que pode ir na lixeira? ]│  botão escuro → #guia
 ├──────────────────────────────┤
@@ -197,10 +198,11 @@ Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não 
 │ Sobre o projeto              │  faixa cinza
 ├──────────────────────────────┤
 │ Contatos e links · logo      │  rodapé escuro
+│ Voltar ao topo               │  → #topo (cabeçalho)
 └──────────────────────────────┘
 ```
 
-A partir de `48rem`: menu no cabeçalho, recorte diagonal escuro no destaque, guia em 2 colunas e rodapé em 2 colunas. A partir de `64rem`: ciclo em linha e números de impacto em 4 colunas.
+A partir de `48rem`: menu ao lado do logo, recorte diagonal escuro no destaque, guia em 2 colunas e rodapé em 2 colunas. A partir de `64rem`: ciclo em linha e números de impacto em 4 colunas.
 
 ## 5. Design system
 
@@ -250,7 +252,7 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 ### 5.4 Foco, movimento e semântica
 
 - Foco: `:focus-visible` com contorno de 3 px em `currentcolor` e afastamento de 2 px, visível em fundos claro, amarelo e escuro.
-- Movimento: com `prefers-reduced-motion: reduce`, animações e transições são zeradas; rolagem suave só com `no-preference` (RNF-09).
+- Movimento: animações e transições só em `src/styles/animacoes.css`, dentro de `prefers-reduced-motion: no-preference`; com `reduce`, nada se mexe e a rolagem não é suave (RNF-09). Só `transform` e `opacity`, nenhuma animação infinita; a entrada ao rolar usa `animation-timeline: view()` dentro de `@supports`, então sem suporte (ou sem JavaScript) o conteúdo aparece parado (RNF-10). Os tokens de curva (`--saida`, `--mola`) ficam no próprio arquivo (T-24).
 - Semântica: um único `<h1>` no cabeçalho; cada seção é `<section id="…" aria-labelledby="…">` com `<h2>`; listas com `<ul>`/`<ol>`; botões com `<button>`; links externos que abrem nova aba avisam "(abre em nova aba)" para leitor de tela.
 
 ### 5.5 Componentes de interface
@@ -262,7 +264,7 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 | Campo de busca | `<label>` visível "Procure um item" + `<input type="search">`; contagem de resultados em `aria-live="polite"` |
 | Etapa do ciclo | Número em círculo (`aria-hidden`), nome e frase; seta entre etapas (decorativa) |
 | Controles do ciclo | Botões numerados com `aria-label="Etapa X: <nome>"` e `aria-current="step"`; "Anterior" e "Próxima" desabilitados nas pontas |
-| Número de impacto | Número grande em `--cor-destaque` sobre `--cor-escura`; descrição e fonte em `--cor-fundo`; sem animação |
+| Número de impacto | Número grande em `--cor-destaque` sobre `--cor-escura`; descrição e fonte em `--cor-fundo`; entram um a um ao rolar, sem contagem animada |
 | Pergunta do quiz | `<fieldset>` com `<legend>`; alternativas em `<input type="radio">` + `<label>`; resultado "✓ Certo" / "✕ Errado" em `aria-live` |
 | Título de seção | `<h2>` com traço amarelo embaixo (escuro na faixa amarela e no rodapé) (T-11) |
 
@@ -321,6 +323,7 @@ SocialTech/
 │   ├── materiais/                  # qr-lixeira.png e adesivo-lixeira.pdf
 │   └── sdd/                        # constituição, especificação, clarificações, planos e revisão
 ├── public/compartilhar.png         # imagem da prévia no WhatsApp e nas redes (T-25)
+├── scripts/verificar-site.mjs      # confere o dist/ depois do build (T-19); não vai para o site
 ├── src/
 │   ├── assets/
 │   │   ├── fontes/                 # Roboto WOFF2 + licença (ADR-004)
@@ -330,6 +333,7 @@ SocialTech/
 │   ├── layouts/BaseLayout.astro    # <html>, <head>, GoatCounter, prévia de compartilhamento
 │   ├── pages/                      # index.astro (página única) e 404.astro (página de erro)
 │   ├── styles/global.css           # tokens e estilos globais
+│   ├── styles/animacoes.css        # animações (só com movimento permitido, T-24)
 │   └── content.config.ts           # schemas zod das coleções
 ├── .pages.yml                      # campos do painel Pages CMS
 ├── astro.config.mjs                # site + base "/SocialTech/"
@@ -450,7 +454,7 @@ flowchart LR
 | Endereço | `https://blima-p.github.io/SocialTech/?campaign=lixeira&ref=qr` (cartazes: `ref=cartaz`) |
 | Tipo | **Estático**: o endereço está no próprio desenho; sem encurtador, redirecionamento ou "QR dinâmico" |
 | Geração | Script Python avulso com a biblioteca `qrcode` (fora do site e do `package.json`): correção de erro M, margem de 4 módulos, preto sobre branco |
-| Versionamento | `docs/materiais/qr-lixeira.png` e `docs/materiais/adesivo-lixeira.pdf` no repositório (T-04) |
+| Versionamento | `docs/materiais/qr-lixeira.png` e `docs/materiais/adesivo-lixeira.pdf` (T-04); `docs/materiais/qr-cartaz.png` e `docs/materiais/cartaz-a4.pdf` (T-33) |
 | Teste | Escanear o **papel impresso** em 2 celulares antes de divulgar (constituição §7; RH-01) |
 
 ### 9.4 Reversão
@@ -472,7 +476,8 @@ flowchart LR
 | Lint e acessibilidade estática | ESLint com `eslint-plugin-jsx-a11y-x`; bloqueio de `set:html` | Local e CI | RNF-07, RNF-13 |
 | Tipos e templates | `astro check` | Local e CI | RNF-14 |
 | Schema do conteúdo | `astro build` (zod) | Local, CI e deploy | RF-15, RNF-15 |
-| Links quebrados | lychee (`*.md` e `src/**/*.astro`) | CI em todo PR | T-16 |
+| Links quebrados | lychee (`*.md`, `src/**/*.astro` e `src/content/**/*.json`) | CI em todo PR, em `push` na `develop` e na `main` (edições do painel) | T-16, T-19 |
+| Site gerado | `npm run verificar:site` (`scripts/verificar-site.mjs`, Node puro): página inicial < 500 KB, um único `<h1>`, `alt` em todo `<img>`, caminhos internos com `/SocialTech/` ou `#`, só o GoatCounter como script externo, `target="_blank"` com `rel="noopener"` | Local (`npm run verify`) e CI | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 (T-19) |
 | Layout em 360 px e 1366 px | Modo responsivo do navegador + capturas no PR | Toda tarefa visual (DoD) | RNF-05 |
 | Teclado, foco e leitor de tela | Tab/Enter/Espaço; TalkBack ou VoiceOver | Tarefas interativas e homologação | RNF-07 |
 | Sem JavaScript | Desativar o JavaScript no navegador | T-12, T-14, T-15 e homologação | RNF-10 |
@@ -480,7 +485,7 @@ flowchart LR
 | Desempenho e acessibilidade | Lighthouse em modo celular, na página publicada | H2 | RNF-01 a RNF-03 |
 | Celulares reais | 2 celulares (Android e iPhone, se possível), 4G | Antes de cada release e nas homologações | RNF-11 |
 
-Não há testes automatizados de comportamento (busca, ciclo, quiz): eles são verificados à mão pelos critérios de aceite (dívida DT-01).
+Não há testes automatizados de comportamento (busca, ciclo, quiz): eles são verificados à mão pelos critérios de aceite (dívida DT-01). A estrutura do HTML gerado (peso, `<h1>`, `alt`, caminhos, terceiros e `noopener`) é conferida automaticamente desde a T-19.
 
 ### 10.2 Roteiro de homologação
 
@@ -556,7 +561,7 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 | Contador próprio | Exige servidor e banco de dados; conflita com ADR-001 |
 | **GoatCounter (escolhida)** | Gratuito para uso não comercial, sem cookies, sem dado pessoal; separa campanha e origem pela URL; um script `async` pequeno |
 
-- **Decisão:** script `count.js` do GoatCounter no `<head>` do `BaseLayout.astro`, com `is:inline` e `async`, **só no build de produção**, para o site `socialtech-ucb`. Os acessos do QR são separados pelos parâmetros `?campaign=lixeira&ref=qr` (cartazes: `ref=cartaz`).
+- **Decisão:** script `count.js` do GoatCounter no `<head>` do `BaseLayout.astro`, com `is:inline` e `async`, **só no build de produção**, para o site `socialtech-ucb`. A função `window.goatcounter.path` preserva no caminho contado somente `campaign` e `ref`, inclusive quando existe um canonical sem query string. Os acessos do QR são separados pelos parâmetros `?campaign=lixeira&ref=qr` (cartazes: `ref=cartaz`).
 - **Consequências:** é um script de terceiro aprovado pela equipe (`AGENTS.md` §4.4); o código do site não é segredo; bloqueadores de anúncio podem impedir a contagem, então o número é um **mínimo** (R-09); o quiz e a busca não mandam eventos (RN-06); a evidência para o relatório são prints do painel do GoatCounter (E-10).
 - **Requisitos:** RF-13, RNF-12, RNF-16.
 
@@ -617,9 +622,9 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 
 | ID | Dívida ou risco | Consequência | Tratamento |
 |---|---|---|---|
-| DT-01 | Sem testes automatizados de comportamento (busca, ciclo, quiz) | Regressões só aparecem no teste manual | Aceito pelo prazo; critérios de aceite e roteiro de homologação cobrem os casos |
+| DT-01 | Sem testes automatizados de comportamento (busca, ciclo, quiz) | Regressões só aparecem no teste manual | Aceito pelo prazo; critérios de aceite e roteiro de homologação cobrem os casos. Desde a T-19, o `npm run verificar:site` confere a estrutura do HTML gerado (`<h1>`, `alt`, caminhos, terceiros), mas não o comportamento |
 | DT-02 | Edições do painel vão direto para a `main`, sem revisão (ADR-002) | A `develop` fica atrás da `main` | `git merge origin/main` na `develop` antes e depois de cada release |
-| DT-03 | Lighthouse não roda no CI | Peso ou acessibilidade podem piorar sem aviso | Medição manual na H2 (RH-12) |
+| DT-03 | Lighthouse não roda no CI | Desempenho e acessibilidade podem piorar sem aviso | Desde a T-19, o CI falha se a página inicial passar de 500 KB (RNF-01) ou perder o `<h1>` único ou o `alt`; as notas do Lighthouse (RNF-02, RNF-03) continuam medidas à mão (RH-12) |
 | DT-04 | O QR estático aponta para `blima-p.github.io/SocialTech` | Renomear o repositório ou trocar de domínio quebra o QR impresso | Não renomear o repositório; se mudar, reimprimir o adesivo |
 | DT-05 | Dependência de serviços gratuitos (GoatCounter, Pages CMS) | Se saírem do ar, a contagem ou a edição param; o site continua no ar | Aceito; o site não depende deles para funcionar |
 | DT-06 | `.pages.yml` e `content.config.ts` podem divergir se só um for alterado | O painel salva um dado que o build recusa | Regra do `AGENTS.md` §4.9 e revisão de PR |

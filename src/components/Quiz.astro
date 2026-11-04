@@ -13,10 +13,15 @@ const perguntas = (await getCollection("quiz")).sort(
       <p>Para conferir as respostas, ative o JavaScript do navegador.</p>
     </noscript>
     <ol class="perguntas">
-      {perguntas.map(({ id, data }) => (
+      {perguntas.map(({ id, data }, indice) => (
         <li>
           <fieldset data-pergunta data-correta={data.correta}>
-            <legend>{data.pergunta}</legend>
+            <legend>
+              <span class="numero-pergunta" aria-hidden="true">
+                {String(indice + 1).padStart(2, "0")}
+              </span>
+              <span>{data.pergunta}</span>
+            </legend>
             {data.alternativas.map((alternativa, indice) => (
               <label>
                 <input type="radio" name={`quiz-${id}`} value={indice + 1} />
@@ -72,7 +77,10 @@ const perguntas = (await getCollection("quiz")).sort(
       texto.append(simbolo, acertou ? "Certo." : "Errado.");
       resultado.replaceChildren(texto);
       pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = false;
-      pergunta.querySelector<HTMLElement>("[data-feedback]")!.focus();
+      const feedback = pergunta.querySelector<HTMLElement>("[data-feedback]")!;
+      feedback.classList.toggle("feedback--certo", acertou);
+      feedback.classList.toggle("feedback--errado", !acertou);
+      feedback.focus();
     };
 
     for (const pergunta of perguntas) {
@@ -113,6 +121,9 @@ const perguntas = (await getCollection("quiz")).sort(
         pergunta
           .querySelector<HTMLElement>("[data-resultado]")!
           .replaceChildren();
+        pergunta
+          .querySelector<HTMLElement>("[data-feedback]")!
+          .classList.remove("feedback--certo", "feedback--errado");
         pergunta.querySelector<HTMLElement>("[data-aviso]")!.textContent = "";
         pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = true;
         pergunta.querySelector<HTMLElement>("[data-responder]")!.hidden = false;
@@ -127,7 +138,7 @@ const perguntas = (await getCollection("quiz")).sort(
 <style>
   .perguntas {
     display: grid;
-    gap: calc(var(--espaco) * 1.5);
+    gap: var(--espaco);
     max-width: var(--largura-conteudo);
     margin: 0;
     padding: 0;
@@ -136,57 +147,95 @@ const perguntas = (await getCollection("quiz")).sort(
 
   fieldset {
     margin: 0;
-    border: 0;
-    border-radius: var(--raio);
+    border: 1px solid #d5d5d5;
+    border-left: 0.25rem solid var(--cor-destaque);
+    border-radius: calc(var(--raio) * 1.5);
     padding: var(--espaco);
-    background: var(--cor-fundo-suave);
+    background: var(--cor-fundo);
+    box-shadow: 0 0.25rem 1rem rgb(48 51 60 / 8%);
   }
 
   legend {
-    float: left;
+    display: flex;
     width: 100%;
-    margin-bottom: 0.5rem;
-    padding: 0;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding: 0 0.25rem 0 0;
     font-weight: 700;
   }
 
+  .numero-pergunta {
+    display: grid;
+    flex: 0 0 2rem;
+    min-height: 2rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--cor-destaque);
+    color: var(--cor-texto);
+    font-size: 0.875rem;
+    line-height: 1;
+  }
+
   label {
-    clear: both;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.75rem;
     min-height: var(--alvo-toque);
+    margin-top: 0.5rem;
+    border: 1px solid #d5d5d5;
+    border-radius: var(--raio);
+    padding: 0.625rem 0.75rem;
+    background: var(--cor-fundo);
+    cursor: pointer;
+  }
+
+  label:has(input:checked) {
+    border-color: var(--cor-escura);
+    background: var(--cor-fundo-suave);
+  }
+
+  label:has(input:disabled) {
+    cursor: default;
   }
 
   input {
     flex-shrink: 0;
     width: 1.25rem;
     height: 1.25rem;
-    margin: 0;
+    margin: 0.125rem 0 0;
+    accent-color: var(--cor-escura);
+  }
+
+  input:focus-visible {
+    outline: 3px solid var(--cor-escura);
+    outline-offset: 3px;
   }
 
   .botao {
-    min-height: var(--alvo-toque);
-    margin-top: 0.5rem;
-    border: 0;
-    border-radius: var(--raio);
-    padding-inline: var(--espaco);
-    background: var(--cor-escura);
-    color: var(--cor-fundo);
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
+    justify-content: center;
+    margin-top: 0.75rem;
   }
 
   .botao:focus-visible {
     outline-color: var(--cor-escura);
   }
 
-  .aviso,
-  .resultado p,
-  .explicacao,
-  .final p {
+  @media (hover: hover) {
+    label:hover {
+      border-color: var(--cor-texto-suave);
+      background: var(--cor-fundo-suave);
+    }
+
+    .botao:hover {
+      background: var(--cor-texto-suave);
+    }
+  }
+
+  .aviso {
     margin: 0.5rem 0 0;
+    color: var(--cor-nao-pode);
+    font-weight: 700;
   }
 
   /* A região do aviso fica sempre na página (para o leitor de tela), mas sem espaço quando vazia. */
@@ -194,22 +243,83 @@ const perguntas = (await getCollection("quiz")).sort(
     margin: 0;
   }
 
-  .feedback:focus {
-    outline: none;
+  .feedback:has(.resultado:not(:empty)) {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 0.75rem;
+    border-left: 0.25rem solid var(--cor-texto-suave);
+    border-radius: 0 var(--raio) var(--raio) 0;
+    padding: 0.75rem;
+    background: var(--cor-fundo-suave);
   }
 
-  .certo {
+  .feedback:has(.resultado:not(:empty)).feedback--certo {
+    border-left-color: var(--cor-pode);
+    background: var(--cor-pode-fundo);
+  }
+
+  .feedback:has(.resultado:not(:empty)).feedback--errado {
+    border-left-color: var(--cor-nao-pode);
+    background: var(--cor-nao-pode-fundo);
+  }
+
+  .resultado :global(p),
+  .explicacao {
+    margin: 0;
+  }
+
+  .feedback--certo :global(.certo) {
     color: var(--cor-pode);
     font-weight: 700;
   }
 
-  .errado {
+  .feedback--errado :global(.errado) {
     color: var(--cor-nao-pode);
     font-weight: 700;
   }
 
+  .feedback:focus {
+    outline: 3px solid var(--cor-escura);
+    outline-offset: 3px;
+  }
+
+  .explicacao {
+    color: var(--cor-texto);
+  }
+
+  .final:has([data-placar]:not(:empty)) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    max-width: var(--largura-conteudo);
+    margin-top: var(--espaco);
+    border-top: 0.25rem solid var(--cor-destaque);
+    border-radius: var(--raio);
+    padding: 0.75rem var(--espaco);
+    background: var(--cor-fundo-suave);
+  }
+
   .final p {
-    font-size: 1.25rem;
+    margin: 0;
+    font-size: 1.125rem;
     font-weight: 700;
+  }
+
+  .final .botao {
+    margin-top: 0;
+  }
+
+  @media (min-width: 48rem) {
+    fieldset {
+      padding: calc(var(--espaco) * 1.25);
+    }
+
+    legend {
+      align-items: center;
+      margin-bottom: var(--espaco);
+      font-size: 1.125rem;
+    }
   }
 </style>

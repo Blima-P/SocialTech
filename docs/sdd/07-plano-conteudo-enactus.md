@@ -4,8 +4,8 @@
 |---|---|
 | Projeto | Compostagem Enactus UCB (projeto de extensão SocialTech, UCB + Enactus UCB) |
 | Fase SDD | 6 (Plano de tarefas): conteúdo validado e tarefas que nasceram das respostas do Prof. Marcus |
-| Versão | 1.0 (31/10/2026) |
-| Status | 🚦 Em revisão pela equipe |
+| Versão | 1.2 (04/11/2026): situação final das T-28 a T-35 |
+| Status | ✅ Concluído (04/11/2026) |
 | Base | [Clarificações](02-clarificacoes.md) (respostas de 31/10), [Requisitos](../requisitos.md), [Plano de melhorias](06-plano-melhorias.md) |
 
 ## 0. Como usar este plano
@@ -42,16 +42,16 @@ O quiz (Q-06) continua sem perguntas. A T-34 rascunha 5 perguntas **só com o co
 
 ## 2. Ordem e responsáveis
 
-| Tarefa | Responsável | Depende de | Arquivos principais |
-|---|---|---|---|
-| T-28 · Documentação das respostas do professor | Pedro | — | `docs/sdd/`, `docs/requisitos.md`, `AGENTS.md`, `README.md` |
-| T-29 · Conteúdo validado | Pedro | — | `src/content/*.json`, `secoes/sobre-o-projeto.md`, `index.astro` |
-| T-30 · Identidade "Compostagem Enactus UCB" | Nicole | T-20 (#58), T-25 (#65), T-27 (#68) e T-29 | `Cabecalho`, `Rodape`, `BaseLayout`, `404.astro`, `index.astro`, `public/compartilhar.png` |
-| T-31 · Dúvidas comuns | Luiz | T-29 | `DuvidasComuns.astro`, `duvidas.json`, `content.config.ts`, `.pages.yml`, guia de edição |
-| T-32 · Fotos do professor no ciclo e na lixeira | Nicole | T-21 (#59), T-23 (#61) e T-29 | `src/assets/conteudo/`, `ciclo.json`, `ponto-coleta.json` |
-| T-33 · Cartaz A4 com QR Code | Luiz | — (pode começar já) | `docs/materiais/`, `docs/arquitetura.md` |
-| T-34 · Perguntas do quiz | Luiz | T-29 | `quiz.json` |
-| T-35 · Faixa "Um projeto de parceria" | Pedro | — | `FaixaParceria.astro`, `index.astro` (issue #62, PR #63) |
+| Tarefa | Responsável | Depende de | Arquivos principais | Issue / PR · situação em 04/11/2026 |
+|---|---|---|---|---|
+| T-28 · Documentação das respostas do professor | Pedro | — | `docs/sdd/`, `docs/requisitos.md`, `AGENTS.md`, `README.md` | #69 / PR #70 · ✅ Concluída |
+| T-29 · Conteúdo validado | Pedro | — | `src/content/*.json`, `secoes/sobre-o-projeto.md`, `index.astro` | #71 / PR #72 · ✅ Concluída (release #78) |
+| T-30 · Identidade "Compostagem Enactus UCB" | Nicole | T-20 (#58), T-25 (#65), T-27 (#68) e T-29 | `Cabecalho`, `Rodape`, `BaseLayout`, `404.astro`, `index.astro`, `public/compartilhar.png` | #73 / PR #85 · ✅ Concluída (implementada por Pedro) |
+| T-31 · Dúvidas comuns | Luiz | T-29 | `DuvidasComuns.astro`, `duvidas.json`, `content.config.ts`, `.pages.yml`, guia de edição | #74 / PR #81 · ✅ Concluída |
+| T-32 · Fotos do professor no ciclo e na lixeira | Nicole | T-21 (#59), T-23 (#61) e T-29 | `src/assets/conteudo/`, `ciclo.json`, `ponto-coleta.json` | #75 / PR #86 · ✅ Concluída (implementada por Pedro) |
+| T-33 · Cartaz A4 com QR Code | Luiz | — (pode começar já) | `docs/materiais/`, `docs/arquitetura.md` | #76 / PR #82 · ✅ Concluída (impressão pela equipe) |
+| T-34 · Perguntas do quiz | Luiz | T-29 | `quiz.json` | #77 / PR #83 · ✅ Concluída (aceite registrado por Pedro em 04/11) |
+| T-35 · Faixa "Um projeto de parceria" | Pedro | — | `FaixaParceria.astro`, `index.astro` | #62 / PR #63 · ✅ Concluída (release #78) |
 
 A T-31 mexe no `content.config.ts`, no `.pages.yml` e no guia de edição, como a T-21 e a T-23. Quem fizer o merge depois atualiza a branch com a `develop` (`git merge origin/develop`) antes de pedir a revisão.
 

@@ -7,9 +7,15 @@ import ListaLinks from "./ListaLinks.astro";
 <footer>
   <div class="marca">
     <Image src={logo} alt="Enactus Brasil" height={48} />
-    <p>Projeto de extensão da UCB em parceria com o Projeto Enactus</p>
+    <p>Projeto de extensão da UCB em parceria com o Enactus UCB</p>
+    <p class="creditos">
+      Site feito pela equipe SocialTech, de estudantes da UCB
+    </p>
   </div>
   <ListaLinks />
+  <p class="topo">
+    <a href="#topo">Voltar ao topo</a>
+  </p>
 </footer>
 
 <style>
@@ -31,6 +37,11 @@ import ListaLinks from "./ListaLinks.astro";
     max-width: 22rem;
     margin: 0.75rem 0 0;
     font-size: 0.9375rem;
+  }
+
+  .marca .creditos {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
   }
 
   /* ListaLinks é de outro componente: :global() aplica o estilo só dentro do rodapé. */
@@ -65,10 +76,20 @@ import ListaLinks from "./ListaLinks.astro";
     outline-color: var(--cor-destaque);
   }
 
+  /* "#topo" (e não BASE_URL + "#topo") não recarrega a página de quem veio pelo QR
+     com ?campaign=..., o que contaria o acesso duas vezes no GoatCounter. */
+  .topo {
+    margin: 0;
+  }
+
   @media (min-width: 48rem) {
     footer {
       grid-template-columns: 1fr auto;
       align-items: start;
+    }
+
+    .topo {
+      grid-column: 1 / -1;
     }
   }
 </style>

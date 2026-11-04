@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/animacoes.css";
 
 // Código do site no GoatCounter (ADR-003). Não é segredo.
 const CODIGO_GOATCOUNTER = "socialtech-ucb";
@@ -27,6 +28,12 @@ const imagemCompartilhar = new URL(
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#ffc222" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={`${import.meta.env.BASE_URL}favicon.svg`}
+    />
     <title>{title}</title>
     {erro ? (
       <meta name="robots" content="noindex" />
@@ -35,7 +42,7 @@ const imagemCompartilhar = new URL(
     )}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
-    <meta property="og:site_name" content="SocialTech" />
+    <meta property="og:site_name" content="Compostagem Enactus UCB" />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
     {!erro && <meta property="og:url" content={enderecoPagina} />}
@@ -45,17 +52,33 @@ const imagemCompartilhar = new URL(
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="SocialTech: descarte correto de resíduos orgânicos. Projeto de extensão UCB + Enactus."
+      content="Compostagem Enactus UCB: descarte correto de resíduos orgânicos. Projeto de extensão UCB + Enactus."
     />
     <meta name="twitter:card" content="summary_large_image" />
     {/* Contagem de acessos sem cookies, só no site publicado (ADR-003). */}
     {import.meta.env.PROD && !erro && (
-      <script
-        is:inline
-        async
-        data-goatcounter={`https://${CODIGO_GOATCOUNTER}.goatcounter.com/count`}
-        src="https://gc.zgo.at/count.js"
-      ></script>
+      <>
+        <script is:inline>
+          window.goatcounter = {
+            path: () => {
+              const parametros = new URLSearchParams(window.location.search);
+              const origem = new URLSearchParams();
+              for (const chave of ["campaign", "ref"]) {
+                const valor = parametros.get(chave);
+                if (valor) origem.set(chave, valor);
+              }
+              const sufixo = origem.toString();
+              return `${window.location.pathname}${sufixo ? `?${sufixo}` : ""}`;
+            },
+          };
+        </script>
+        <script
+          is:inline
+          async
+          data-goatcounter={`https://${CODIGO_GOATCOUNTER}.goatcounter.com/count`}
+          src="https://gc.zgo.at/count.js"
+        ></script>
+      </>
     )}
   </head>
   <body>

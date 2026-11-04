@@ -1,1 +1,43 @@
-[]
+[
+  {
+    "pergunta": "Casca de laranja pode ir na lixeira de compostagem?",
+    "alternativas": ["Sim", "Não"],
+    "correta": 2,
+    "explicacao": "Frutas cítricas alteram o pH do composto."
+  },
+  {
+    "pergunta": "Qual destes itens pode ir na lixeira?",
+    "alternativas": [
+      "Borra de café com o filtro de papel",
+      "Restos de carne",
+      "Sacola plástica"
+    ],
+    "correta": 1,
+    "explicacao": "A borra e o filtro viram composto. Carnes atraem vetores, e plástico não se decompõe."
+  },
+  {
+    "pergunta": "Seu resíduo não está na lista. O que fazer?",
+    "alternativas": [
+      "Colocar na lixeira mesmo assim",
+      "Não colocar e consultar o Enactus UCB"
+    ],
+    "correta": 2,
+    "explicacao": "Em caso de dúvida, não coloque o resíduo na lixeira de compostagem."
+  },
+  {
+    "pergunta": "Para onde vai o composto?",
+    "alternativas": [
+      "Para o aterro sanitário",
+      "Para o cultivo de plantas no Horto Botânico da UCB",
+      "Para a coleta seletiva da cidade"
+    ],
+    "correta": 2,
+    "explicacao": "O composto aduba plantas como hortelã, alecrim e manjericão no Horto Botânico."
+  },
+  {
+    "pergunta": "Quanto tempo leva a compostagem, em média?",
+    "alternativas": ["Cerca de 1 semana", "Cerca de 4 meses", "Cerca de 2 anos"],
+    "correta": 2,
+    "explicacao": "É uma estimativa: o tempo depende do clima, da umidade e de outros fatores."
+  }
+]

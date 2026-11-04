@@ -69,11 +69,22 @@ const pontoColeta = defineCollection({
   loader: file("src/content/ponto-coleta.json", {
     parser: objetoUnico("atual"),
   }),
-  schema: z.object({
-    local: z.string().trim().min(1),
-    comoReconhecer: z.string().trim().min(1),
-    atualizadoEm: z.coerce.date(),
-  }),
+  schema: ({ image }) =>
+    z
+      .object({
+        local: z.string().trim().min(1),
+        comoReconhecer: z.string().trim().min(1),
+        atualizadoEm: z.coerce.date(),
+        imagem: z.preprocess(vazioParaUndefined, image().optional()),
+        descricaoImagem: z.preprocess(
+          vazioParaUndefined,
+          z.string().trim().min(1).optional(),
+        ),
+      })
+      .refine((ponto) => !ponto.imagem || ponto.descricaoImagem, {
+        message: "Toda imagem precisa de descrição (texto alternativo).",
+        path: ["descricaoImagem"],
+      }),
 });
 
 const guia = defineCollection({
@@ -104,13 +115,24 @@ const ciclo = defineCollection({
   loader: file("src/content/ciclo.json", {
     parser: listaComPosicao,
   }),
-  schema: z.object({
-    nome: z.string().trim().min(1),
-    descricao: z.preprocess(
-      vazioParaUndefined,
-      z.string().trim().min(1).optional(),
-    ),
-  }),
+  schema: ({ image }) =>
+    z
+      .object({
+        nome: z.string().trim().min(1),
+        descricao: z.preprocess(
+          vazioParaUndefined,
+          z.string().trim().min(1).optional(),
+        ),
+        imagem: z.preprocess(vazioParaUndefined, image().optional()),
+        descricaoImagem: z.preprocess(
+          vazioParaUndefined,
+          z.string().trim().min(1).optional(),
+        ),
+      })
+      .refine((etapa) => !etapa.imagem || etapa.descricaoImagem, {
+        message: "Toda imagem precisa de descrição (texto alternativo).",
+        path: ["descricaoImagem"],
+      }),
 });
 
 const impacto = defineCollection({
@@ -154,6 +176,16 @@ const quiz = defineCollection({
     }),
 });
 
+const duvidas = defineCollection({
+  loader: file("src/content/duvidas.json", {
+    parser: listaComPosicao,
+  }),
+  schema: z.object({
+    pergunta: z.string().trim().min(1),
+    resposta: z.string().trim().min(1),
+  }),
+});
+
 export const collections = {
   secoes,
   links,
@@ -164,4 +196,5 @@ export const collections = {
   impacto,
   guiaOrientacao,
   quiz,
+  duvidas,
 };

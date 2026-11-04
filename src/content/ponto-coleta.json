@@ -1,5 +1,7 @@
 {
   "local": "Clínica Escola de Nutrição",
   "comoReconhecer": "Lixeira verde com o banner “O que pode / O que não pode”, do Enactus e da UCB.",
-  "atualizadoEm": "2026-10-31"
+  "atualizadoEm": "2026-10-31",
+  "imagem": "../assets/conteudo/lixeira-verde.jpg",
+  "descricaoImagem": "Lixeira verde com o símbolo de reciclagem, embaixo do banner “O que pode / O que não pode” do Enactus e da UCB."
 }
