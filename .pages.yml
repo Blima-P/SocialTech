@@ -115,6 +115,16 @@ content:
         label: Frase curta (opcional)
         description: Uma frase explicando a etapa. Combine o texto com a Enactus.
         type: text
+      - name: imagem
+        label: Foto (opcional)
+        description: Foto do espaço desta etapa. Use só fotos autorizadas pela Enactus.
+        type: image
+        options:
+          media: dados
+      - name: descricaoImagem
+        label: Descrição da foto
+        description: Obrigatória se houver foto. Descreva o que a foto mostra, para pessoas que usam leitor de tela.
+        type: string
 
   - name: guia
     label: "Guia: pode / não pode"
