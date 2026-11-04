@@ -10,6 +10,9 @@ import ListaLinks from "./ListaLinks.astro";
     <p>Projeto de extensão da UCB em parceria com o Projeto Enactus</p>
   </div>
   <ListaLinks />
+  <p class="topo">
+    <a href="#topo">Voltar ao topo</a>
+  </p>
 </footer>
 
 <style>
@@ -65,10 +68,20 @@ import ListaLinks from "./ListaLinks.astro";
     outline-color: var(--cor-destaque);
   }
 
+  /* "#topo" (e não BASE_URL + "#topo") não recarrega a página de quem veio pelo QR
+     com ?campaign=..., o que contaria o acesso duas vezes no GoatCounter. */
+  .topo {
+    margin: 0;
+  }
+
   @media (min-width: 48rem) {
     footer {
       grid-template-columns: 1fr auto;
       align-items: start;
+    }
+
+    .topo {
+      grid-column: 1 / -1;
     }
   }
 </style>

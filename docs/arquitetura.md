@@ -121,7 +121,7 @@ flowchart TB
 | Componente | Arquivo | Coleção | Seção (`id`) | JavaScript | Tarefa | Situação |
 |---|---|---|---|---|---|---|
 | Layout base | `src/layouts/BaseLayout.astro` | — | `<html>`, `<head>`, prévia de compartilhamento | `count.js` (produção) | T-01, T-08, T-25 | ✅ |
-| Cabeçalho | `src/components/Cabecalho.astro` | — | `<header>` | Não | T-02, T-11 | ✅ · 🔨 redesign |
+| Cabeçalho | `src/components/Cabecalho.astro` | — | `<header id="topo">`; no celular, o menu vira uma faixa com rolagem lateral | Não | T-02, T-11, T-27 | ✅ |
 | Guia "Pode / Não pode" | `src/components/GuiaPodeNaoPode.astro` | `guia`, `guiaOrientacao` | `guia` | Busca (T-14) | T-05, T-14 | ✅ · 🔨 busca |
 | Onde está a lixeira | `src/components/PontoColeta.astro` | `pontoColeta` | `ponto-de-coleta` | Não | T-06, T-11 | ✅ |
 | Ciclo do resíduo | `src/components/CicloResiduo.astro` | `ciclo` | `ciclo` | Passo a passo (T-12) | T-03, T-12 | ✅ · 🔨 interativo |
@@ -129,7 +129,7 @@ flowchart TB
 | Quiz | `src/components/Quiz.astro` | `quiz` | `quiz` | Sim (T-15) | T-15 | 🔨 |
 | Avalie o projeto | `src/components/Avaliacao.astro` | `avaliacao` | `avaliacao` | Não | T-07, T-11 | ✅ |
 | Seção do painel | `src/components/Secao.astro` | `secoes` | título `secao-<id>` | Não | Base | ✅ |
-| Rodapé | `src/components/Rodape.astro` + `ListaLinks.astro` | `links` | `<footer>` | Não | T-02, T-11 | ✅ |
+| Rodapé | `src/components/Rodape.astro` + `ListaLinks.astro` | `links` | `<footer>`, link "Voltar ao topo" (`#topo`) | Não | T-02, T-11, T-27 | ✅ |
 
 A página `src/pages/index.astro` só compõe os componentes, na ordem da seção 4.
 
@@ -145,7 +145,7 @@ Página única (ADR-005) em faixas de largura total (ADR-007). A ordem segue a j
 
 | Ordem | Seção | `id` | Fundo da faixa | Tarefas | Situação |
 |---|---|---|---|---|---|
-| 1 | Cabeçalho: barra branca com logo e menu; destaque amarelo com o título e o botão "O que pode ir na lixeira?" | `<header>` | Branco e amarelo | T-02, T-11 | ✅ · 🔨 |
+| 1 | Cabeçalho: barra branca com logo e menu (no celular, o menu vira uma faixa abaixo do logo, sem JavaScript); destaque amarelo com o título e o botão "O que pode ir na lixeira?" | `<header>` | Branco e amarelo | T-02, T-11 | ✅ · 🔨 |
 | 2 | Guia "Pode / Não pode", com busca e item não listado | `guia` | Branco | T-05, T-14 | ✅ · 🔨 |
 | 3 | Onde está a lixeira agora | `ponto-de-coleta` | Cinza (`--cor-fundo-suave`) | T-06, T-11 | ✅ |
 | 4 | Ciclo do resíduo | `ciclo` | Branco | T-03, T-12 | ✅ · 🔨 |
@@ -153,7 +153,7 @@ Página única (ADR-005) em faixas de largura total (ADR-007). A ordem segue a j
 | 6 | Quiz | `quiz` | Branco | T-15 | 🔨 |
 | 7 | Avalie o projeto | `avaliacao` | Amarelo (`--cor-destaque`) | T-07, T-11 | ✅ |
 | 8 | Seções do painel ("Sobre o projeto" etc.) | `secao-<id>` | Cinza | Base, T-11 | ✅ |
-| 9 | Rodapé com contatos e logo | `<footer>` | Escuro | T-02, T-11 | ✅ |
+| 9 | Rodapé com contatos, logo e "Voltar ao topo" | `<footer>` | Escuro | T-02, T-11, T-27 | ✅ |
 
 Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não aparecem** (RN-04).
 
@@ -163,6 +163,7 @@ Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não 
 ┌──────────────────────────────┐
 │▀▀▀▀▀▀ linha amarela ▀▀▀▀▀▀▀▀▀│
 │ [logo Enactus]               │  barra branca
+│ O que pode · Onde está a l…→ │  menu em faixa (rola de lado, T-27)
 ├──────────────────────────────┤
 │ SocialTech            (h1)   │  destaque amarelo
 │ Descarte correto de resíduos │
@@ -197,10 +198,11 @@ Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não 
 │ Sobre o projeto              │  faixa cinza
 ├──────────────────────────────┤
 │ Contatos e links · logo      │  rodapé escuro
+│ Voltar ao topo               │  → #topo (cabeçalho)
 └──────────────────────────────┘
 ```
 
-A partir de `48rem`: menu no cabeçalho, recorte diagonal escuro no destaque, guia em 2 colunas e rodapé em 2 colunas. A partir de `64rem`: ciclo em linha e números de impacto em 4 colunas.
+A partir de `48rem`: menu ao lado do logo, recorte diagonal escuro no destaque, guia em 2 colunas e rodapé em 2 colunas. A partir de `64rem`: ciclo em linha e números de impacto em 4 colunas.
 
 ## 5. Design system
 
