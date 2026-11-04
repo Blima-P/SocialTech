@@ -135,7 +135,7 @@ A página `src/pages/index.astro` só compõe os componentes, na ordem da seçã
 
 A página `src/pages/404.astro` vira o `404.html`, que o GitHub Pages mostra em qualquer endereço inexistente dentro de `/SocialTech/`. Ela leva de volta ao início e às seções principais (links com `BASE_URL` completo), não é indexada (`noindex`) e não é contada no GoatCounter (T-25).
 
-**Prévia de compartilhamento (T-25).** O `BaseLayout` gera as metatags Open Graph (`og:title`, `og:description`, `og:url`, `og:image`) e o `link rel="canonical"`, sempre com endereço absoluto (`Astro.site` + `BASE_URL`). A imagem é `public/compartilhar.png` (1200 × 630 px, menos de 300 KB, como o WhatsApp exige). Não há `robots.txt` nem `sitemap.xml`: num site de projeto do GitHub Pages, o `robots.txt` só vale na raiz do domínio (`blima-p.github.io`, que é outro repositório), e o sitemap só ajudaria se fosse enviado ao Google Search Console.
+**Prévia de compartilhamento (T-25).** O `BaseLayout` gera as metatags Open Graph (`og:title`, `og:description`, `og:url`, `og:image`) e o `link rel="canonical"`, sempre com endereço absoluto (`Astro.site` + `BASE_URL`). A imagem é `public/compartilhar.png` (1200 × 630 px, até 100 KB desde a T-30, com o nome "Compostagem Enactus UCB"; o WhatsApp aceita até 300 KB). Não há `robots.txt` nem `sitemap.xml`: num site de projeto do GitHub Pages, o `robots.txt` só vale na raiz do domínio (`blima-p.github.io`, que é outro repositório), e o sitemap só ajudaria se fosse enviado ao Google Search Console.
 
 ## 4. Arquitetura da informação
 
@@ -165,7 +165,7 @@ Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não 
 │ [logo Enactus]               │  barra branca
 │ O que pode · Onde está a l…→ │  menu em faixa (rola de lado, T-27)
 ├──────────────────────────────┤
-│ SocialTech            (h1)   │  destaque amarelo
+│ Compostagem Enactus UCB (h1) │  destaque amarelo
 │ Descarte correto de resíduos │
 │ [ O que pode ir na lixeira? ]│  botão escuro → #guia
 ├──────────────────────────────┤
