@@ -167,6 +167,16 @@ content:
         required: true
         options:
           format: yyyy-MM-dd
+      - name: imagem
+        label: Foto da lixeira (opcional)
+        description: Envie uma foto atual da lixeira para ajudar a reconhecê-la no local.
+        type: image
+        options:
+          media: dados
+      - name: descricaoImagem
+        label: Descrição da foto
+        description: Obrigatória se houver foto. Descreva o que a imagem mostra.
+        type: string
 
   - name: avaliacao
     label: Formulário de avaliação
