@@ -288,7 +288,9 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     }
 
     .interativo .etapas > li {
-      flex: 0 0 min(85%, 22rem);
+      box-sizing: border-box;
+      flex: 0 0 calc(100% - 2.5rem);
+      min-width: 0;
       scroll-snap-align: start;
       scroll-snap-stop: always;
     }
