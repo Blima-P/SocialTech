@@ -12,6 +12,9 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
 <section id="ciclo" aria-labelledby="titulo-ciclo" data-ciclo>
   <h2 id="titulo-ciclo">Do resto de comida à horta</h2>
   {semDescricao && <p>Textos do ciclo em validação com a Enactus.</p>}
+  <p class="dica-arraste" hidden data-dica-arraste>
+    Arraste para o lado para ver as próximas etapas.
+  </p>
   <ol class="atalhos" aria-label="Escolha uma etapa" hidden data-atalhos>
     {etapas.map(({ data }, indice) => (
       <li>
@@ -58,8 +61,9 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
 </section>
 
 <script>
-  // Sem JavaScript, a lista mostra todas as etapas. Com JavaScript, uma etapa por vez.
+  // Sem JavaScript, a lista mostra todas as etapas. No celular, o modo interativo permite arrastar.
   for (const ciclo of document.querySelectorAll<HTMLElement>("[data-ciclo]")) {
+    const lista = ciclo.querySelector<HTMLOListElement>(".etapas")!;
     const etapas = [...ciclo.querySelectorAll<HTMLElement>(".etapas > li")];
     const atalhos = [
       ...ciclo.querySelectorAll<HTMLButtonElement>("[data-atalhos] button"),
@@ -67,10 +71,17 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     const anterior = ciclo.querySelector<HTMLButtonElement>("[data-anterior]")!;
     const proxima = ciclo.querySelector<HTMLButtonElement>("[data-proxima]")!;
     const posicao = ciclo.querySelector<HTMLElement>("[data-posicao]")!;
+    const modoCarrossel = window.matchMedia("(max-width: 63.999rem)");
+    const movimentoReduzido = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
     if (etapas.length < 2) continue;
 
     const mostrar = (ativa: number) => {
-      etapas.forEach((etapa, indice) => (etapa.hidden = indice !== ativa));
+      etapas.forEach(
+        (etapa, indice) =>
+          (etapa.hidden = !modoCarrossel.matches && indice !== ativa),
+      );
       atalhos.forEach((botao, indice) =>
         indice === ativa
           ? botao.setAttribute("aria-current", "step")
@@ -83,9 +94,15 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     };
 
     let atual = 0;
-    const ir = (indice: number) => {
+    const ir = (indice: number, rolar = true) => {
       atual = Math.min(Math.max(indice, 0), etapas.length - 1);
       mostrar(atual);
+      if (modoCarrossel.matches && rolar) {
+        lista.scrollTo({
+          left: etapas[atual].offsetLeft - lista.offsetLeft,
+          behavior: movimentoReduzido.matches ? "auto" : "smooth",
+        });
+      }
     };
 
     atalhos.forEach((botao, indice) =>
@@ -94,9 +111,36 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     anterior.addEventListener("click", () => ir(atual - 1));
     proxima.addEventListener("click", () => ir(atual + 1));
 
+    let quadroRolagem = 0;
+    lista.addEventListener(
+      "scroll",
+      () => {
+        if (!modoCarrossel.matches) return;
+        cancelAnimationFrame(quadroRolagem);
+        quadroRolagem = requestAnimationFrame(() => {
+          const esquerda = lista.scrollLeft;
+          const maisProxima = etapas.reduce(
+            (melhor, etapa, indice) => {
+              const distancia = Math.abs(
+                etapa.offsetLeft - lista.offsetLeft - esquerda,
+              );
+              return distancia < melhor.distancia
+                ? { indice, distancia }
+                : melhor;
+            },
+            { indice: 0, distancia: Number.POSITIVE_INFINITY },
+          );
+          if (maisProxima.indice !== atual) ir(maisProxima.indice, false);
+        });
+      },
+      { passive: true },
+    );
+
+    modoCarrossel.addEventListener("change", () => ir(atual, false));
     ciclo.classList.add("interativo");
     ciclo.querySelector<HTMLElement>("[data-atalhos]")!.hidden = false;
     ciclo.querySelector<HTMLElement>("[data-navegacao]")!.hidden = false;
+    ciclo.querySelector<HTMLElement>("[data-dica-arraste]")!.hidden = false;
     ir(0);
   }
 </script>
@@ -155,6 +199,15 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     height: auto;
     margin-top: 0.5rem;
     border-radius: var(--raio);
+  }
+
+  .dica-arraste {
+    margin: 0 0 var(--espaco);
+    color: var(--cor-texto-suave);
+  }
+
+  .dica-arraste[hidden] {
+    display: none;
   }
 
   .nome {
@@ -220,6 +273,27 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
 
   .interativo .seta {
     display: none;
+  }
+
+  @media (max-width: 63.999rem) {
+    .interativo .etapas {
+      display: flex;
+      max-width: none;
+      gap: 0.75rem;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      padding-bottom: 0.5rem;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+
+    .interativo .etapas > li {
+      box-sizing: border-box;
+      flex: 0 0 calc(100% - 2.5rem);
+      min-width: 0;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
   }
 
   .atalhos {
