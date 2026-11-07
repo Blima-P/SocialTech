@@ -237,11 +237,17 @@ Funcionalidade: Ciclo do resíduo
 Funcionalidade: Ciclo passo a passo
 
   Cenário: Navegar pelo toque
-    Dado que o ciclo tem 5 etapas e o JavaScript está ativo
+    Dado que o ciclo tem 5 etapas, o JavaScript está ativo e a tela tem pelo menos 64rem
     Quando toco em "Próxima"
     Então só a etapa 2 fica visível
     E o texto "Etapa 2 de 5" é anunciado pelo leitor de tela
     E o botão "2" fica marcado como etapa atual
+
+  Cenário: Arrastar as fotos no celular
+    Dado que abri o ciclo num celular
+    Quando arrasto a foto de uma etapa para o lado
+    Então a próxima etapa se encaixa na área visível
+    E o indicador e os controles passam a representar essa etapa
 
   Cenário: Pontas do ciclo
     Dado que estou na etapa 1

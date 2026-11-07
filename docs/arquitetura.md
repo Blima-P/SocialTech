@@ -283,7 +283,7 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 | Campo de busca | `<label>` visível "Procure um item" + `<input type="search">`; contagem de resultados em `aria-live="polite"` |
 | "Ver mais" do guia | Botão de ação abaixo de cada grupo com mais de 3 itens, com `aria-expanded` e `aria-controls` apontando para a lista; alterna para "Ver menos". Só existe com JavaScript; some durante a busca, que procura em todos os itens |
 | Etapa do ciclo | Número em círculo (`aria-hidden`), nome e frase; seta entre etapas (decorativa) |
-| Controles do ciclo | Botões numerados com `aria-label="Etapa X: <nome>"` e `aria-current="step"`; "Anterior" e "Próxima" desabilitados nas pontas |
+| Controles do ciclo | No celular, os cartões com fotos formam um carrossel nativo com `scroll-snap` e gesto de arrastar; botões numerados com `aria-label="Etapa X: <nome>"` e `aria-current="step"` e controles "Anterior"/"Próxima" continuam disponíveis |
 | Número de impacto | Número grande em `--cor-destaque` sobre `--cor-faixa-escura`; descrição e fonte em `--cor-sobre-escura`; entram um a um ao rolar, sem contagem animada |
 | Pergunta do quiz | `<fieldset>` com `<legend>`; alternativas em `<input type="radio">` + `<label>`; resultado "✓ Certo" / "✕ Errado" em `aria-live`. Um texto inicial diz quantas perguntas são; com JavaScript, só a primeira aparece e cada resposta revela a seguinte (animação `revelar` em `animacoes.css`) |
 | Título de seção | `<h2>` com traço amarelo embaixo (escuro na faixa amarela e no rodapé) (T-11) |
@@ -517,7 +517,7 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 | RH-02 | Abrir o painel do GoatCounter | O acesso do RH-01 aparece com a campanha `lixeira` | RF-13 | H1-6 | H2-7 |
 | RH-03 | Teste de 10 s: 5 pessoas, cada uma com o nome de um item da lista; cronometrar da abertura do QR até dizer "pode" ou "não pode" | Pelo menos 4 de 5 decidem em até 10 s (S-05) | RF-01 | H1-1 | — |
 | RH-04 | Buscar "cítrica", "CITRICA" e "citrica"; buscar um item fora da lista | Os três acham "Frutas cítricas"; o item fora da lista mostra a orientação (ou o aviso de pendência) | RF-02, RF-03 | — | H2-2 |
-| RH-05 | Conferir as etapas do ciclo; navegar pelo toque e, no computador, só pelo teclado | Etapas e frases corretas; navegação funciona | RF-04, RF-05 | H1-3 | H2-3 |
+| RH-05 | Conferir as etapas do ciclo; no celular, arrastar as fotos e usar os botões; no computador, navegar só pelo teclado | Etapas e frases corretas; o encaixe lateral e os controles acompanham a etapa atual | RF-04, RF-05 | H1-3 | H2-3 |
 | RH-06 | Conferir o local da lixeira; o Prof. Marcus muda o local pelo painel | Local correto; a mudança aparece em até 5 minutos | RF-06, RF-15 | H1-4 | — |
 | RH-07 | O Prof. Marcus confere os números de impacto e as fontes | Números e fontes corretos | RF-10 | — | H2-4 |
 | RH-08 | Responder o quiz inteiro com a aba Rede aberta (computador) e tocar em "Refazer" | Gabarito e explicações validados; nenhuma requisição | RF-11, RN-06 | — | H2-5 |
