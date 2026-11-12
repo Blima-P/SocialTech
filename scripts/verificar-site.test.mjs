@@ -124,7 +124,7 @@ test("encontra cada nome do guia com o escape de texto usado pelo Astro", () => 
       { nome: "Exemplo <teste> \"com\" 'aspas'" },
     ],
     inicial:
-      "<p>Café &amp; filtro</p><p hidden>Exemplo &lt;teste&gt; &quot;com&quot; &#39;aspas&#39;</p>",
+      '<section id="guia"><p>Café &amp; filtro</p><p hidden>Exemplo &lt;teste&gt; &quot;com&quot; &#39;aspas&#39;</p></section>',
   });
   assert.equal(resultado.status, 0, resultado.saida);
 });
@@ -212,4 +212,32 @@ test("nova aba exige noopener e noreferrer", () => {
   const resultado = verificar({ inicial: link("noopener") });
   assert.equal(resultado.status, 1);
   assert.match(resultado.saida, /sem rel="noopener noreferrer"/);
+});
+
+test("procura o guia só na seção #guia e ignora espaços nas pontas", () => {
+  const guia = [{ nome: "  Borra de café " }];
+  const naSecao = '<section id="guia"><h3>Borra de café</h3></section>';
+  assert.equal(verificar({ guia, inicial: naSecao }).status, 0);
+
+  const resultado = verificar({
+    guia,
+    inicial:
+      '<section id="guia"></section><section id="quiz">Borra de café</section>',
+  });
+  assert.equal(resultado.status, 1);
+  assert.match(
+    resultado.saida,
+    /" {2}Borra de café " \(guia.json\) não aparece na seção #guia/,
+  );
+});
+
+test("sitemap lista apenas a página inicial", () => {
+  const resultado = verificar({
+    sitemap: urlset(
+      "https://blima-p.github.io/SocialTech/",
+      "https://blima-p.github.io/SocialTech/inexistente/",
+    ),
+  });
+  assert.equal(resultado.status, 1);
+  assert.match(resultado.saida, /inexistente\/: o site tem uma página só/);
 });
