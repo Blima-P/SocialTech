@@ -58,3 +58,26 @@ for (const tema of ["light", "dark"] as const) {
     }
   });
 }
+
+test("atalhos da 404 são sublinhados, espaçados e com alvo de toque", async ({
+  page,
+}) => {
+  await page.goto(`${paginaInicial}404.html`);
+  const atalhos = page
+    .getByRole("list", { name: "Ou vá direto para" })
+    .getByRole("link");
+  await expect(atalhos).toHaveCount(3);
+
+  const caixas = [];
+  for (const atalho of await atalhos.all()) {
+    await expect(atalho).toHaveCSS("text-decoration-line", "underline");
+    const caixa = await atalho.boundingBox();
+    expect(caixa?.height).toBeGreaterThanOrEqual(44);
+    caixas.push(caixa!);
+  }
+  for (let i = 1; i < caixas.length; i += 1) {
+    expect(
+      caixas[i].y - (caixas[i - 1].y + caixas[i - 1].height),
+    ).toBeGreaterThanOrEqual(8);
+  }
+});
