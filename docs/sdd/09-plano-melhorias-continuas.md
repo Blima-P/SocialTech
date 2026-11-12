@@ -188,6 +188,7 @@ Fazer o painel, o verificador e os testes pegarem erros antes da publicação, e
 | T-60 | #132 | Cobre a página 404 e o quiz sem alternativa | RF-17, RNF-13 | ✅ #164 |
 | T-61 | #133 | Alinha AGENTS.md com código e CI | RNF-14 | ✅ #168 |
 | T-69 | #172 | Guia conferido só na seção do guia e sitemap com URL exata | RF-01, RF-14, RNF-04, RNF-14 | ✅ |
+| T-72 | #178 | Quiz lê o gabarito do JSON e anúncios esperam o fim da rolagem | RF-14, RF-17, RNF-14 | ✅ |
 
 **T-55 — critérios de aceite**
 
@@ -234,6 +235,12 @@ Fazer o painel, o verificador e os testes pegarem erros antes da publicação, e
 - [x] Os textos do JSON passam por `trim()` antes da comparação, como no schema.
 - [x] O sitemap precisa listar exatamente a URL canônica da página inicial.
 - [x] Testes do verificador cobrem cada caso e falham sem a correção.
+
+**T-72 — critérios de aceite**
+
+- [x] Os testes do quiz leem alternativas e gabarito de `src/content/quiz.json` (import JSON com `with { type: "json" }`).
+- [x] O teste de anúncios só confere a lista depois que a rolagem chega à última etapa.
+- [x] Com uma alternativa editada no JSON, o teste antigo falha e o novo passa.
 
 ### M8 · Desempenho, SEO e operação
 
