@@ -11,6 +11,9 @@ const atalhos = [
 ---
 
 <header id="topo">
+  <a class="pular" href="#conteudo">
+    Pular para o conteúdo
+  </a>
   <div class="barra">
     <Image
       class="logo-claro"
@@ -98,6 +101,31 @@ const atalhos = [
   header {
     border-top: 0.25rem solid var(--cor-destaque);
     background: var(--cor-fundo);
+  }
+
+  /* WCAG 2.4.1: primeiro item do Tab. Fora do foco fica fora da tela e não ocupa espaço. */
+  .pular {
+    position: absolute;
+    top: 0.5rem;
+    left: var(--recuo-lateral);
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--alvo-toque);
+    padding-inline: 1rem;
+    border-radius: var(--raio);
+    background: var(--cor-texto);
+    color: var(--cor-fundo);
+    font-weight: 700;
+    transform: translateY(-200%);
+  }
+
+  .pular:focus {
+    transform: none;
+  }
+
+  .pular:focus-visible {
+    outline-color: var(--cor-destaque);
   }
 
   /* No celular o menu quebra para uma faixa própria abaixo do logo. */
