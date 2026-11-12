@@ -40,7 +40,7 @@ O projeto segue **SDD**: primeiro a especificação, depois o código. A especif
 | [`docs/sdd/06-plano-melhorias.md`](docs/sdd/06-plano-melhorias.md) | Melhorias depois da entrega (T-18 a T-27): limpeza, verificação automática, design system, fotos, busca, animações, prévia de compartilhamento, quiz e navegação no celular |
 | [`docs/sdd/07-plano-conteudo-enactus.md`](docs/sdd/07-plano-conteudo-enactus.md) | Conteúdo validado pelo Prof. Marcus em 31/10/2026 (T-28 a T-35): guia, ciclo, nome "Compostagem Enactus UCB", dúvidas comuns, fotos, cartaz e quiz |
 | [`docs/sdd/08-plano-milestones.md`](docs/sdd/08-plano-milestones.md) | Encerramento do projeto (T-36 a T-39): governança, homologação operacional, regressão automatizada e desempenho |
-| [`docs/sdd/09-plano-melhorias-continuas.md`](docs/sdd/09-plano-melhorias-continuas.md) | Melhorias contínuas (T-40 a T-87, M5–M9): segurança, acessibilidade, arquitetura, SEO, operação e refinamentos pós-release; critérios de aceite e DoD |
+| [`docs/sdd/09-plano-melhorias-continuas.md`](docs/sdd/09-plano-melhorias-continuas.md) | Melhorias contínuas (T-40 a T-89, M5–M9): segurança, acessibilidade, arquitetura, SEO, operação e refinamentos pós-release; critérios de aceite e DoD |
 
 Enquanto esses documentos não existirem ou não estiverem aprovados, siga as seções 2 e 4 deste arquivo e **não implemente funcionalidades** além do que o desenvolvedor pedir explicitamente.
 
