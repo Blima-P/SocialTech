@@ -115,6 +115,7 @@ Rode `npm run verify` e, em mudanças de comportamento, `npm run test:e2e` antes
 
 ### 4.4 Dependências
 - **Não adicione** pacotes npm (`npm install <pacote>`), CDNs, fontes externas (ex.: Google Fonts), scripts de terceiros ou qualquer dependência **sem aprovação explícita**. Explique o motivo, o peso no carregamento e a alternativa sem dependência.
+- `@playwright/test` é a exceção aprovada para testes de desenvolvimento e CI (ADR-009); não entra no JavaScript entregue ao visitante.
 - Prefira recursos nativos do Astro (`astro:assets`, Content Collections, `<script>` processado) antes de bibliotecas.
 - Para instalar o projeto, use `npm ci`. Sempre commite `package.json` e `package-lock.json` juntos.
 - Não atualize versões *major* sem aprovação.

@@ -645,7 +645,7 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 | RNF-13 | Segurança | Nenhum segredo no repositório; nenhum `set:html`, `innerHTML`, `eval` ou `new Function` com conteúdo do painel (bloqueado pelo ESLint); links que abrem nova aba com `rel="noopener"`; site só em HTTPS | `npm run lint`; revisão de PR | **Must** | ✅ |
 | RNF-14 | Manutenibilidade | Todo texto, item, etapa, número e pergunta em `src/content/`, validado por schema; `src/content.config.ts` e `.pages.yml` mudam no mesmo PR; `npm run verify` e o CI (`lint` e `links`) passam em todo PR | CI no PR | **Must** | ✅ |
 | RNF-15 | Disponibilidade | Edição salva no painel publicada em **até 5 minutos**; um build que falha **não** derruba o site (a versão anterior continua no ar) | Tempo entre o commit e o fim do workflow `Deploy GitHub Pages` | **Must** | ✅ |
-| RNF-16 | Custo e dependências | **Custo zero**; nenhuma dependência npm, CDN, fonte externa ou framework de UI nova sem ADR aprovado; JavaScript só nos componentes interativos | `package.json` no PR; aba Rede | **Must** | ✅ |
+| RNF-16 | Custo e dependências | **Custo zero**; nenhuma dependência npm, CDN, fonte externa ou framework de UI nova sem ADR aprovado; JavaScript só nos componentes interativos | `package.json` no PR; aba Rede | **Must** | ✅ Playwright aprovado apenas para desenvolvimento e CI (ADR-009) |
 | RNF-17 | Idioma | Interface e documentação em português do Brasil; `<html lang="pt-BR">` | Código-fonte da página | **Must** | ✅ |
 
 ## 5. Regras de negócio e de conteúdo

@@ -19,7 +19,7 @@ jobs:
   lint:
     name: lint
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
 
@@ -55,7 +55,7 @@ jobs:
         run: npm run test:e2e
 
       - name: Anexar relatório dos testes
-        if: failure()
+        if: ${{ failure() || cancelled() }}
         uses: actions/upload-artifact@v6
         with:
           name: relatorio-playwright

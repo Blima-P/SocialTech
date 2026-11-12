@@ -549,6 +549,7 @@ O registro mais recente está em
 | [ADR-006](#adr-006--conteúdo-em-coleções-json-com-schema) | Conteúdo em coleções JSON com schema | Aceito | 22/10/2026 |
 | [ADR-007](#adr-007--layout-em-faixas-de-largura-total) | Layout em faixas de largura total | Aceito | 26/10/2026 |
 | [ADR-008](#adr-008--interatividade-com-aprimoramento-progressivo) | Interatividade com aprimoramento progressivo | Aceito | 26/10/2026 |
+| [ADR-009](#adr-009--playwright-para-regressão-no-navegador) | Playwright para regressão no navegador | Aceito | 12/11/2026 |
 
 ### ADR-001 · Stack: Astro + TypeScript + CSS puro, site estático
 
@@ -644,6 +645,15 @@ O registro mais recente está em
 - **Decisão:** o HTML traz todo o conteúdo; os controles interativos vêm com `hidden` e o script os mostra; os dados que o script precisa (ex.: gabarito do quiz) vêm de atributos `data-*` gerados no build; o script usa `textContent` e `createElement`, nunca `innerHTML`.
 - **Consequências:** sem JavaScript, o guia aparece completo, o ciclo mostra todas as etapas e o quiz mostra as perguntas com um aviso `<noscript>`; nenhuma dependência nova; o quiz não mede nada (RN-06, Q-12).
 - **Requisitos:** RF-02, RF-05, RF-11, RNF-07, RNF-10, RNF-12, RNF-16.
+
+### ADR-009 · Playwright para regressão no navegador
+
+- **Status:** Aceito em 12/11/2026 para a T-38.
+- **Contexto:** os fluxos críticos eram validados apenas manualmente, permitindo regressões na busca, no ciclo, no quiz, no tema e no funcionamento sem JavaScript.
+- **Opções:** manter apenas o roteiro manual; criar testes unitários sem navegador; usar Cypress; **usar Playwright com Chromium no desenvolvimento e no CI (escolhida)**.
+- **Decisão:** `@playwright/test` é dependência exclusiva de desenvolvimento. A suíte executa o build estático em Chromium com projetos de 360 px e 1366 px e retém trace, vídeo e captura somente em falhas.
+- **Consequências:** o pacote não entra no JavaScript entregue ao visitante; o CI baixa o Chromium e fica mais demorado; relatórios gerados são ignorados pelo Git e pelo ESLint; aparelhos reais e leitores de tela continuam no roteiro manual.
+- **Requisitos:** RF-01, RF-02, RF-05, RF-11, RF-17, RNF-05, RNF-07, RNF-09, RNF-10, RNF-12, RNF-14, RNF-16.
 
 ## 12. Riscos técnicos e dívidas aceitas
 

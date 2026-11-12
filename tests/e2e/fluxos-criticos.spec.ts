@@ -25,16 +25,18 @@ test.describe("guia de descarte", () => {
   });
 
   test("expande e recolhe a lista compacta", async ({ page }) => {
-    const botao = page.locator(".grupo--pode [data-ver-mais]");
+    for (const grupo of [".grupo--pode", ".grupo--nao-pode"]) {
+      const botao = page.locator(`${grupo} [data-ver-mais]`);
 
-    await expect(botao).toHaveText(/Ver mais \d+ itens que podem/);
-    await expect(botao).toHaveAttribute("aria-expanded", "false");
-    await botao.click();
-    await expect(botao).toHaveText("Ver menos");
-    await expect(botao).toHaveAttribute("aria-expanded", "true");
+      await expect(botao).toHaveText(/Ver mais \d+ itens/);
+      await expect(botao).toHaveAttribute("aria-expanded", "false");
+      await botao.click();
+      await expect(botao).toHaveText("Ver menos");
+      await expect(botao).toHaveAttribute("aria-expanded", "true");
 
-    await botao.click();
-    await expect(botao).toHaveAttribute("aria-expanded", "false");
+      await botao.click();
+      await expect(botao).toHaveAttribute("aria-expanded", "false");
+    }
   });
 });
 
@@ -55,22 +57,84 @@ test.describe("ciclo do resíduo", () => {
     );
 
     if (isMobile) {
-      await page.waitForTimeout(500);
-      await page.locator(".etapas").evaluate((lista) => {
-        const trilha = lista as HTMLElement;
-        const proxima = lista.children.item(2) as HTMLElement;
-        trilha.scrollLeft = proxima.offsetLeft - trilha.offsetLeft;
+      const trilha = page.locator(".etapas");
+      await expect
+        .poll(() =>
+          trilha.evaluate((lista) => {
+            const faixa = lista as HTMLElement;
+            const etapa = lista.children.item(1) as HTMLElement;
+            return Math.abs(
+              faixa.scrollLeft - (etapa.offsetLeft - faixa.offsetLeft),
+            );
+          }),
+        )
+        .toBeLessThan(2);
+      await expect
+        .poll(() =>
+          trilha.evaluate((lista) => lista.scrollWidth > lista.clientWidth),
+        )
+        .toBe(true);
+
+      const caixa = await trilha.boundingBox();
+      expect(caixa).not.toBeNull();
+      const sessao = await page.context().newCDPSession(page);
+      const inicioX = caixa!.x + caixa!.width * 0.8;
+      const fimX = caixa!.x + caixa!.width * 0.1;
+      const y = caixa!.y + Math.min(caixa!.height / 2, 200);
+      await sessao.send("Input.dispatchTouchEvent", {
+        type: "touchStart",
+        touchPoints: [{ x: inicioX, y }],
       });
+      for (let passo = 1; passo <= 10; passo += 1) {
+        await sessao.send("Input.dispatchTouchEvent", {
+          type: "touchMove",
+          touchPoints: [{ x: inicioX + ((fimX - inicioX) * passo) / 10, y }],
+        });
+        await page.waitForTimeout(16);
+      }
+      await sessao.send("Input.dispatchTouchEvent", {
+        type: "touchEnd",
+        touchPoints: [],
+      });
+      await sessao.detach();
       await expect(
         page.getByRole("button", { name: /Etapa 3: Horto Botânico/ }),
       ).toHaveAttribute("aria-current", "step");
     } else {
+      await expect(page.locator("[data-dica-arraste]")).toBeHidden();
       await etapaDois.focus();
       await page.getByRole("button", { name: "Próxima" }).press("Enter");
       await expect(page.locator("[data-posicao]")).toContainText(
         "Etapa 3 de 5",
       );
     }
+  });
+
+  test("não anuncia etapas intermediárias na rolagem suave", async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(!isMobile, "A rolagem suave lateral existe apenas no mobile.");
+    await page.evaluate(() => {
+      const janela = window as Window & { anunciosCiclo?: string[] };
+      janela.anunciosCiclo = [];
+      const posicao = document.querySelector("[data-posicao]")!;
+      new MutationObserver(() => {
+        janela.anunciosCiclo!.push(posicao.textContent ?? "");
+      }).observe(posicao, { childList: true });
+    });
+
+    await page
+      .getByRole("button", { name: /Etapa 5: Gastronomia\/Nutrição/ })
+      .click();
+    await expect(page.locator("[data-posicao]")).toContainText("Etapa 5 de 5");
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => (window as Window & { anunciosCiclo?: string[] }).anunciosCiclo,
+        ),
+      )
+      .toEqual(["Etapa 5 de 5: Gastronomia/Nutrição"]);
   });
 });
 
@@ -80,16 +144,23 @@ test("quiz revela perguntas, calcula o placar e permite refazer", async ({
   await page.goto(`${paginaInicial}#quiz`);
   const perguntas = page.locator("[data-pergunta]");
   const total = await perguntas.count();
+  const respostasCorretas = [
+    "Não",
+    "Borra de café com o filtro de papel",
+    "Não colocar e consultar o Enactus UCB",
+    "Para o cultivo de plantas no Horto Botânico da UCB",
+    "Cerca de 4 meses",
+  ];
 
   for (let indice = 0; indice < total; indice += 1) {
     const pergunta = perguntas.nth(indice);
     await expect(pergunta).toBeVisible();
-    await pergunta.locator('input[type="radio"]').first().check();
+    await pergunta.getByLabel(respostasCorretas[indice]).check();
     await pergunta.getByRole("button", { name: "Responder" }).click();
   }
 
   await expect(page.locator("[data-placar]")).toHaveText(
-    new RegExp(`Você acertou \\d+ de ${total}\\.`),
+    `Você acertou ${total} de ${total}.`,
   );
   await page.getByRole("button", { name: "Refazer" }).click();
   await expect(perguntas.first()).toBeVisible();
@@ -110,6 +181,20 @@ test("tema alterna e persiste sem dado pessoal", async ({ page }) => {
     .toEqual(["tema"]);
 });
 
+test("tema segue a preferência do sistema sem escolha salva", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(paginaInicial);
+  const botao = page.getByRole("button", { name: "Modo escuro" });
+
+  await expect(botao).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("html")).not.toHaveAttribute("data-tema");
+
+  await page.emulateMedia({ colorScheme: "light" });
+  await expect(botao).toHaveAttribute("aria-pressed", "false");
+});
+
 test("movimento reduzido não inicia animações CSS", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(paginaInicial);
@@ -121,10 +206,13 @@ test("movimento reduzido não inicia animações CSS", async ({ page }) => {
 
 test("conteúdo principal continua legível sem JavaScript", async ({
   browser,
+  isMobile,
 }) => {
   const contexto = await browser.newContext({
     javaScriptEnabled: false,
-    viewport: { width: 360, height: 800 },
+    viewport: isMobile
+      ? { width: 360, height: 800 }
+      : { width: 1366, height: 768 },
   });
   const page = await contexto.newPage();
   await page.goto(paginaInicial);
@@ -137,6 +225,15 @@ test("conteúdo principal continua legível sem JavaScript", async ({
   await expect(
     page.getByText(/ative o JavaScript do navegador/i),
   ).toBeVisible();
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          document.documentElement.scrollWidth <=
+          document.documentElement.clientWidth,
+      ),
+    )
+    .toBe(true);
 
   await contexto.close();
 });
