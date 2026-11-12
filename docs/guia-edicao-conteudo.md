@@ -118,7 +118,7 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 
 Cerca de **2 minutos** depois de salvar. Recarregue a página do site: **https://blima-p.github.io/SocialTech/**
 
-Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto). Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
+Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto) ou a página pode ter passado do limite interno de peso (350 KB), o que costuma acontecer quando se acrescentam fotos. O site já reduz o tamanho de cada foto sozinho, então não adianta reenviar a imagem menor. Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
 
 ## 13. Validações do painel
 
