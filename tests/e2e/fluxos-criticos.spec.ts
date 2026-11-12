@@ -399,3 +399,51 @@ test("conteúdo principal continua legível sem JavaScript", async ({
 
   await contexto.close();
 });
+
+test("impressão abre todo o conteúdo, esconde controles e usa texto escuro sobre branco", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(paginaInicial);
+  const controles = page.locator(
+    "[data-alternar-tema], [data-busca], [data-ver-mais], [data-atalhos], [data-navegacao], #quiz",
+  );
+  const conteudo = "#guia .cartao, #ciclo .etapas > li, #duvidas details > p";
+  const ocultos = () =>
+    page.evaluate(
+      (seletor) =>
+        [...document.querySelectorAll<HTMLElement>(seletor)].filter(
+          (el) => !el.checkVisibility(),
+        ).length,
+      conteudo,
+    );
+  // Na tela, parte do conteúdo fica guardada e os controles aparecem.
+  await expect(page.locator("#quiz")).toBeVisible();
+  expect(await ocultos()).toBeGreaterThan(0);
+
+  await page.emulateMedia({ colorScheme: "dark", media: "print" });
+  expect(await ocultos()).toBe(0);
+  expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
+  for (const controle of await controles.all()) {
+    await expect(controle).toBeHidden();
+  }
+  const etapasCabem = await page
+    .locator("#ciclo .etapas")
+    .evaluate((lista) => lista.scrollWidth <= lista.clientWidth);
+  expect(etapasCabem).toBe(true);
+
+  const cores = await page.evaluate(() => {
+    const estilo = (el: Element) => getComputedStyle(el);
+    const impacto = document.querySelector("#impacto")!;
+    return {
+      pagina: estilo(document.body).backgroundColor,
+      impactoFundo: estilo(impacto).backgroundColor,
+      impactoTexto: estilo(impacto).color,
+    };
+  });
+  expect(cores).toEqual({
+    pagina: "rgb(255, 255, 255)",
+    impactoFundo: "rgba(0, 0, 0, 0)",
+    impactoTexto: "rgb(0, 0, 0)",
+  });
+});
