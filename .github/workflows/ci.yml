@@ -48,6 +48,22 @@ jobs:
       - name: Verificar site gerado
         run: npm run verificar:site
 
+      - name: Instalar Chromium do Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Testes de comportamento
+        run: npm run test:e2e
+
+      - name: Anexar relatório dos testes
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: relatorio-playwright
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
   links:
     name: links
     runs-on: ubuntu-latest

@@ -84,10 +84,11 @@ CI em `.github/workflows/` (`ci.yml`, `deploy-pages.yml`, `controle-merge-main.y
 npm ci            # instala exatamente as versões do package-lock.json
 npm run dev       # servidor local: http://localhost:4321/SocialTech/
 npm run verify    # formatação + lint + tipos + build + verificação do site gerado (o mesmo que o CI)
+npm run test:e2e  # busca, ciclo, quiz, tema, movimento reduzido e modo sem JavaScript
 npm run format    # corrige a formatação automaticamente
 ```
 
-Rode `npm run verify` antes de propor qualquer commit. A verificação do site gerado (`npm run verificar:site`) confere no `dist/` o peso da página inicial, o `<h1>` único, o `alt` das imagens, os caminhos com `/SocialTech/`, os scripts de terceiros e o `rel="noopener"`. O CI também verifica links quebrados (lychee), inclusive os do conteúdo em `src/content/`. Todos os checks precisam passar.
+Rode `npm run verify` e, em mudanças de comportamento, `npm run test:e2e` antes de propor qualquer commit. A verificação do site gerado (`npm run verificar:site`) confere no `dist/` o peso da página inicial, o `<h1>` único, o `alt` das imagens, os caminhos com `/SocialTech/`, os scripts de terceiros e o `rel="noopener"`. O CI também verifica links quebrados (lychee), inclusive os do conteúdo em `src/content/`, e executa os testes Playwright. Todos os checks precisam passar.
 
 ---
 
