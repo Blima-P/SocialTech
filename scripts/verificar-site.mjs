@@ -95,6 +95,20 @@ function arquivoNoDist(endereco) {
     : arquivo;
 }
 
+// Um ícone, imagem ou folha de estilo citado na página precisa existir em dist/.
+function verificarArquivo(nomeArquivo, endereco, origem) {
+  let arquivo;
+  try {
+    arquivo = arquivoNoDist(endereco);
+  } catch {
+    problema(nomeArquivo, `"${endereco}" em ${origem} tem caminho inválido.`);
+    return;
+  }
+  if (!existsSync(arquivo) || !statSync(arquivo).isFile()) {
+    problema(nomeArquivo, `"${endereco}" em ${origem} não existe em dist/.`);
+  }
+}
+
 const idsPorArquivo = new Map();
 
 // RNF-14: o GitHub Pages não deixa configurar cabeçalhos, então a CSP e a política
@@ -252,6 +266,22 @@ function verificarPagina(nomeArquivo) {
           nomeArquivo,
           `caminho interno "${endereco}" em <${nome}> não começa com "${BASE}" nem com "#". Use import.meta.env.BASE_URL.`,
         );
+      } else if (!endereco.includes("#")) {
+        // Endereços com "#" são conferidos por verificarAncora.
+        verificarArquivo(nomeArquivo, endereco, `<${nome}>`);
+      }
+    }
+
+    // A prévia do link (Open Graph) usa endereço absoluto do próprio site.
+    if (nome === "meta" && atributos.get("property") === "og:image") {
+      const imagem = atributos.get("content") ?? "";
+      const inicio = new URL(BASE, config.site).href;
+      if (imagem.startsWith(inicio)) {
+        verificarArquivo(
+          nomeArquivo,
+          new URL(imagem).pathname,
+          '<meta property="og:image">',
+        );
       }
     }
 
@@ -299,10 +329,11 @@ function pesoDaPaginaInicial(tags, cssEmbutido) {
   for (const tag of tags) {
     adicionarDoCss(tag.atributos.get("style") ?? "");
 
+    // Ausências nas tags já são avisadas por verificarArquivo.
     const locais = recursosDaTag(tag)
       .filter((endereco) => endereco && endereco.startsWith(BASE))
-      .map(arquivoExistente)
-      .filter(Boolean);
+      .map(arquivoNoDist)
+      .filter((arquivo) => existsSync(arquivo) && statSync(arquivo).isFile());
     if (locais.length === 0) continue;
 
     if (tag.nome === "img" || tag.nome === "source") {

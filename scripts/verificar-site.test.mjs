@@ -296,3 +296,36 @@ test("exige lastmod AAAA-MM-DD válido em cada URL do sitemap", () => {
     assert.match(resultado.saida, mensagem);
   }
 });
+
+test("exige que ícones, imagens e a prévia do link existam em dist/", () => {
+  const recursos =
+    '<link rel="apple-touch-icon" href="/SocialTech/icone.png">' +
+    '<img src="/SocialTech/foto.png" srcset="/SocialTech/foto-2x.png 2x" alt="">' +
+    '<meta property="og:image" content="https://blima-p.github.io/SocialTech/compartilhar.png">';
+  const resultado = verificar({ inicial: recursos });
+  assert.equal(resultado.status, 1);
+  for (const [endereco, origem] of [
+    ["/SocialTech/icone.png", "<link>"],
+    ["/SocialTech/foto.png", "<img>"],
+    ["/SocialTech/foto-2x.png", "<img>"],
+    ["/SocialTech/compartilhar.png", '<meta property="og:image">'],
+  ]) {
+    assert.ok(
+      resultado.saida.includes(
+        `"${endereco}" em ${origem} não existe em dist/`,
+      ),
+      resultado.saida,
+    );
+  }
+
+  const presentes = verificar({
+    inicial: recursos,
+    paginas: {
+      "icone.png": "",
+      "foto.png": "",
+      "foto-2x.png": "",
+      "compartilhar.png": "",
+    },
+  });
+  assert.equal(presentes.status, 0, presentes.saida);
+});
