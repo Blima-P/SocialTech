@@ -10,7 +10,7 @@ import config from "../astro.config.mjs";
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = join(RAIZ, "dist");
 const BASE = config.base; // "/SocialTech/"
-const LIMITE_KB = 500; // RNF-01
+const LIMITE_KB = 350; // Orçamento interno com margem sobre o RNF-01 (< 500 KB).
 // RNF-12: as únicas requisições a terceiros são as do GoatCounter.
 function hostPermitido(host) {
   return host === "gc.zgo.at" || host.endsWith(".goatcounter.com");
@@ -228,7 +228,7 @@ const kb = pesoDaPaginaInicial(tagsDaInicial, cssEmbutido) / 1024;
 if (kb >= LIMITE_KB) {
   problema(
     "index.html",
-    `a página inicial pesa ${kb.toFixed(1)} KB; o limite é ${LIMITE_KB} KB (RNF-01).`,
+    `a página inicial pesa ${kb.toFixed(1)} KB; o orçamento interno é ${LIMITE_KB} KB (RNF-01 permite até 500 KB).`,
   );
 }
 
@@ -238,6 +238,6 @@ if (problemas.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    `Site gerado verificado (${paginas.join(", ")}): página inicial com ${kb.toFixed(1)} KB (limite de ${LIMITE_KB} KB, sem contar o GoatCounter).`,
+    `Site gerado verificado (${paginas.join(", ")}): página inicial com ${kb.toFixed(1)} KB (orçamento interno de ${LIMITE_KB} KB, sem contar o GoatCounter).`,
   );
 }
