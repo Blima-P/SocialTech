@@ -94,13 +94,31 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     };
 
     let atual = 0;
+    let alvoProgramatico: number | null = null;
+    let temporizadorRolagem = 0;
+    const cancelarRolagemProgramatica = () => {
+      alvoProgramatico = null;
+      window.clearTimeout(temporizadorRolagem);
+    };
+    const esquerdaDaEtapa = (indice: number) =>
+      etapas[indice].offsetLeft - lista.offsetLeft;
     const ir = (indice: number, rolar = true) => {
       atual = Math.min(Math.max(indice, 0), etapas.length - 1);
       mostrar(atual);
       if (modoCarrossel.matches && rolar) {
+        const esquerda = esquerdaDaEtapa(atual);
+        const suave = !movimentoReduzido.matches;
+        cancelarRolagemProgramatica();
+        if (suave && Math.abs(lista.scrollLeft - esquerda) > 1) {
+          alvoProgramatico = atual;
+          temporizadorRolagem = window.setTimeout(
+            cancelarRolagemProgramatica,
+            1500,
+          );
+        }
         lista.scrollTo({
-          left: etapas[atual].offsetLeft - lista.offsetLeft,
-          behavior: movimentoReduzido.matches ? "auto" : "smooth",
+          left: esquerda,
+          behavior: suave ? "smooth" : "auto",
         });
       }
     };
@@ -110,6 +128,15 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     );
     anterior.addEventListener("click", () => ir(atual - 1));
     proxima.addEventListener("click", () => ir(atual + 1));
+    lista.addEventListener("pointerdown", cancelarRolagemProgramatica, {
+      passive: true,
+    });
+    lista.addEventListener("touchstart", cancelarRolagemProgramatica, {
+      passive: true,
+    });
+    lista.addEventListener("wheel", cancelarRolagemProgramatica, {
+      passive: true,
+    });
 
     let quadroRolagem = 0;
     lista.addEventListener(
@@ -119,6 +146,12 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
         cancelAnimationFrame(quadroRolagem);
         quadroRolagem = requestAnimationFrame(() => {
           const esquerda = lista.scrollLeft;
+          if (alvoProgramatico !== null) {
+            if (Math.abs(esquerda - esquerdaDaEtapa(alvoProgramatico)) <= 1) {
+              cancelarRolagemProgramatica();
+            }
+            return;
+          }
           const maisProxima = etapas.reduce(
             (melhor, etapa, indice) => {
               const distancia = Math.abs(
@@ -136,7 +169,10 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
       { passive: true },
     );
 
-    modoCarrossel.addEventListener("change", () => ir(atual, false));
+    modoCarrossel.addEventListener("change", () => {
+      cancelarRolagemProgramatica();
+      ir(atual, false);
+    });
     ciclo.classList.add("interativo");
     ciclo.querySelector<HTMLElement>("[data-atalhos]")!.hidden = false;
     ciclo.querySelector<HTMLElement>("[data-navegacao]")!.hidden = false;
@@ -235,6 +271,10 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
   }
 
   @media (min-width: 64rem) {
+    .interativo .dica-arraste {
+      display: none;
+    }
+
     .etapas {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
@@ -278,6 +318,7 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
   @media (max-width: 63.999rem) {
     .interativo .etapas {
       display: flex;
+      flex-direction: row;
       max-width: none;
       gap: 0.75rem;
       overflow-x: auto;
