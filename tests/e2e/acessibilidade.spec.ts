@@ -122,3 +122,19 @@ for (const tema of ["light", "dark"] as const) {
     expect(contraste).toBeGreaterThanOrEqual(3);
   });
 }
+
+test("rodapé leva ao código aberto na mesma aba, com alvo de toque", async ({
+  page,
+}) => {
+  await page.goto(paginaInicial);
+  const codigo = page
+    .getByRole("contentinfo")
+    .getByRole("link", { name: "Código aberto (licença MIT)" });
+  await expect(codigo).toHaveAttribute(
+    "href",
+    "https://github.com/Blima-P/SocialTech",
+  );
+  await expect(codigo).not.toHaveAttribute("target", /.*/);
+  const caixa = await codigo.boundingBox();
+  expect(caixa?.height).toBeGreaterThanOrEqual(44);
+});
