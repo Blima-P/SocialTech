@@ -123,18 +123,21 @@ for (const tema of ["light", "dark"] as const) {
   });
 }
 
-test("rodapé leva ao código aberto na mesma aba, com alvo de toque", async ({
-  page,
-}) => {
-  await page.goto(paginaInicial);
-  const codigo = page
-    .getByRole("contentinfo")
-    .getByRole("link", { name: "Código aberto (licença MIT)" });
-  await expect(codigo).toHaveAttribute(
-    "href",
-    "https://github.com/Blima-P/SocialTech",
-  );
-  await expect(codigo).not.toHaveAttribute("target", /.*/);
-  const caixa = await codigo.boundingBox();
-  expect(caixa?.height).toBeGreaterThanOrEqual(44);
-});
+for (const pagina of [paginaInicial, `${paginaInicial}404.html`]) {
+  test(`rodapé mostra só contatos e o voltar ao topo, com alvo de toque (${pagina})`, async ({
+    page,
+  }) => {
+    await page.goto(pagina);
+    const rodape = page.getByRole("contentinfo");
+    await expect(rodape.getByText(/licença MIT/i)).toHaveCount(0);
+    await expect(rodape.locator('a[href*="github.com"]')).toHaveCount(0);
+
+    const links = rodape.getByRole("link");
+    await expect(links.last()).toHaveAccessibleName("Voltar ao topo");
+    await expect(links.last()).toHaveAttribute("href", "#topo");
+    for (const link of await links.all()) {
+      const caixa = await link.boundingBox();
+      expect(caixa?.height).toBeGreaterThanOrEqual(44);
+    }
+  });
+}
