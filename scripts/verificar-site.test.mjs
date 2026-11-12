@@ -8,7 +8,13 @@ import { fileURLToPath } from "node:url";
 const raiz = join(dirname(fileURLToPath(import.meta.url)), "..");
 let sequencia = 0;
 
-function verificar({ inicial = "", erro = "", sem404 = false, paginas = {} }) {
+function verificar({
+  inicial = "",
+  erro = "",
+  sem404 = false,
+  paginas = {},
+  guia = [],
+}) {
   const pasta = join(
     raiz,
     ".cache",
@@ -23,6 +29,7 @@ function verificar({ inicial = "", erro = "", sem404 = false, paginas = {} }) {
     salvar("astro.config.mjs", 'export default { base: "/SocialTech/" };');
     salvar(join("src", "content", "duvidas.json"), "[]");
     salvar(join("src", "content", "links.json"), "[]");
+    salvar(join("src", "content", "guia.json"), JSON.stringify(guia));
     salvar(join("dist", "index.html"), `<h1>Início</h1>${inicial}`);
     if (!sem404) salvar(join("dist", "404.html"), `<h1>Erro</h1>${erro}`);
     for (const [nome, html] of Object.entries(paginas)) {
@@ -89,4 +96,26 @@ test("não confunde um id da 404 com o id no início nem com comentários", () =
   });
   assert.equal(resultado.status, 1);
   assert.match(resultado.saida, /id "guia" ausente/);
+});
+
+test("encontra cada nome do guia com o escape de texto usado pelo Astro", () => {
+  const resultado = verificar({
+    guia: [
+      { nome: "Café & filtro" },
+      { nome: "Exemplo <teste> \"com\" 'aspas'" },
+    ],
+    inicial:
+      "<p>Café &amp; filtro</p><p hidden>Exemplo &lt;teste&gt; &quot;com&quot; &#39;aspas&#39;</p>",
+  });
+  assert.equal(resultado.status, 0, resultado.saida);
+});
+
+test("cita todos os itens ausentes e não aceita nome apenas em comentário", () => {
+  const resultado = verificar({
+    guia: [{ nome: "Cascas" }, { nome: "Filtro" }],
+    inicial: "<!-- Cascas -->",
+  });
+  assert.equal(resultado.status, 1);
+  assert.match(resultado.saida, /index.html: o item "Cascas" \(guia.json\)/);
+  assert.match(resultado.saida, /index.html: o item "Filtro" \(guia.json\)/);
 });

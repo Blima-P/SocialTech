@@ -325,6 +325,12 @@ verificarOrdem(
   trechoDoBloco(htmlDaInicial, 'aria-labelledby="titulo-links"', "</nav>"),
 );
 
+for (const { nome } of lerConteudo("guia")) {
+  if (!htmlDaInicial.includes(comoNoHtml(nome))) {
+    problema("index.html", `o item "${nome}" (guia.json) não aparece no HTML.`);
+  }
+}
+
 const kb = pesoDaPaginaInicial(tagsDaInicial, cssEmbutido) / 1024;
 if (kb >= LIMITE_KB) {
   problema(
