@@ -178,6 +178,11 @@ const visiveis = 3;
 </script>
 
 <style>
+  /* Faixa cinza: separa o guia do ciclo e do ponto de coleta (fundo alternado). */
+  section {
+    background: var(--cor-fundo-suave);
+  }
+
   .grupos {
     display: grid;
     gap: 0.75rem;
@@ -253,7 +258,7 @@ const visiveis = 3;
     margin-top: var(--espaco);
     border-radius: var(--raio);
     padding: 0.75rem var(--espaco);
-    background: var(--cor-fundo-suave);
+    background: var(--cor-fundo);
   }
 
   .nao-listado h3 {
