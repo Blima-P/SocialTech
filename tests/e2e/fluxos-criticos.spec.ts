@@ -58,6 +58,28 @@ test.describe("guia de descarte", () => {
     await expect(busca).toHaveCSS("background-color", esperado.backgroundColor);
     await expect(busca).toHaveCSS("color", esperado.color);
   });
+
+  test("limpar busca restaura a lista e devolve o foco", async ({ page }) => {
+    const busca = page.getByLabel("Procure um item");
+    const limpar = page.getByRole("button", { name: "Limpar busca" });
+    const cartoes = page.locator("#guia .cartao:visible");
+    const inicial = await cartoes.count();
+
+    await expect(limpar).toBeHidden();
+    await busca.fill("citrica");
+    await expect(cartoes).toHaveCount(1);
+
+    const caixa = await limpar.boundingBox();
+    expect(caixa?.width).toBeGreaterThanOrEqual(44);
+    expect(caixa?.height).toBeGreaterThanOrEqual(44);
+
+    await limpar.click();
+    await expect(busca).toHaveValue("");
+    await expect(busca).toBeFocused();
+    await expect(limpar).toBeHidden();
+    await expect(cartoes).toHaveCount(inicial);
+    await expect(page.locator("[data-contagem]")).toHaveText("");
+  });
 });
 
 test.describe("ciclo do resíduo", () => {

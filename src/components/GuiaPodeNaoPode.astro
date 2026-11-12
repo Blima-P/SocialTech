@@ -15,12 +15,23 @@ const visiveis = 3;
   <h2 id="titulo-guia">O que pode ir nesta lixeira?</h2>
   <div class="busca" hidden data-busca>
     <label for="busca-guia">Procure um item</label>
-    <input
-      id="busca-guia"
-      type="search"
-      autocomplete="off"
-      placeholder="Ex.: borra de café, isopor"
-    />
+    <div class="campo">
+      <input
+        id="busca-guia"
+        type="search"
+        autocomplete="off"
+        placeholder="Ex.: borra de café, isopor"
+      />
+      <button
+        class="limpar"
+        type="button"
+        aria-label="Limpar busca"
+        hidden
+        data-limpar
+      >
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
     <p class="contagem" aria-live="polite" data-contagem></p>
   </div>
   <div class="grupos">
@@ -100,6 +111,7 @@ const visiveis = 3;
   for (const guia of document.querySelectorAll<HTMLElement>("[data-guia]")) {
     const busca = guia.querySelector<HTMLElement>("[data-busca]")!;
     const campo = busca.querySelector("input")!;
+    const limpar = busca.querySelector<HTMLButtonElement>("[data-limpar]")!;
     const contagem = guia.querySelector<HTMLElement>("[data-contagem]")!;
     const cartoes = [...guia.querySelectorAll<HTMLElement>(".cartao")];
     const textos = cartoes.map((cartao) =>
@@ -129,6 +141,7 @@ const visiveis = 3;
         if (termo && mostra) achados += 1;
       });
       for (const botao of botoes) botao.hidden = termo.length > 0;
+      limpar.hidden = campo.value.length === 0;
       for (const grupo of grupos) {
         grupo.hidden =
           termo.length > 0 &&
@@ -155,6 +168,11 @@ const visiveis = 3;
     }
 
     campo.addEventListener("input", atualizar);
+    limpar.addEventListener("click", () => {
+      campo.value = "";
+      atualizar();
+      campo.focus();
+    });
     atualizar();
   }
 </script>
@@ -176,16 +194,44 @@ const visiveis = 3;
     font-weight: 700;
   }
 
+  .campo {
+    position: relative;
+  }
+
   /* Cores explícitas: sem elas, o tema escuro usa o estilo nativo do navegador. */
   .busca input {
     width: 100%;
     min-height: var(--alvo-toque);
     border: 2px solid var(--cor-texto-suave);
     border-radius: var(--raio);
-    padding-inline: 0.75rem;
+    padding-inline: 0.75rem var(--alvo-toque);
     background: var(--cor-fundo);
     color: var(--cor-texto);
     font: inherit;
+  }
+
+  /* O botão "Limpar busca" substitui o X nativo, pequeno demais para o toque. */
+  .busca input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  .limpar {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    display: grid;
+    place-items: center;
+    width: var(--alvo-toque);
+    border: 0;
+    border-radius: var(--raio);
+    background: none;
+    color: var(--cor-texto);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .limpar[hidden] {
+    display: none;
   }
 
   .busca input::placeholder {
