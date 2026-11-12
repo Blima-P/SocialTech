@@ -123,9 +123,21 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
       }
     };
 
-    atalhos.forEach((botao, indice) =>
-      botao.addEventListener("click", () => ir(indice)),
-    );
+    atalhos.forEach((botao, indice) => {
+      botao.addEventListener("click", () => ir(indice));
+      // Setas, Home e End só movem o foco; Enter ou Espaço escolhem a etapa.
+      botao.addEventListener("keydown", (evento) => {
+        const destino = {
+          ArrowRight: indice + 1,
+          ArrowLeft: indice - 1,
+          Home: 0,
+          End: atalhos.length - 1,
+        }[evento.key];
+        if (destino === undefined) return;
+        evento.preventDefault();
+        atalhos[Math.min(Math.max(destino, 0), atalhos.length - 1)].focus();
+      });
+    });
     anterior.addEventListener("click", () => ir(atual - 1));
     proxima.addEventListener("click", () => ir(atual + 1));
     lista.addEventListener("pointerdown", cancelarRolagemProgramatica, {
@@ -369,8 +381,11 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     color: var(--cor-sobre-destaque);
   }
 
+  /* Desabilitado continua com cara de botão: contorno tracejado e fundo próprio. */
   button:disabled {
-    border-color: var(--cor-fundo-suave);
+    border-style: dashed;
+    border-color: var(--cor-texto-suave);
+    background: var(--cor-fundo-suave);
     color: var(--cor-texto-suave);
     cursor: default;
   }
