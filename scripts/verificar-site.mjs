@@ -425,7 +425,12 @@ if (!existsSync(SITEMAP)) {
     const data = /^\d{4}-\d{2}-\d{2}$/.test(lastmod ?? "")
       ? new Date(`${lastmod}T00:00:00Z`)
       : undefined;
-    if (!data || data.toISOString().slice(0, 10) !== lastmod) {
+    // Mês 13 vira "Invalid Date"; dia 30 de fevereiro vira 2 de março.
+    if (
+      !data ||
+      Number.isNaN(data.getTime()) ||
+      data.toISOString().slice(0, 10) !== lastmod
+    ) {
       problema(
         "sitemap.xml",
         `<lastmod> precisa ser uma data AAAA-MM-DD válida; está "${lastmod ?? "ausente"}".`,
