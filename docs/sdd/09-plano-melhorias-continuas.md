@@ -252,6 +252,7 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 | T-63 | #135 | Publica sitemap da página canônica | RNF-04 | ✅ #167 |
 | T-64 | #136 | Dados estruturados das dúvidas comuns | RNF-04, RF-16 | ❌ não planejada (seção 3) |
 | T-65 | #137 | Monitora o site publicado e os links externos toda semana | RNF-13 | ✅ #155 |
+| T-73 | #180 | Guia explica o limite de peso e lychee com tentativas limitadas | RNF-01, RNF-13 | ✅ |
 | T-66 | #138 | Publica M5–M8 e registra Lighthouse publicado | RNF-01, RNF-02, RNF-03 | ⏳ |
 
 **T-62 — critérios de aceite**
@@ -272,6 +273,11 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 - [x] Permissões `contents: read` e `issues: write`; em falha, abre ou comenta uma única issue de alerta.
 - [x] Timeout e tentativas limitadas.
 - [x] A documentação avisa que o GitHub desativa workflows agendados após 60 dias sem atividade no repositório.
+
+**T-73 — critérios de aceite**
+
+- [x] O guia de edição (§12) cita o limite de peso como motivo de a mudança não aparecer, explica que o site já reduz cada foto e orienta a avisar o responsável técnico.
+- [x] O lychee do monitoramento usa `--max-retries 3` e `--timeout 30`.
 
 **T-66 — critérios de aceite**
 
