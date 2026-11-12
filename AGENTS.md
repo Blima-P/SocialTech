@@ -91,7 +91,7 @@ Workflows em `.github/workflows/`:
 | `revisao-dependencias.yml` | Em PRs para `develop`/`main`: check `revisao-dependencias`, que bloqueia dependências alteradas com vulnerabilidades altas ou críticas. |
 | `deploy-pages.yml` | Em pushes para `main` ou execução manual: build e `npm run verificar:site` antes de enviar o artefato e publicar no GitHub Pages. |
 | `controle-merge-main.yml` | Check `aprovacao-main`: confere origem `develop`/`fix/*` do mesmo repositório e aprovação de mantenedor (dispensada se o autor já for mantenedor), sem checkout do código do PR. |
-| `monitoramento.yml` | Semanal (segunda-feira, 11h UTC) ou manual: confere a página inicial, a 404 e links externos publicados; em falha, abre uma issue ou comenta na já aberta. |
+| `monitoramento.yml` | Semanal (segunda-feira, 11h UTC) ou manual: confere a página inicial, a CSP publicada (sem curinga nem `'unsafe-*'`), o sitemap, a 404 e links externos publicados; em falha, abre uma issue ou comenta na já aberta. |
 
 ## 3. Como validar suas mudanças
 
