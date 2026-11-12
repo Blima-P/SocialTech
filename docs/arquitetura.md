@@ -5,10 +5,10 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.0 (26/10/2026) |
-| Status | 🚦 Em revisão pela equipe |
-| Tarefa | T-16 (issue #37) |
-| Base | [Requisitos](requisitos.md), [Plano do MVP](sdd/03-plano-tarefas.md) §1, [Plano da entrega final](sdd/05-plano-entrega-final.md) §1, código da `develop` em 26/10/2026 |
+| Versão | 1.1 (12/11/2026) |
+| Status | ✅ Atualizada com a implementação entregue e o plano de encerramento |
+| Tarefa | T-16 (issue #37); atualização T-36 (issue #99) |
+| Base | [Requisitos](requisitos.md), [planos SDD](sdd/), código da `develop` em 12/11/2026 |
 
 ---
 
@@ -122,11 +122,11 @@ flowchart TB
 |---|---|---|---|---|---|---|
 | Layout base | `src/layouts/BaseLayout.astro` | — | `<html>`, `<head>`, prévia de compartilhamento | `count.js` (produção) | T-01, T-08, T-25 | ✅ |
 | Cabeçalho | `src/components/Cabecalho.astro` | — | `<header id="topo">`; no celular, o menu vira uma faixa com rolagem lateral | Botão de tema (RF-17) | T-02, T-11, T-27 | ✅ |
-| Guia "Pode / Não pode" | `src/components/GuiaPodeNaoPode.astro` | `guia`, `guiaOrientacao` | `guia` | Busca (T-14) | T-05, T-14 | ✅ · 🔨 busca |
+| Guia "Pode / Não pode" | `src/components/GuiaPodeNaoPode.astro` | `guia`, `guiaOrientacao` | `guia` | Busca e lista compacta | T-05, T-14 | ✅ |
 | Onde está a lixeira | `src/components/PontoColeta.astro` | `pontoColeta` | `ponto-de-coleta` | Não | T-06, T-11 | ✅ |
-| Ciclo do resíduo | `src/components/CicloResiduo.astro` | `ciclo` | `ciclo` | Passo a passo (T-12) | T-03, T-12 | ✅ · 🔨 interativo |
-| Números de impacto | `src/components/NumerosImpacto.astro` | `impacto` | `impacto` | Não | T-13 | 🔨 |
-| Quiz | `src/components/Quiz.astro` | `quiz` | `quiz` | Sim (T-15) | T-15 | 🔨 |
+| Ciclo do resíduo | `src/components/CicloResiduo.astro` | `ciclo` | `ciclo` | Passo a passo e arraste mobile | T-03, T-12, PR #98 | ✅ |
+| Números de impacto | `src/components/NumerosImpacto.astro` | `impacto` | `impacto` | Não | T-13 | ✅ |
+| Quiz | `src/components/Quiz.astro` | `quiz` | `quiz` | Uma pergunta por vez | T-15 | ✅ |
 | Avalie o projeto | `src/components/Avaliacao.astro` | `avaliacao` | `avaliacao` | Não | T-07, T-11 | ✅ |
 | Seção do painel | `src/components/Secao.astro` | `secoes` | título `secao-<id>` | Não | Base | ✅ |
 | Rodapé | `src/components/Rodape.astro` + `ListaLinks.astro` | `links` | `<footer>`, link "Voltar ao topo" (`#topo`) | Não | T-02, T-11, T-27 | ✅ |
@@ -141,19 +141,21 @@ A página `src/pages/404.astro` vira o `404.html`, que o GitHub Pages mostra em 
 
 ### 4.1 Ordem da página e faixas
 
-Página única (ADR-005) em faixas de largura total (ADR-007). A ordem segue a jornada crítica J1: o guia vem logo depois do cabeçalho.
+Página única (ADR-005) em faixas de largura total (ADR-007). Depois da validação do Prof. Marcus, o ciclo passou a ser a primeira seção; o botão principal continua levando diretamente ao guia.
 
 | Ordem | Seção | `id` | Fundo da faixa | Tarefas | Situação |
 |---|---|---|---|---|---|
-| 1 | Cabeçalho: barra branca com logo e menu (no celular, o menu vira uma faixa abaixo do logo, sem JavaScript); destaque amarelo com o título e o botão "O que pode ir na lixeira?" | `<header>` | Branco e amarelo | T-02, T-11 | ✅ · 🔨 |
-| 2 | Guia "Pode / Não pode", com busca e item não listado | `guia` | Branco | T-05, T-14 | ✅ · 🔨 |
-| 3 | Onde está a lixeira agora | `ponto-de-coleta` | Cinza (`--cor-fundo-suave`) | T-06, T-11 | ✅ |
-| 4 | Ciclo do resíduo | `ciclo` | Branco | T-03, T-12 | ✅ · 🔨 |
-| 5 | Números de impacto | `impacto` | Escuro (`--cor-escura`) | T-13 | 🔨 |
-| 6 | Quiz | `quiz` | Branco | T-15 | 🔨 |
-| 7 | Avalie o projeto | `avaliacao` | Amarelo (`--cor-destaque`) | T-07, T-11 | ✅ |
-| 8 | Seções do painel ("Sobre o projeto" etc.) | `secao-<id>` | Cinza | Base, T-11 | ✅ |
-| 9 | Rodapé com contatos, logo e "Voltar ao topo" | `<footer>` | Escuro | T-02, T-11, T-27 | ✅ |
+| 1 | Cabeçalho com menu, tema e botão para o guia | `<header>` | Branco e amarelo | T-02, T-11, T-27, RF-17 | ✅ |
+| 2 | Ciclo do resíduo, com fotos e arraste mobile | `ciclo` | Branco | T-03, T-12, T-21, PR #98 | ✅ |
+| 3 | Guia "Pode / Não pode", com busca e item não listado | `guia` | Branco | T-05, T-14, T-22 | ✅ |
+| 4 | Onde está a lixeira agora | `ponto-de-coleta` | Cinza (`--cor-fundo-suave`) | T-06, T-23 | ✅ |
+| 5 | Dúvidas comuns | `duvidas` | Branco | T-31 | ✅ |
+| 6 | Números de impacto | `impacto` | Escuro (`--cor-faixa-escura`) | T-13 | ✅ |
+| 7 | Quiz | `quiz` | Branco | T-15, T-34 | ✅ |
+| 8 | Avalie o projeto | `avaliacao` | Amarelo (`--cor-destaque`) | T-07 | ✅ |
+| 9 | Seções do painel ("Sobre o projeto" etc.) | `secao-<id>` | Cinza | Base | ✅ |
+| 10 | Faixa de parceria | — | Foto com véu verde | T-35 | ✅ |
+| 11 | Rodapé com contatos, logo e "Voltar ao topo" | `<footer>` | Escuro | T-02, T-27 | ✅ |
 
 Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não aparecem** (RN-04).
 
@@ -304,12 +306,13 @@ Regras comuns:
 | `secoes` | `src/content/secoes/*.md` | Markdown com frontmatter | **`titulo`**, **`ordem`** (inteiro), `publicada` (padrão `true`), `imagem`, `descricaoImagem` (**obrigatória se houver imagem**); corpo em Markdown | `Secao.astro` | Base | ✅ |
 | `links` | `src/content/links.json` | Lista | **`nome`**, **`tipo`** (`site`, `email` ou `whatsapp`), **`endereco`** (URL http(s), e-mail ou 12 a 13 dígitos, conforme o tipo) | `ListaLinks.astro` | Base | ✅ |
 | `guia` | `src/content/guia.json` | Lista | **`nome`**, **`classificacao`** (`pode` ou `nao-pode`), **`motivo`** | `GuiaPodeNaoPode.astro` | T-05 | ✅ |
-| `pontoColeta` | `src/content/ponto-coleta.json` | Objeto (`id` `atual`) | **`local`**, **`comoReconhecer`**, **`atualizadoEm`** (data `AAAA-MM-DD`) | `PontoColeta.astro` | T-06 | ✅ |
-| `ciclo` | `src/content/ciclo.json` | Lista ordenada | **`nome`**, `descricao` | `CicloResiduo.astro` | T-03 | ✅ |
+| `pontoColeta` | `src/content/ponto-coleta.json` | Objeto (`id` `atual`) | **`local`**, **`comoReconhecer`**, **`atualizadoEm`**, `imagem`, `descricaoImagem` | `PontoColeta.astro` | T-06, T-23 | ✅ |
+| `ciclo` | `src/content/ciclo.json` | Lista ordenada | **`nome`**, `descricao`, `imagem`, `descricaoImagem` | `CicloResiduo.astro` | T-03, T-21 | ✅ |
 | `avaliacao` | `src/content/avaliacao.json` | Objeto (`id` `formulario`) | **`texto`**, `endereco` (só `https://`) | `Avaliacao.astro` | T-07 | ✅ |
-| `impacto` | `src/content/impacto.json` | Lista | **`numero`**, **`descricao`**, **`fonte`** (todos texto) | `NumerosImpacto.astro` | T-13 | 🔨 |
-| `guiaOrientacao` | `src/content/guia-orientacao.json` | Objeto (`id` `atual`) | `naoListado` | `GuiaPodeNaoPode.astro` | T-14 | 🔨 |
-| `quiz` | `src/content/quiz.json` | Lista | **`pergunta`**, **`alternativas`** (2 a 4 textos), **`correta`** (número da alternativa certa, a partir de 1, que precisa existir), **`explicacao`** | `Quiz.astro` | T-15 | 🔨 |
+| `impacto` | `src/content/impacto.json` | Lista | **`numero`**, **`descricao`**, **`fonte`** (todos texto) | `NumerosImpacto.astro` | T-13 | ✅ |
+| `guiaOrientacao` | `src/content/guia-orientacao.json` | Objeto (`id` `atual`) | `naoListado` | `GuiaPodeNaoPode.astro` | T-14 | ✅ |
+| `quiz` | `src/content/quiz.json` | Lista | **`pergunta`**, **`alternativas`** (2 a 4 textos), **`correta`**, **`explicacao`** | `Quiz.astro` | T-15 | ✅ |
+| `duvidas` | `src/content/duvidas.json` | Lista | **`pergunta`**, **`resposta`** | `DuvidasComuns.astro` | T-31 | ✅ |
 
 Os schemas das três coleções novas estão no [plano da entrega final §1.3](sdd/05-plano-entrega-final.md#13-contrato-de-dados-novas-coleções), testados com `npm run verify` em 26/10/2026.
 
