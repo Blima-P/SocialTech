@@ -14,6 +14,11 @@ ${enderecos.map((endereco) => `  <url><loc>${endereco}</loc></url>`).join("\n")}
 </urlset>
 `;
 const SITEMAP_VALIDO = urlset("https://blima-p.github.io/SocialTech/");
+const cabecalho = (csp) =>
+  `<meta http-equiv="content-security-policy" content="${csp}"><meta name="referrer" content="strict-origin-when-cross-origin">`;
+const CSP_VALIDA =
+  "default-src 'self';object-src 'none';base-uri 'self'; script-src 'self' https://gc.zgo.at 'sha256-abc='";
+const CABECALHO_SEGURO = cabecalho(CSP_VALIDA);
 
 function verificar({
   inicial = "",
@@ -22,6 +27,7 @@ function verificar({
   paginas = {},
   guia = [],
   sitemap = SITEMAP_VALIDO,
+  topo = CABECALHO_SEGURO,
 }) {
   const pasta = join(
     raiz,
@@ -41,11 +47,12 @@ function verificar({
     salvar(join("src", "content", "duvidas.json"), "[]");
     salvar(join("src", "content", "links.json"), "[]");
     salvar(join("src", "content", "guia.json"), JSON.stringify(guia));
-    salvar(join("dist", "index.html"), `<h1>Início</h1>${inicial}`);
-    if (!sem404) salvar(join("dist", "404.html"), `<h1>Erro</h1>${erro}`);
+    salvar(join("dist", "index.html"), `${topo}<h1>Início</h1>${inicial}`);
+    if (!sem404)
+      salvar(join("dist", "404.html"), `${topo}<h1>Erro</h1>${erro}`);
     if (sitemap !== null) salvar(join("dist", "sitemap.xml"), sitemap);
     for (const [nome, html] of Object.entries(paginas)) {
-      salvar(join("dist", nome), html);
+      salvar(join("dist", nome), `${topo}${html}`);
     }
     mkdirSync(join(pasta, "scripts"));
     copyFileSync(
@@ -155,4 +162,54 @@ test("recusa a 404 e endereços de outro site no sitemap", () => {
   assert.equal(resultado.status, 1);
   assert.match(resultado.saida, /404\.html: a página de erro não é indexada/);
   assert.match(resultado.saida, /exemplo\.com\/SocialTech\/ está fora/);
+});
+
+test("exige CSP completa antes dos scripts e referrer restrito", () => {
+  for (const [topo, mensagens] of [
+    ["", [/sem <meta http-equiv="content-security-policy">/, /está "ausente"/]],
+    [
+      `<script>tema()</script>${CABECALHO_SEGURO}`,
+      [/há <script> antes da meta da CSP/],
+    ],
+    [
+      cabecalho("default-src 'self'; script-src 'self' 'unsafe-inline'"),
+      [
+        /precisa de object-src 'none'/,
+        /precisa de base-uri 'self'/,
+        /'unsafe-inline' \(em script-src\)/,
+      ],
+    ],
+    [
+      CABECALHO_SEGURO.replace("strict-origin-when-cross-origin", "unsafe-url"),
+      [/está "unsafe-url"/],
+    ],
+  ]) {
+    const resultado = verificar({ topo });
+    assert.equal(resultado.status, 1);
+    for (const mensagem of mensagens) {
+      assert.match(resultado.saida, mensagem);
+    }
+  }
+});
+
+test("aceita só o count.js do GoatCounter como script remoto", () => {
+  const goatcounter =
+    '<script async src="https://gc.zgo.at/count.js"></script>';
+  assert.equal(verificar({ inicial: goatcounter }).status, 0);
+
+  const resultado = verificar({
+    inicial: '<script src="https://gc.zgo.at/outro.js"></script>',
+  });
+  assert.equal(resultado.status, 1);
+  assert.match(resultado.saida, /único script remoto aceito/);
+});
+
+test("nova aba exige noopener e noreferrer", () => {
+  const link = (rel) =>
+    `<a href="https://forms.gle/x" target="_blank" rel="${rel}">Avaliar</a>`;
+  assert.equal(verificar({ inicial: link("noopener noreferrer") }).status, 0);
+
+  const resultado = verificar({ inicial: link("noopener") });
+  assert.equal(resultado.status, 1);
+  assert.match(resultado.saida, /sem rel="noopener noreferrer"/);
 });
