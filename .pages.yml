@@ -2,6 +2,8 @@
 # O professor edita textos, imagens e links pela tela; cada "Salvar" vira um commit na main
 # e o deploy publica o site em ~2 minutos.
 # Os campos aqui precisam bater com os schemas em src/content.config.ts.
+# Validações: https://pagescms.org/docs/configuration/content/fields/
+# minlength fica em options; pattern fica no campo. Não há maxlength no schema.
 
 media:
   # As duas fontes gravam na mesma pasta; muda só o caminho escrito no conteúdo,
@@ -40,11 +42,15 @@ content:
     fields:
       - name: titulo
         label: Título
+        description: Preencha o título com pelo menos um caractere que não seja espaço.
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: ordem
         label: Ordem na página
-        description: 1 aparece primeiro, 2 em seguida, e assim por diante.
+        description: Use um número inteiro. 1 aparece primeiro, 2 em seguida, e assim por diante. O build confere se é inteiro.
         type: number
         required: true
       - name: publicada
@@ -59,8 +65,11 @@ content:
           media: secoes
       - name: descricaoImagem
         label: Descrição da imagem
-        description: Obrigatória se houver imagem. Descreva o que a imagem mostra, para pessoas que usam leitor de tela.
+        description: Obrigatória se houver imagem. Descreva o que a imagem mostra, para pessoas que usam leitor de tela. Não preencha só com espaços; o build confere a relação com a imagem.
         type: string
+        pattern: '^([\s\S]*\S[\s\S]*)?$'
+        options:
+          minlength: 1
       - name: body
         label: Texto
         type: rich-text
@@ -78,9 +87,12 @@ content:
     fields:
       - name: nome
         label: Texto do link
-        description: "Ex.: Instagram da Enactus UCB"
+        description: "Ex.: Instagram da Enactus UCB. Preencha com texto, não só espaços."
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: tipo
         label: Tipo
         type: select
@@ -95,7 +107,7 @@ content:
               label: WhatsApp
       - name: endereco
         label: Endereço
-        description: "Site: endereço completo começando com https://. E-mail: nome@exemplo.com. WhatsApp: só números, com 55 e DDD (ex.: 5561999999999)."
+        description: "Site: URL HTTP ou HTTPS completa. E-mail: nome@exemplo.com. WhatsApp: 12 ou 13 dígitos, com DDI e DDD (ex.: 5561999999999). O formato depende do Tipo; o build valida essa combinação."
         type: string
         required: true
 
@@ -108,13 +120,19 @@ content:
     fields:
       - name: nome
         label: Nome da etapa
-        description: "Ex.: Compostagem. A ordem da lista é a ordem no site."
+        description: "Ex.: Compostagem. A ordem da lista é a ordem no site. Não preencha só com espaços."
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: descricao
         label: Frase curta (opcional)
-        description: Uma frase explicando a etapa. Combine o texto com a Enactus.
+        description: Uma frase explicando a etapa. Combine o texto com a Enactus. Pode ficar vazio, mas não use só espaços.
         type: text
+        pattern: '^([\s\S]*\S[\s\S]*)?$'
+        options:
+          minlength: 1
       - name: imagem
         label: Foto (opcional)
         description: Foto do espaço desta etapa. Use só fotos autorizadas pela Enactus.
@@ -123,8 +141,11 @@ content:
           media: dados
       - name: descricaoImagem
         label: Descrição da foto
-        description: Obrigatória se houver foto. Descreva o que a foto mostra, para pessoas que usam leitor de tela.
+        description: Obrigatória se houver foto. Descreva o que a foto mostra, para pessoas que usam leitor de tela. Não use só espaços; o build confere a relação com a foto.
         type: string
+        pattern: '^([\s\S]*\S[\s\S]*)?$'
+        options:
+          minlength: 1
 
   - name: guia
     label: "Guia: pode / não pode"
@@ -135,9 +156,12 @@ content:
     fields:
       - name: nome
         label: Item
-        description: "Ex.: Cascas de banana. Regras de descarte são combinadas com a Enactus antes de mudar."
+        description: "Ex.: Cascas de banana. Regras de descarte são combinadas com a Enactus antes de mudar. Não use só espaços."
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: classificacao
         label: Pode ir na lixeira?
         type: select
@@ -150,9 +174,12 @@ content:
               label: Não pode
       - name: motivo
         label: Motivo
-        description: Frase curta explicando o porquê.
+        description: Frase curta explicando o porquê. Não use só espaços.
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
 
   - name: pontoColeta
     label: Onde está a lixeira
@@ -162,14 +189,20 @@ content:
     fields:
       - name: local
         label: Local atual
-        description: "Onde a lixeira está agora. Ex.: Bloco K, perto da cantina."
+        description: "Onde a lixeira está agora. Ex.: Bloco K, perto da cantina. Não use só espaços."
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: comoReconhecer
         label: Como reconhecer a lixeira
-        description: "Uma frase curta para a pessoa achar a lixeira. Ex.: lixeira verde com o adesivo do QR Code."
+        description: "Uma frase curta para a pessoa achar a lixeira. Ex.: lixeira verde com o adesivo do QR Code. Não use só espaços."
         type: text
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: atualizadoEm
         label: Data da atualização
         description: Sempre que mudar o local, atualize esta data para o dia de hoje.
@@ -185,8 +218,11 @@ content:
           media: dados
       - name: descricaoImagem
         label: Descrição da foto
-        description: Obrigatória se houver foto. Descreva o que a imagem mostra.
+        description: Obrigatória se houver foto. Descreva o que a imagem mostra. Não use só espaços; o build confere a relação com a foto.
         type: string
+        pattern: '^([\s\S]*\S[\s\S]*)?$'
+        options:
+          minlength: 1
 
   - name: avaliacao
     label: Formulário de avaliação
@@ -196,13 +232,20 @@ content:
     fields:
       - name: texto
         label: Texto antes do botão
-        description: "Uma ou duas frases convidando a pessoa a responder."
+        description: "Uma ou duas frases convidando a pessoa a responder. Não use só espaços."
         type: text
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: endereco
         label: Link do Google Forms
-        description: "Começa com https://. Deixe vazio para esconder a seção."
+        description: "Use uma URL HTTPS completa. Deixe vazio para esconder a seção. O painel confere o protocolo; o build valida a URL."
         type: string
+        # URL normaliza maiúsculas e controles; não recuse entradas HTTPS aceitas pelo zod.
+        pattern:
+          regex: '^(?:[\s\u0000-\u0020]*[hH][\t\n\r]*[tT][\t\n\r]*[tT][\t\n\r]*[pP][\t\n\r]*[sS][\t\n\r]*:[\s\S]*|)$'
+          message: Use um endereço HTTPS ou deixe vazio.
 
   - name: impacto
     label: Números de impacto
@@ -213,19 +256,28 @@ content:
     fields:
       - name: numero
         label: Número
-        description: "Como deve aparecer em destaque. Ex.: 81 milhões de toneladas."
+        description: "Como deve aparecer em destaque. Ex.: 81 milhões de toneladas. Não use só espaços."
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: descricao
         label: Frase
-        description: Completa o número em uma frase curta.
+        description: Completa o número em uma frase curta. Não use só espaços.
         type: text
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: fonte
         label: Fonte
-        description: "Quem publicou o dado e o ano. Ex.: ABREMA, 2025. Todo número precisa de fonte."
+        description: "Quem publicou o dado e o ano. Ex.: ABREMA, 2025. Todo número precisa de fonte. Não use só espaços."
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
 
   - name: guiaOrientacao
     label: "Guia: item fora da lista"
@@ -235,8 +287,11 @@ content:
     fields:
       - name: naoListado
         label: Orientação para item fora da lista
-        description: 'Aparece na caixa "Não achou seu item?". Combine o texto com a Enactus. Deixe vazio para mostrar o aviso de pendência.'
+        description: 'Aparece na caixa "Não achou seu item?". Combine o texto com a Enactus. Deixe vazio para mostrar o aviso de pendência; não use só espaços.'
         type: text
+        pattern: '^([\s\S]*\S[\s\S]*)?$'
+        options:
+          minlength: 1
 
   - name: quiz
     label: Quiz
@@ -247,26 +302,38 @@ content:
     fields:
       - name: pergunta
         label: Pergunta
+        description: Escreva a pergunta; não use só espaços.
         type: text
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: alternativas
         label: Alternativas
-        description: De 2 a 4 alternativas.
+        description: De 2 a 4 alternativas. Cada texto precisa ter conteúdo, não só espaços.
         type: string
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
         list:
           min: 2
           max: 4
       - name: correta
         label: Número da alternativa certa
-        description: "1 para a primeira alternativa, 2 para a segunda, e assim por diante."
+        description: "Use um número inteiro a partir de 1: 1 para a primeira alternativa, 2 para a segunda, e assim por diante. Não pode ultrapassar o total de alternativas; o build confere essa relação."
         type: number
         required: true
+        options:
+          min: 1
       - name: explicacao
         label: Explicação
-        description: Aparece depois da resposta, certa ou errada.
+        description: Aparece depois da resposta, certa ou errada. Não use só espaços.
         type: text
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
 
   - name: duvidas
     label: Dúvidas comuns
@@ -277,12 +344,20 @@ content:
     fields:
       - name: pergunta
         label: Pergunta
+        description: Escreva a dúvida; não use só espaços.
         type: text
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
       - name: resposta
         label: Resposta
+        description: Escreva a resposta; não use só espaços.
         type: text
         required: true
+        pattern: '[\s\S]*\S[\s\S]*'
+        options:
+          minlength: 1
 
 settings:
   commit:

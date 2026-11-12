@@ -45,7 +45,7 @@ Requer Node.js 22.22 ou superior. A versão exata usada no CI está no arquivo
 ```bash
 npm ci
 npm run dev      # http://localhost:4321/SocialTech/
-npm run verify   # formatação, lint, tipos, build, verificação do site e testes do verificador
+npm run verify   # formatação, lint, tipos, build, verificação do site e testes do verificador/painel
 npm run test:e2e # testes no navegador (o CI também roda links e revisão de dependências)
 ```
 

@@ -4,6 +4,9 @@ import { z } from "astro/zod";
 
 // Conteúdo editado pelo professor no Pages CMS (.pages.yml). Ao mudar um campo aqui,
 // atualize também o .pages.yml, senão o painel e o site ficam dessincronizados.
+// Nos campos string/text do painel, trim().min(1) corresponde a options.minlength: 1
+// e pattern com \S (ao menos um caractere não branco, inclusive em várias linhas).
+// Os opcionais também aceitam ""; nenhum texto tem tamanho máximo.
 
 // O Pages CMS pode salvar campos opcionais vazios como "" ou null.
 const vazioParaUndefined = (valor: unknown) =>
@@ -45,6 +48,7 @@ const links = defineCollection({
   loader: file("src/content/links.json", {
     parser: listaComPosicao,
   }),
+  // Painel links.endereco: sem pattern único; a ajuda explica os formatos por tipo.
   schema: z.discriminatedUnion("tipo", [
     z.object({
       nome: z.string().trim().min(1),
@@ -106,6 +110,7 @@ const avaliacao = defineCollection({
     texto: z.string().trim().min(1),
     endereco: z.preprocess(
       vazioParaUndefined,
+      // Painel avaliacao.endereco: pattern só do protocolo; a URL completa é validada aqui.
       z.url({ protocol: /^https$/ }).optional(),
     ),
   }),
@@ -165,8 +170,10 @@ const quiz = defineCollection({
   schema: z
     .object({
       pergunta: z.string().trim().min(1),
+      // Painel quiz.alternativas: list.min/max, além da validação de cada texto.
       alternativas: z.array(z.string().trim().min(1)).min(2).max(4),
       // Número da alternativa certa, contando a partir de 1 (como aparece no painel).
+      // Painel quiz.correta: options.min: 1, sem máximo fixo nem regra cruzada.
       correta: z.number().int().min(1),
       explicacao: z.string().trim().min(1),
     })
