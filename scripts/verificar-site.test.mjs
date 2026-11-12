@@ -25,7 +25,11 @@ const JSON_LD_VALIDO = jsonLd({
   "@context": "https://schema.org",
   "@graph": [
     { "@type": "WebSite", url: "https://blima-p.github.io/SocialTech/" },
-    { "@type": "Organization", name: "Enactus UCB" },
+    {
+      "@type": "Organization",
+      name: "Enactus UCB",
+      logo: "https://blima-p.github.io/SocialTech/icone-512.png",
+    },
   ],
 });
 
@@ -64,6 +68,7 @@ function verificar({
     if (!sem404)
       salvar(join("dist", "404.html"), `${topo}<h1>Erro</h1>${erro}`);
     if (sitemap !== null) salvar(join("dist", "sitemap.xml"), sitemap);
+    salvar(join("dist", "icone-512.png"), "");
     for (const [nome, html] of Object.entries(paginas)) {
       salvar(join("dist", nome), `${topo}${html}`);
     }
@@ -370,4 +375,34 @@ test("confere endereços absolutos do site e recusa caminhos fora da base", () =
   assert.ok(
     !resultado.saida.includes('"https://blima-p.github.io/SocialTech/" em'),
   );
+});
+
+test("exige logo matricial do próprio site e existente na Organization", () => {
+  const comLogo = (logo) =>
+    jsonLd({
+      "@context": "https://schema.org",
+      "@graph": [
+        { "@type": "WebSite", url: "https://blima-p.github.io/SocialTech/" },
+        { "@type": "Organization", name: "Enactus UCB", logo },
+      ],
+    });
+  for (const [logo, mensagem] of [
+    [undefined, /está "ausente"/],
+    [
+      "https://blima-p.github.io/SocialTech/favicon.svg",
+      /PNG, JPEG ou WebP sob https:\/\/blima-p\.github\.io\/SocialTech\/; está ".*favicon\.svg"/,
+    ],
+    [
+      "https://exemplo.com/logo.png",
+      /está "https:\/\/exemplo\.com\/logo\.png"/,
+    ],
+    [
+      "https://blima-p.github.io/SocialTech/sumiu.png",
+      /"https:\/\/blima-p\.github\.io\/SocialTech\/sumiu\.png" em Organization\.logo não existe em dist\//,
+    ],
+  ]) {
+    const resultado = verificar({ dadosEstruturados: comLogo(logo) });
+    assert.equal(resultado.status, 1);
+    assert.match(resultado.saida, mensagem);
+  }
 });
