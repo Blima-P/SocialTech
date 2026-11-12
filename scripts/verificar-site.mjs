@@ -354,6 +354,18 @@ if (!existsSync(SITEMAP)) {
   if (!enderecos.includes(inicio)) {
     problema("sitemap.xml", `não lista a página inicial (${inicio}).`);
   }
+  for (const [, url] of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
+    const lastmod = url.match(/<lastmod>([^<]*)<\/lastmod>/)?.[1].trim();
+    const data = /^\d{4}-\d{2}-\d{2}$/.test(lastmod ?? "")
+      ? new Date(`${lastmod}T00:00:00Z`)
+      : undefined;
+    if (!data || data.toISOString().slice(0, 10) !== lastmod) {
+      problema(
+        "sitemap.xml",
+        `<lastmod> precisa ser uma data AAAA-MM-DD válida; está "${lastmod ?? "ausente"}".`,
+      );
+    }
+  }
   for (const endereco of enderecos) {
     if (!endereco.startsWith(inicio)) {
       problema("sitemap.xml", `${endereco} está fora de ${inicio}.`);
