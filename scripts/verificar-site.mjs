@@ -359,6 +359,11 @@ if (!existsSync(SITEMAP)) {
       problema("sitemap.xml", `${endereco} está fora de ${inicio}.`);
     } else if (/404/.test(endereco)) {
       problema("sitemap.xml", `${endereco}: a página de erro não é indexada.`);
+    } else if (endereco !== inicio) {
+      problema(
+        "sitemap.xml",
+        `${endereco}: o site tem uma página só; liste apenas ${inicio}.`,
+      );
     }
   }
 }
@@ -382,9 +387,11 @@ const cssEmbutido = [
   .map(([, css]) => css)
   .join("\n");
 
-// Texto como o Astro escreve no HTML (escapa &, <, >, " e ').
+// Texto como o Astro escreve no HTML (escapa &, <, >, " e '). O schema aplica
+// trim() aos campos, então o espaço nas pontas do JSON não chega à página.
 function comoNoHtml(texto) {
   return texto
+    .trim()
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -439,9 +446,15 @@ verificarOrdem(
   trechoDoBloco(htmlDaInicial, 'aria-labelledby="titulo-links"', "</nav>"),
 );
 
+// O nome também pode aparecer no quiz; só vale o que está na seção do guia.
+const htmlDoGuia =
+  trechoDoBloco(htmlDaInicial, 'id="guia"', "</section>") ?? "";
 for (const { nome } of lerConteudo("guia")) {
-  if (!htmlDaInicial.includes(comoNoHtml(nome))) {
-    problema("index.html", `o item "${nome}" (guia.json) não aparece no HTML.`);
+  if (!htmlDoGuia.includes(comoNoHtml(nome))) {
+    problema(
+      "index.html",
+      `o item "${nome}" (guia.json) não aparece na seção #guia.`,
+    );
   }
 }
 

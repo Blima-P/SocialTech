@@ -181,6 +181,7 @@ Fazer o painel, o verificador e os testes pegarem erros antes da publicação, e
 | T-59 | #131 | Todo item de guia.json aparece no HTML | RF-01, RF-14 | ✅ #162 |
 | T-60 | #132 | Cobre a página 404 e o quiz sem alternativa | RF-17, RNF-13 | ✅ #164 |
 | T-61 | #133 | Alinha AGENTS.md com código e CI | RNF-14 | ✅ #168 |
+| T-69 | #172 | Guia conferido só na seção do guia e sitemap com URL exata | RF-01, RF-14, RNF-04, RNF-14 | ✅ |
 
 **T-55 — critérios de aceite**
 
@@ -220,6 +221,13 @@ Fazer o painel, o verificador e os testes pegarem erros antes da publicação, e
 **T-61 — critérios de aceite**
 
 - [x] As três afirmações batem com `astro.config.mjs`, a árvore `src/` e o `ci.yml`.
+
+**T-69 — critérios de aceite**
+
+- [x] Os nomes do guia são procurados só dentro de `#guia` (o quiz repete alguns, como "Borra de café").
+- [x] Os textos do JSON passam por `trim()` antes da comparação, como no schema.
+- [x] O sitemap precisa listar exatamente a URL canônica da página inicial.
+- [x] Testes do verificador cobrem cada caso e falham sem a correção.
 
 ### M8 · Desempenho, SEO e operação
 
