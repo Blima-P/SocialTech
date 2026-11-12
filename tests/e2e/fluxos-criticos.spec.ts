@@ -1,4 +1,10 @@
 import { expect, test, type Locator } from "@playwright/test";
+import quiz from "../../src/content/quiz.json" with { type: "json" };
+
+// O painel edita o quiz; o gabarito vem do mesmo JSON que gera a página.
+const respostasCorretas = quiz.map(
+  ({ alternativas, correta }) => alternativas[correta - 1],
+);
 
 const paginaInicial = "/SocialTech/";
 
@@ -186,13 +192,27 @@ test.describe("ciclo do resíduo", () => {
       .getByRole("button", { name: /Etapa 5: Gastronomia\/Nutrição/ })
       .click();
     await expect(page.locator("[data-posicao]")).toContainText("Etapa 5 de 5");
+    // Só confere a lista depois que a rolagem suave chega ao fim; antes disso
+    // um anúncio intermediário ainda poderia aparecer.
     await expect
       .poll(() =>
-        page.evaluate(
-          () => (window as Window & { anunciosCiclo?: string[] }).anunciosCiclo,
-        ),
+        page.locator(".etapas").evaluate((lista) => {
+          const faixa = lista as HTMLElement;
+          return faixa.scrollWidth - faixa.clientWidth - faixa.scrollLeft;
+        }),
       )
-      .toEqual(["Etapa 5 de 5: Gastronomia/Nutrição"]);
+      .toBeLessThan(2);
+    await page.evaluate(
+      () =>
+        new Promise((pronto) =>
+          requestAnimationFrame(() => requestAnimationFrame(pronto)),
+        ),
+    );
+    expect(
+      await page.evaluate(
+        () => (window as Window & { anunciosCiclo?: string[] }).anunciosCiclo,
+      ),
+    ).toEqual(["Etapa 5 de 5: Gastronomia/Nutrição"]);
   });
 
   test("setas movem o foco entre os atalhos e Enter escolhe a etapa", async ({
@@ -248,18 +268,14 @@ test("quiz revela perguntas, calcula o placar e permite refazer", async ({
   await page.goto(`${paginaInicial}#quiz`);
   const perguntas = page.locator("[data-pergunta]");
   const total = await perguntas.count();
-  const respostasCorretas = [
-    "Não",
-    "Borra de café com o filtro de papel",
-    "Não colocar e consultar o Enactus UCB",
-    "Para o cultivo de plantas no Horto Botânico da UCB",
-    "Cerca de 4 meses",
-  ];
+  expect(total).toBe(quiz.length);
 
   for (let indice = 0; indice < total; indice += 1) {
     const pergunta = perguntas.nth(indice);
     await expect(pergunta).toBeVisible();
-    await pergunta.getByLabel(respostasCorretas[indice]).check();
+    await pergunta
+      .getByLabel(respostasCorretas[indice], { exact: true })
+      .check();
     await pergunta.getByRole("button", { name: "Responder" }).click();
   }
 
@@ -286,8 +302,12 @@ test("quiz destaca a escolha e só mostra o anel de foco por teclado", async ({
     alvo.evaluate((elemento) => getComputedStyle(elemento).color);
 
   const primeira = perguntas.first();
-  const escolhida = primeira.locator("label").filter({ hasText: "Não" });
-  const outra = primeira.locator("label").filter({ hasText: "Sim" });
+  const [certa, errada] = [
+    respostasCorretas[0],
+    quiz[0].alternativas.find((texto) => texto !== respostasCorretas[0])!,
+  ];
+  const escolhida = primeira.locator("label").filter({ hasText: certa });
+  const outra = primeira.locator("label").filter({ hasText: errada });
   const corAntes = await corDe(outra);
   await escolhida.click();
   expect(await estilo(escolhida)).toEqual({ peso: "700", borda: "2px" });
