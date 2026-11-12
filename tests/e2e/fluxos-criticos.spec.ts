@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const paginaInicial = "/SocialTech/";
 
@@ -270,6 +270,41 @@ test("quiz revela perguntas, calcula o placar e permite refazer", async ({
   await expect(perguntas.first()).toBeVisible();
   await expect(perguntas.nth(1)).toBeHidden();
   await expect(page.locator("[data-placar]")).toBeEmpty();
+});
+
+test("quiz destaca a escolha e só mostra o anel de foco por teclado", async ({
+  page,
+}) => {
+  await page.goto(`${paginaInicial}#quiz`);
+  const perguntas = page.locator("[data-pergunta]");
+  const estilo = (rotulo: Locator) =>
+    rotulo.evaluate((elemento) => {
+      const css = getComputedStyle(elemento);
+      return { peso: css.fontWeight, borda: css.borderTopWidth };
+    });
+  const corDe = (alvo: Locator) =>
+    alvo.evaluate((elemento) => getComputedStyle(elemento).color);
+
+  const primeira = perguntas.first();
+  const escolhida = primeira.locator("label").filter({ hasText: "Não" });
+  const outra = primeira.locator("label").filter({ hasText: "Sim" });
+  const corAntes = await corDe(outra);
+  await escolhida.click();
+  expect(await estilo(escolhida)).toEqual({ peso: "700", borda: "2px" });
+  await primeira.getByRole("button", { name: "Responder" }).click();
+  const feedback = primeira.locator("[data-feedback]");
+  await expect(feedback).toBeFocused();
+  await expect(feedback).toHaveCSS("outline-style", "none");
+  expect(await corDe(outra)).not.toBe(corAntes);
+  expect(await corDe(outra)).toBe(await corDe(page.locator(".intro")));
+
+  const segunda = perguntas.nth(1);
+  await segunda.locator("input").first().check();
+  await segunda.getByRole("button", { name: "Responder" }).focus();
+  await page.keyboard.press("Enter");
+  const feedbackTeclado = segunda.locator("[data-feedback]");
+  await expect(feedbackTeclado).toBeFocused();
+  await expect(feedbackTeclado).toHaveCSS("outline-style", "solid");
 });
 
 test("tema alterna e persiste sem dado pessoal", async ({ page }) => {

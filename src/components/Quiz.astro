@@ -222,13 +222,21 @@ const perguntas = (await getCollection("quiz")).sort(
     cursor: pointer;
   }
 
+  /* Borda mais grossa: o padding perde 1px para o texto não se mexer. */
   label:has(input:checked) {
-    border-color: var(--cor-escura);
+    border: 2px solid var(--cor-escura);
+    padding: calc(0.625rem - 1px) calc(0.75rem - 1px);
     background: var(--cor-fundo-suave);
+    font-weight: 700;
   }
 
   label:has(input:disabled) {
     cursor: default;
+  }
+
+  /* Depois de responder, as alternativas não escolhidas recuam sem perder o contraste AA. */
+  fieldset:has(input:disabled) label:not(:has(input:checked)) {
+    color: var(--cor-texto-suave);
   }
 
   input {
@@ -310,7 +318,8 @@ const perguntas = (await getCollection("quiz")).sort(
     font-weight: 700;
   }
 
-  .feedback:focus {
+  /* O foco vai para o feedback em toda resposta; o anel só aparece para quem usa teclado. */
+  .feedback:focus-visible {
     outline: 3px solid var(--cor-escura);
     outline-offset: 3px;
   }
