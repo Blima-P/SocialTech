@@ -26,6 +26,21 @@ jobs:
           test "$status" = "200"
           grep --fixed-strings --quiet "Compostagem Enactus UCB" pagina-inicial.html
 
+      # O GitHub Pages não envia cabeçalho de CSP: a política vem só da <meta> (RNF-14).
+      - name: Verificar CSP publicada
+        run: |
+          grep --quiet --ignore-case --extended-regexp \
+            "http-equiv=\"content-security-policy\"[^>]*content=\"[^\"]*default-src 'self'" \
+            pagina-inicial.html
+
+      - name: Verificar sitemap
+        run: |
+          curl --retry 3 --retry-delay 10 --fail --silent --show-error --location \
+            --output sitemap.xml \
+            "https://blima-p.github.io/SocialTech/sitemap.xml"
+          grep --fixed-strings --quiet \
+            "<loc>https://blima-p.github.io/SocialTech/</loc>" sitemap.xml
+
       - name: Verificar página 404
         run: |
           status="$(
