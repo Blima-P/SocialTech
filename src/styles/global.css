@@ -28,10 +28,11 @@
 }
 
 /* Tema claro (padrão). .tema-fixo-claro mantém essas cores numa faixa mesmo no tema escuro
-   (faixas amarelas e o cartão de logos). */
+   (faixas amarelas e o cartão de logos). "only" impede o modo escuro automático do
+   Chrome/Edge de inverter as cores quando a pessoa escolhe o tema claro. */
 :root,
 .tema-fixo-claro {
-  color-scheme: light;
+  color-scheme: only light;
   --cor-texto: #30333c;
   --cor-texto-suave: #515356;
   --cor-fundo: #ffffff;

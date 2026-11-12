@@ -354,6 +354,19 @@ test("tema segue a preferência do sistema sem escolha salva", async ({
   await expect(botao).toHaveAttribute("aria-pressed", "false");
 });
 
+test("tema claro escolhido não é invertido pelo modo escuro automático", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(paginaInicial);
+  const faixaClara = page.locator(".tema-fixo-claro").first();
+  await expect(faixaClara).toHaveCSS("color-scheme", "light only");
+
+  await page.getByRole("button", { name: "Modo escuro" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-tema", "claro");
+  await expect(page.locator("html")).toHaveCSS("color-scheme", "light only");
+});
+
 test("revelar o botão de tema não desloca a página", async ({
   browser,
   page,
