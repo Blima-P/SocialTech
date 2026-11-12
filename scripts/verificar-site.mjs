@@ -61,9 +61,12 @@ function enderecosDoSrcset(srcset) {
     .filter(Boolean);
 }
 
-// <link rel="canonical"> e "alternate" não são baixados pelo navegador.
+// <link rel="canonical"> e "alternate" não são baixados pelo navegador; o
+// apple-touch-icon só é baixado quando a pessoa salva o site na tela de início.
 function linkCarregado(atributos) {
-  return !/canonical|alternate/.test(atributos.get("rel") ?? "");
+  return !/canonical|alternate|apple-touch-icon/.test(
+    atributos.get("rel") ?? "",
+  );
 }
 
 // Endereços que o navegador baixa ao abrir a página, por tag.

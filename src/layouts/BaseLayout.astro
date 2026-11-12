@@ -104,6 +104,11 @@ if (contarAcesso) await autorizar(scriptGoatcounter);
       type="image/svg+xml"
       href={`${import.meta.env.BASE_URL}favicon.svg`}
     />
+    {/* O Safari não usa o favicon SVG na tela de início nem nos favoritos. */}
+    <link
+      rel="apple-touch-icon"
+      href={`${import.meta.env.BASE_URL}apple-touch-icon.png`}
+    />
     <title>{title}</title>
     {erro ? (
       <meta name="robots" content="noindex" />

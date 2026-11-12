@@ -467,3 +467,21 @@ test("impressão abre todo o conteúdo, esconde controles e usa texto escuro sob
     impactoTexto: "rgb(0, 0, 0)",
   });
 });
+
+test("ícone da tela de início do iPhone é um PNG opaco de 180 × 180", async ({
+  page,
+}) => {
+  await page.goto(paginaInicial);
+  const href = await page
+    .locator('link[rel="apple-touch-icon"]')
+    .getAttribute("href");
+  expect(href).toBe(`${paginaInicial}apple-touch-icon.png`);
+
+  const resposta = await page.request.get(href!);
+  expect(resposta.ok()).toBe(true);
+  expect(resposta.headers()["content-type"]).toBe("image/png");
+  // Cabeçalho IHDR do PNG: largura, altura e tipo de cor (2 = RGB, 3 = paleta; sem alfa).
+  const png = await resposta.body();
+  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([180, 180]);
+  expect([2, 3]).toContain(png[25]);
+});
