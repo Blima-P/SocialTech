@@ -4,7 +4,7 @@
 |---|---|
 | Projeto | Compostagem Enactus UCB (SocialTech) |
 | Versão | 1.1 (12/11/2026) |
-| Status | 🚧 M1 e M3 concluídos; M2 aguarda evidências presenciais; M4 aguarda publicação da `develop` |
+| Status | 🚧 M1, M3 e M4 concluídos; M2 aguarda evidências presenciais |
 | Base | [Requisitos](../requisitos.md), [Arquitetura](../arquitetura.md), [Revisão](04-revisao.md) |
 
 ## 1. Objetivo
@@ -90,8 +90,8 @@ O estado detalhado de RH-01 a RH-12 está no [registro de homologação operacio
 | Campo | Valor |
 |---|---|
 | Depende de | T-38 |
-| Issue / PR | #103 / #104 — parte técnica mesclada em `develop` |
-| Status | 🚧 Medição local aprovada; medição publicada depende da promoção para `main` |
+| Issue / PR | #103 / #104 (técnica) e #183 (publicação, T-66) |
+| Status | ✅ Concluída: medição publicada registrada na T-66 (#183) |
 | Requisitos | RNF-01, RNF-02, RNF-16 |
 | Entrega | Página inicial com meta interna de até 350 KB e backlog pós-entrega decidido |
 
@@ -99,7 +99,7 @@ O estado detalhado de RH-01 a RH-12 está no [registro de homologação operacio
 
 - [x] O verificador automático usa 350 KB como meta interna.
 - [x] Imagens e recursos críticos são otimizados sem perda relevante de legibilidade.
-- [ ] Lighthouse publicado registra desempenho ≥ 90 e LCP ≤ 3 s.
+- [x] Lighthouse publicado registra desempenho ≥ 90 e LCP ≤ 3 s (T-66: 99 a 100 e 1,5 a 1,9 s).
 - [x] C-14 (fotos/depoimentos da ação) só vira requisito com autorização de uso.
 - [x] Questões Q-24 a Q-28 ficam respondidas ou formalmente aceitas como pendência.
 
