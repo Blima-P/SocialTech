@@ -41,7 +41,7 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 | T-45 | #117 | Verificador exige noreferrer, CSP e único script remoto | RNF-14 | ✅ #169 |
 | T-46 | #118 | Publica a política de segurança | RNF-14, RNF-15 | ✅ #153 |
 | T-67 | #142 | Deploy roda o verificador do site antes de publicar | RNF-13, RNF-14 | ✅ #144 |
-| T-68 | #171 | Dependabot de Actions também ignora versões major | RNF-14 | ✅ |
+| T-68 | #171 | Dependabot de Actions também ignora versões major | RNF-14 | ✅ #174 |
 
 **T-40 — critérios de aceite**
 
@@ -116,7 +116,7 @@ Corrigir lacunas de WCAG 2.1 AA e de leitura rápida no celular, sem mudar o con
 | T-52 | #124 | Alterna o fundo de seções vizinhas | RNF-07, ADR-007 | ✅ #159 |
 | T-53 | #125 | Atalhos sublinhados, espaçados e com alvo de toque | RNF-05 | ✅ #161 |
 | T-54 | #126 | Versão para impressão com todo o conteúdo | RNF-10 | ✅ #163 |
-| T-71 | #176 | Anel de foco visível no atalho da etapa atual no tema escuro | RNF-05 | ✅ |
+| T-71 | #176 | Anel de foco visível no atalho da etapa atual no tema escuro | RNF-05 | ✅ #177 |
 
 **T-47 — critérios de aceite**
 
@@ -187,8 +187,8 @@ Fazer o painel, o verificador e os testes pegarem erros antes da publicação, e
 | T-59 | #131 | Todo item de guia.json aparece no HTML | RF-01, RF-14 | ✅ #162 |
 | T-60 | #132 | Cobre a página 404 e o quiz sem alternativa | RF-17, RNF-13 | ✅ #164 |
 | T-61 | #133 | Alinha AGENTS.md com código e CI | RNF-14 | ✅ #168 |
-| T-69 | #172 | Guia conferido só na seção do guia e sitemap com URL exata | RF-01, RF-14, RNF-04, RNF-14 | ✅ |
-| T-72 | #178 | Quiz lê o gabarito do JSON e anúncios esperam o fim da rolagem | RF-14, RF-17, RNF-14 | ✅ |
+| T-69 | #172 | Guia conferido só na seção do guia e sitemap com URL exata | RF-01, RF-14, RNF-04, RNF-14 | ✅ #175 |
+| T-72 | #178 | Quiz lê o gabarito do JSON e anúncios esperam o fim da rolagem | RF-14, RF-17, RNF-14 | ✅ #179 |
 
 **T-55 — critérios de aceite**
 
@@ -252,7 +252,7 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 | T-63 | #135 | Publica sitemap da página canônica | RNF-04 | ✅ #167 |
 | T-64 | #136 | Dados estruturados das dúvidas comuns | RNF-04, RF-16 | ❌ não planejada (seção 3) |
 | T-65 | #137 | Monitora o site publicado e os links externos toda semana | RNF-13 | ✅ #155 |
-| T-73 | #180 | Guia explica o limite de peso e lychee com tentativas limitadas | RNF-01, RNF-13 | ✅ |
+| T-73 | #180 | Guia explica o limite de peso e lychee com tentativas limitadas | RNF-01, RNF-13 | ✅ #181 |
 | T-66 | #138 | Publica M5–M8 e registra Lighthouse publicado | RNF-01, RNF-02, RNF-03 | ⏳ |
 
 **T-62 — critérios de aceite**
@@ -344,3 +344,25 @@ Dois modelos revisaram a v1.0: Claude Sonnet 5.5 e GPT-5.3 Codex. Os achados ace
 | Workflow agendado sem alerta passa despercebido | T-65 abre issue em falha |
 
 O Codex também sugeriu manter a T-64 depois da T-63. Ficou de fora pelos motivos da seção 3.
+
+### 5.2 Revisão dos milestones M5–M8
+
+Três modelos revisaram o diff consolidado `main`…`develop` (M5 a M8), cada um com um foco: Gemini 4 Argon (segurança e CI), Grok 4.7 (visual e acessibilidade) e GPT-6.1 Terra (arquitetura e testes). Nenhum achado bloqueava a release. O Gemini conferiu byte a byte os hashes da CSP com os scripts gerados e não achou brecha nos workflows.
+
+| Achado | Modelos | Decisão |
+|---|---|---|
+| Dependabot de Actions abria atualização major (#151) | Gemini | Corrigido na T-68 (#174); #151 fechado |
+| Guia procurado no HTML inteiro (o quiz repete nomes), sem `trim()` | GPT, Gemini | Corrigido na T-69 (#175) |
+| Sitemap aceitava qualquer URL sob a base | GPT | Corrigido na T-69 (#175) |
+| Anel de foco do atalho atual com 1,39:1 no tema escuro | Grok | Corrigido na T-71 (#177) |
+| Gabarito do quiz fixo no teste; anúncios conferidos antes do fim da rolagem | GPT | Corrigido na T-72 (#179) |
+| Carrossel do ciclo dessincroniza ao estreitar a janela | GPT, Grok | Não reproduz (#173): o navegador faz o re-snap para a etapa ativa, única visível no layout de computador; medido de 1366 para 360 px nas etapas 2, 4 e 5, e um teste com essa troca passou sem mudança no código |
+| T-45 ainda fora de `develop` | Gemini | Já resolvido: a revisão começou antes do merge do #169 |
+
+Na release, Claude Sonnet 5.5, que não tinha revisado os milestones, analisou o mesmo diff com foco no risco de deploy: CSP em produção, GoatCounter, caminhos com a base, workflows de deploy e monitoramento. Parecer: **release liberada**.
+
+| Achado (não bloqueante) | Decisão |
+|---|---|
+| Folga de 19 KB no orçamento; uma edição pelo painel pode barrar o deploy sem a pessoa entender | Guia de edição explica, na T-73 (#181) |
+| Lychee sem limite de tentativas e de tempo abre issue falsa | `--max-retries 3 --timeout 30` na T-73 (#181) |
+| Falta `robots.txt` com a linha `Sitemap:` | Rejeitado: sob `/SocialTech/` o arquivo não vale (seção 3 e arquitetura) |
