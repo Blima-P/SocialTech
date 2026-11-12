@@ -30,3 +30,31 @@ test("primeiro Tab mostra o atalho que leva ao conteúdo", async ({ page }) => {
     ),
   ).toBe(true);
 });
+
+for (const tema of ["light", "dark"] as const) {
+  test(`seções vizinhas têm fundos diferentes (tema ${tema})`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: tema });
+    await page.goto(paginaInicial);
+    // Fundo transparente mostra o do body; compara a cor que a pessoa vê.
+    const fundos = await page.evaluate(() => {
+      const body = getComputedStyle(document.body).backgroundColor;
+      return [...document.querySelectorAll("main > section")].map((secao) => {
+        const fundo = getComputedStyle(secao).backgroundColor;
+        return {
+          id: secao.id || secao.getAttribute("aria-labelledby"),
+          fundo: fundo === "rgba(0, 0, 0, 0)" ? body : fundo,
+        };
+      });
+    });
+
+    expect(fundos.length).toBeGreaterThan(5);
+    for (let i = 1; i < fundos.length; i += 1) {
+      expect(
+        fundos[i].fundo,
+        `${fundos[i - 1].id} e ${fundos[i].id} com o mesmo fundo`,
+      ).not.toBe(fundos[i - 1].fundo);
+    }
+  });
+}
