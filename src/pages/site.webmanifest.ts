@@ -1,7 +1,8 @@
 import type { APIRoute } from "astro";
 
 // Nome e ícones do atalho na tela de início do Android. Gerado no build para
-// seguir o BASE_URL. Sem service worker: o site não funciona offline.
+// seguir o BASE_URL. Sem service worker: o site não funciona offline, então
+// "minimal-ui" mantém voltar e recarregar para quem abrir o atalho sem sinal.
 export const GET: APIRoute = () => {
   const base = import.meta.env.BASE_URL;
   const manifesto = {
@@ -12,8 +13,9 @@ export const GET: APIRoute = () => {
     lang: "pt-BR",
     start_url: base,
     scope: base,
-    display: "standalone",
-    background_color: "#ffffff",
+    display: "minimal-ui",
+    // Mesmo fundo dos ícones, para a tela de abertura não mostrar um quadrado.
+    background_color: "#30333c",
     theme_color: "#ffc222",
     icons: [
       { src: `${base}icone-192.png`, sizes: "192x192", type: "image/png" },
