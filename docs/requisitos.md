@@ -35,6 +35,7 @@ Este documento diz **o que** o site precisa fazer (requisitos funcionais), **com
 - As melhorias T-18 a T-27 e o conteúdo T-28 a T-35 estão concluídos e publicados na `main` pela release de 04/11/2026.
 - O carrossel mobile do ciclo foi acrescentado no PR #98 e está na `develop`.
 - O encerramento segue o [plano de milestones](sdd/08-plano-milestones.md): documentação (M1), evidências operacionais (M2), regressão automatizada (M3) e desempenho (M4).
+- As melhorias contínuas seguem o [plano M5–M8](sdd/09-plano-melhorias-continuas.md): segurança, visual e acessibilidade, arquitetura e desempenho/SEO (T-40 a T-67).
 - O que ainda depende de resposta ou evidência externa está nas [seções 6 e 9](#6-requisitos-de-conteúdo).
 - O plano do MVP foi feito antes deste documento (exceção aprovada em [03-plano-tarefas.md §0.1](sdd/03-plano-tarefas.md#01-exceção-aprovada-à-definição-de-preparado)). A [seção 8](#8-matriz-de-rastreabilidade) liga cada tarefa já feita aos requisitos daqui.
 
@@ -772,6 +773,7 @@ As tarefas do [plano de melhorias](sdd/06-plano-melhorias.md) e do [plano 07](sd
 | T-37 Homologação operacional | RF-13, RF-14, RF-15; RNF-11, RNF-12, RNF-15 | #105 / PR #106 | 🚧 Registro criado; evidências presenciais pendentes |
 | T-38 Regressão automatizada | RF-01, RF-02, RF-05, RF-11, RF-17; RNF-05, RNF-07, RNF-09, RNF-10, RNF-12 | #101 / PR #102 | ✅ Concluída |
 | T-39 Desempenho e evolução | RNF-01, RNF-02, RNF-16 | #103 / PR #104 | 🚧 Parte técnica concluída; medição publicada pendente |
+| T-40 a T-67 Melhorias contínuas (M5–M8) | Ver a tabela de cada milestone | #112–#142 | 🚧 Em execução; status por tarefa no [plano 09](sdd/09-plano-melhorias-continuas.md#2-milestones) |
 
 ## 9. Pendências e riscos
 
