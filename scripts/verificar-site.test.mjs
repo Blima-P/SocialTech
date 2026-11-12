@@ -322,7 +322,10 @@ test("exige que ícones, imagens e a prévia do link existam em dist/", () => {
     ["/SocialTech/icone.png", "<link>"],
     ["/SocialTech/foto.png", "<img>"],
     ["/SocialTech/foto-2x.png", "<img>"],
-    ["/SocialTech/compartilhar.png", '<meta property="og:image">'],
+    [
+      "https://blima-p.github.io/SocialTech/compartilhar.png",
+      '<meta property="og:image">',
+    ],
   ]) {
     assert.ok(
       resultado.saida.includes(
@@ -342,4 +345,27 @@ test("exige que ícones, imagens e a prévia do link existam em dist/", () => {
     },
   });
   assert.equal(presentes.status, 0, presentes.saida);
+});
+
+test("confere endereços absolutos do site e recusa caminhos fora da base", () => {
+  const resultado = verificar({
+    inicial:
+      '<a href="https://blima-p.github.io/SocialTech/sumiu.pdf">Cartaz</a>' +
+      '<a href="https://blima-p.github.io/SocialTech/sumiu/#topo">Topo</a>' +
+      '<a href="/SocialTech/%2e%2e/package.json">Pacote</a>' +
+      '<img src="/SocialTech/x/..%2f..%2f..%2fpackage.json" alt="">' +
+      '<a href="https://blima-p.github.io/SocialTech/">Início</a>',
+  });
+  assert.equal(resultado.status, 1);
+  for (const trecho of [
+    '"https://blima-p.github.io/SocialTech/sumiu.pdf" em <a> não existe em dist/',
+    'href="https://blima-p.github.io/SocialTech/sumiu/#topo": página de destino não existe',
+    '"/SocialTech/%2e%2e/package.json" em <a> tem caminho inválido ou fora de /SocialTech/',
+    '"/SocialTech/x/..%2f..%2f..%2fpackage.json" em <img> tem caminho inválido ou fora de /SocialTech/',
+  ]) {
+    assert.ok(resultado.saida.includes(trecho), resultado.saida);
+  }
+  assert.ok(
+    !resultado.saida.includes('"https://blima-p.github.io/SocialTech/" em'),
+  );
 });
