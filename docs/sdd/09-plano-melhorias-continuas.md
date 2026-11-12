@@ -37,7 +37,7 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 | T-41 | #113 | Aplica permissões mínimas por job e checkout sem credenciais | RNF-14 | ✅ #141 |
 | T-42 | #114 | Configura Dependabot para npm e GitHub Actions | RNF-14 | ⏳ |
 | T-43 | #115 | Adiciona revisão de dependências nos PRs | RNF-14 | ⏳ |
-| T-44 | #116 | Adiciona CSP e política de referenciador | RNF-14, RNF-15 | ⏳ |
+| T-44 | #116 | Adiciona CSP e política de referenciador | RNF-14, RNF-15 | ✅ |
 | T-45 | #117 | Verificador exige noreferrer, CSP e único script remoto | RNF-14 | ⏳ |
 | T-46 | #118 | Publica a política de segurança | RNF-14, RNF-15 | ⏳ |
 | T-67 | #142 | Deploy roda o verificador do site antes de publicar | RNF-13, RNF-14 | ✅ #144 |
@@ -71,12 +71,12 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 
 **T-44 — critérios de aceite**
 
-- [ ] A CSP é gerada pelo `security.csp` do Astro, que calcula os hashes dos scripts e estilos no build; nada de hash mantido à mão.
-- [ ] A CSP tem `default-src 'self'`, `object-src 'none'` e `base-uri 'self'`, além de `script-src` e `style-src` sem `'unsafe-inline'`; libera só `https://gc.zgo.at` (script) e `https://socialtech-ucb.goatcounter.com` (conexão e imagem).
-- [ ] A meta da CSP vem antes de qualquer `<script>` no `<head>`.
-- [ ] `<meta name="referrer" content="strict-origin-when-cross-origin">`.
-- [ ] O console não registra violação de CSP no build de produção (teste Playwright).
-- [ ] Tema, guia, ciclo e quiz continuam funcionando; a contagem do GoatCounter é conferida no site publicado (T-66), porque localmente ele não registra visitas.
+- [x] A CSP é gerada pelo `security.csp` do Astro, que calcula os hashes dos scripts e estilos no build; nada de hash mantido à mão. Os dois scripts `is:inline` (tema e configuração do GoatCounter), que o Astro não calcula, recebem o hash no `BaseLayout` pelo `Astro.csp.insertScriptHash`, a partir do mesmo texto que vai para a página.
+- [x] A CSP tem `default-src 'self'`, `object-src 'none'` e `base-uri 'self'`, além de `script-src` e `style-src` sem `'unsafe-inline'`; libera só `https://gc.zgo.at` (script) e `https://socialtech-ucb.goatcounter.com` (conexão e imagem).
+- [x] A meta da CSP vem antes de qualquer `<script>`. O Astro põe a meta no fim do `<head>`, então os scripts do layout ficam no `<body>` (o de tema logo no início, sem piscar).
+- [x] `<meta name="referrer" content="strict-origin-when-cross-origin">`.
+- [x] O console não registra violação de CSP no build de produção (teste Playwright).
+- [x] Tema, guia, ciclo e quiz continuam funcionando; a contagem do GoatCounter é conferida no site publicado (T-66), porque localmente ele não registra visitas.
 
 **T-45 — critérios de aceite**
 

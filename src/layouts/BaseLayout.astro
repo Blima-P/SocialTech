@@ -19,6 +19,46 @@ const imagemCompartilhar = new URL(
   `${import.meta.env.BASE_URL}compartilhar.png`,
   Astro.site,
 );
+const contarAcesso = import.meta.env.PROD && !erro;
+
+// Scripts inline (is:inline). O Astro não calcula o hash deles para a CSP (RNF-14):
+// o hash sai do mesmo texto que vai para a página, então nunca fica desatualizado.
+// RF-17: aplica o tema escolhido antes de desenhar a página, sem piscar.
+const scriptTema = `
+try {
+  const tema = localStorage.getItem("tema");
+  if (tema === "claro" || tema === "escuro") {
+    document.documentElement.dataset.tema = tema;
+  }
+} catch {
+  // Sem acesso ao armazenamento: segue o tema do sistema.
+}
+`;
+// GoatCounter: conta só a página e a origem da campanha (campaign, ref).
+const scriptGoatcounter = `
+window.goatcounter = {
+  path: () => {
+    const parametros = new URLSearchParams(window.location.search);
+    const origem = new URLSearchParams();
+    for (const chave of ["campaign", "ref"]) {
+      const valor = parametros.get(chave);
+      if (valor) origem.set(chave, valor);
+    }
+    const sufixo = origem.toString();
+    return window.location.pathname + (sufixo ? "?" + sufixo : "");
+  },
+};
+`;
+const autorizar = async (codigo: string) => {
+  const resumo = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(codigo),
+  );
+  const base64 = btoa(String.fromCharCode(...new Uint8Array(resumo)));
+  Astro.csp?.insertScriptHash(`sha256-${base64}`);
+};
+await autorizar(scriptTema);
+if (contarAcesso) await autorizar(scriptGoatcounter);
 ---
 
 <!doctype html>
@@ -29,17 +69,7 @@ const imagemCompartilhar = new URL(
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#ffc222" />
-    {/* RF-17: aplica o tema escolhido antes de desenhar a página, sem piscar. */}
-    <script is:inline>
-      try {
-        const tema = localStorage.getItem("tema");
-        if (tema === "claro" || tema === "escuro") {
-          document.documentElement.dataset.tema = tema;
-        }
-      } catch {
-        // Sem acesso ao armazenamento: segue o tema do sistema.
-      }
-    </script>
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link
       rel="icon"
       type="image/svg+xml"
@@ -66,23 +96,17 @@ const imagemCompartilhar = new URL(
       content="Compostagem Enactus UCB: descarte correto de resíduos orgânicos. Projeto de extensão UCB + Enactus."
     />
     <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    {/* Fica no body: o Astro põe a CSP no fim do head, e todo script precisa vir depois dela. */}
+    {/* eslint-disable-next-line astro/no-set-html-directive -- texto fixo do próprio layout, sem entrada externa; o set:html garante que o hash da CSP é do mesmo texto */}
+    <script is:inline set:html={scriptTema} />
+    <slot />
     {/* Contagem de acessos sem cookies, só no site publicado (ADR-003). */}
-    {import.meta.env.PROD && !erro && (
+    {contarAcesso && (
       <>
-        <script is:inline>
-          window.goatcounter = {
-            path: () => {
-              const parametros = new URLSearchParams(window.location.search);
-              const origem = new URLSearchParams();
-              for (const chave of ["campaign", "ref"]) {
-                const valor = parametros.get(chave);
-                if (valor) origem.set(chave, valor);
-              }
-              const sufixo = origem.toString();
-              return `${window.location.pathname}${sufixo ? `?${sufixo}` : ""}`;
-            },
-          };
-        </script>
+        {/* eslint-disable-next-line astro/no-set-html-directive -- texto fixo do próprio layout, sem entrada externa; o set:html garante que o hash da CSP é do mesmo texto */}
+        <script is:inline set:html={scriptGoatcounter} />
         <script
           is:inline
           async
@@ -91,8 +115,5 @@ const imagemCompartilhar = new URL(
         ></script>
       </>
     )}
-  </head>
-  <body>
-    <slot />
   </body>
 </html>
