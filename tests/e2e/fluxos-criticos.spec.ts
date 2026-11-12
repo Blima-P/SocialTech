@@ -499,6 +499,8 @@ test("manifesto web dá nome, escopo e ícones ao atalho no Android", async ({
     lang: "pt-BR",
     start_url: paginaInicial,
     scope: paginaInicial,
+    display: "minimal-ui",
+    background_color: "#30333c",
   });
   for (const { src, sizes } of manifesto.icons) {
     const png = await (await page.request.get(src)).body();
