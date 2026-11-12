@@ -45,8 +45,13 @@ Requer Node.js 22.22 ou superior. A versão exata usada no CI está no arquivo
 ```bash
 npm ci
 npm run dev      # http://localhost:4321/SocialTech/
-npm run verify   # formatação, lint, tipos, build e verificação do site gerado (o mesmo que o CI)
+npm run verify   # formatação, lint, tipos, build, verificação do site e testes do verificador
+npm run test:e2e # testes no navegador (o CI também roda links e revisão de dependências)
 ```
+
+O verificador exige `dist/404.html` e confere as âncoras internas na página de
+destino, inclusive os atalhos da 404 para a página inicial. Para testar só essas
+regras, rode `npm run test:verificador` (testes nativos do Node, sem pacote novo).
 
 ## Documentação
 

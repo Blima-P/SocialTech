@@ -48,7 +48,7 @@ jobs:
           ASTRO_TELEMETRY_DISABLED: 1
 
       - name: Verificar site gerado
-        run: npm run verificar:site
+        run: npm run verificar:site && npm run test:verificador
 
       - name: Instalar Chromium do Playwright
         run: npx playwright install --with-deps chromium
