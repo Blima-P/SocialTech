@@ -122,3 +122,22 @@ for (const tema of ["light", "dark"] as const) {
     expect(contraste).toBeGreaterThanOrEqual(3);
   });
 }
+
+for (const pagina of [paginaInicial, `${paginaInicial}404.html`]) {
+  test(`rodapé mostra só contatos e o voltar ao topo, com alvo de toque (${pagina})`, async ({
+    page,
+  }) => {
+    await page.goto(pagina);
+    const rodape = page.getByRole("contentinfo");
+    await expect(rodape.getByText(/licença MIT/i)).toHaveCount(0);
+    await expect(rodape.locator('a[href*="github.com"]')).toHaveCount(0);
+
+    const links = rodape.getByRole("link");
+    await expect(links.last()).toHaveAccessibleName("Voltar ao topo");
+    await expect(links.last()).toHaveAttribute("href", "#topo");
+    for (const link of await links.all()) {
+      const caixa = await link.boundingBox();
+      expect(caixa?.height).toBeGreaterThanOrEqual(44);
+    }
+  });
+}

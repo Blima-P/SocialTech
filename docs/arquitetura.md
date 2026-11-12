@@ -510,7 +510,9 @@ flowchart LR
 | Desempenho e acessibilidade | Lighthouse em modo celular, na página publicada | H2 | RNF-01 a RNF-03 |
 | Celulares reais | 2 celulares (Android e iPhone, se possível), 4G | Antes de cada release e nas homologações | RNF-11 |
 
-**Medição local da T-39:** o verificador registrou 327,1 KB no pior caso das imagens responsivas. O Lighthouse 12 sobre o build de produção local transferiu 276 KiB e obteve Desempenho 100, Acessibilidade 100, Boas práticas 100, SEO 100, LCP 1,6 s e CLS 0,023. A medição no site publicado será registrada depois do deploy.
+**Medição local da T-39:** o verificador registrou 327,1 KB no pior caso das imagens responsivas. O Lighthouse 12 sobre o build de produção local transferiu 276 KiB e obteve Desempenho 100, Acessibilidade 100, Boas práticas 100, SEO 100, LCP 1,6 s e CLS 0,023.
+
+**Medição publicada da T-66 (12/11/2026):** três execuções do Lighthouse 12 em modo celular no site publicado deram Desempenho 99, 100 e 99, Acessibilidade 100, Boas práticas 100 e SEO 100, com LCP de 1,5 a 1,9 s, CLS 0,048 e 279 KiB transferidos. Nenhuma violação de CSP nem erro no console.
 
 Os fluxos críticos têm regressão automatizada desde a T-38. Testes com leitor de tela e em celulares físicos continuam manuais porque dependem de tecnologia assistiva e hardware real.
 

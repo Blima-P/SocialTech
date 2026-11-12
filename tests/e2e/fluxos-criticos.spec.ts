@@ -354,6 +354,19 @@ test("tema segue a preferência do sistema sem escolha salva", async ({
   await expect(botao).toHaveAttribute("aria-pressed", "false");
 });
 
+test("tema claro escolhido não é invertido pelo modo escuro automático", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(paginaInicial);
+  const faixaClara = page.locator(".tema-fixo-claro").first();
+  await expect(faixaClara).toHaveCSS("color-scheme", "light only");
+
+  await page.getByRole("button", { name: "Modo escuro" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-tema", "claro");
+  await expect(page.locator("html")).toHaveCSS("color-scheme", "light only");
+});
+
 test("revelar o botão de tema não desloca a página", async ({
   browser,
   page,
@@ -466,4 +479,48 @@ test("impressão abre todo o conteúdo, esconde controles e usa texto escuro sob
     impactoFundo: "rgba(0, 0, 0, 0)",
     impactoTexto: "rgb(0, 0, 0)",
   });
+});
+
+test("ícone da tela de início do iPhone é um PNG opaco de 180 × 180", async ({
+  page,
+}) => {
+  await page.goto(paginaInicial);
+  const href = await page
+    .locator('link[rel="apple-touch-icon"]')
+    .getAttribute("href");
+  expect(href).toBe(`${paginaInicial}apple-touch-icon.png`);
+
+  const resposta = await page.request.get(href!);
+  expect(resposta.ok()).toBe(true);
+  expect(resposta.headers()["content-type"]).toBe("image/png");
+  // Cabeçalho IHDR do PNG: largura, altura e tipo de cor (2 = RGB, 3 = paleta; sem alfa).
+  const png = await resposta.body();
+  expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([180, 180]);
+  expect([2, 3]).toContain(png[25]);
+});
+
+test("manifesto web dá nome, escopo e ícones ao atalho no Android", async ({
+  page,
+}) => {
+  await page.goto(paginaInicial);
+  const href = await page.locator('link[rel="manifest"]').getAttribute("href");
+  expect(href).toBe(`${paginaInicial}site.webmanifest`);
+
+  const manifesto = await (await page.request.get(href!)).json();
+  expect(manifesto).toMatchObject({
+    name: "Compostagem Enactus UCB",
+    lang: "pt-BR",
+    start_url: paginaInicial,
+    scope: paginaInicial,
+    display: "minimal-ui",
+    background_color: "#30333c",
+  });
+  for (const { src, sizes } of manifesto.icons) {
+    const png = await (await page.request.get(src)).body();
+    const [largura, altura] = [png.readUInt32BE(16), png.readUInt32BE(20)];
+    expect(`${largura}x${altura}`).toBe(sizes);
+  }
+  expect(manifesto.icons).toContainEqual(
+    expect.objectContaining({ purpose: "maskable" }),
+  );
 });

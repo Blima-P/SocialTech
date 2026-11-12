@@ -3,7 +3,7 @@
 // Só usa módulos do Node e lê o base do astro.config.mjs: nenhuma dependência
 // nova (AGENTS.md §4.4).
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, isAbsolute, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import config from "../astro.config.mjs";
 
@@ -61,9 +61,12 @@ function enderecosDoSrcset(srcset) {
     .filter(Boolean);
 }
 
-// <link rel="canonical"> e "alternate" não são baixados pelo navegador.
+// <link rel="canonical"> e "alternate" não são baixados pelo navegador; o
+// apple-touch-icon só é baixado quando a pessoa salva o site na tela de início.
 function linkCarregado(atributos) {
-  return !/canonical|alternate/.test(atributos.get("rel") ?? "");
+  return !/canonical|alternate|apple-touch-icon/.test(
+    atributos.get("rel") ?? "",
+  );
 }
 
 // Endereços que o navegador baixa ao abrir a página, por tag.
@@ -82,14 +85,46 @@ function recursosDaTag({ nome, atributos }) {
   return [];
 }
 
+const INICIO = new URL(BASE, config.site).href;
+
+// Endereço absoluto do próprio site, ex.: "https://blima-p.github.io/SocialTech/…".
+function ehDoSite(endereco) {
+  return endereco.startsWith(INICIO);
+}
+
 // "/SocialTech/_astro/a.css?v=1" -> dist/_astro/a.css
+// Resolve "..", "%2e%2e" e "%2f" como o navegador e o servidor. Devolve null se o
+// caminho for inválido ou sair da base ou de dist/.
 function arquivoNoDist(endereco) {
-  const caminho = decodeURIComponent(endereco.split(/[?#]/)[0]);
-  const relativo = caminho.slice(BASE.length);
+  let relativo;
+  try {
+    const { pathname } = new URL(endereco, INICIO);
+    if (!pathname.startsWith(BASE)) return null;
+    relativo = decodeURIComponent(pathname.slice(BASE.length));
+  } catch {
+    return null;
+  }
   const arquivo = join(DIST, relativo);
+  const dentro = relative(DIST, arquivo);
+  if (dentro.startsWith("..") || isAbsolute(dentro)) return null;
   return relativo === "" || relativo.endsWith("/")
     ? join(arquivo, "index.html")
     : arquivo;
+}
+
+// Um ícone, imagem ou folha de estilo citado na página precisa existir em dist/.
+function verificarArquivo(nomeArquivo, endereco, origem) {
+  const arquivo = arquivoNoDist(endereco);
+  if (arquivo === null) {
+    problema(
+      nomeArquivo,
+      `"${endereco}" em ${origem} tem caminho inválido ou fora de ${BASE}.`,
+    );
+    return;
+  }
+  if (!existsSync(arquivo) || !statSync(arquivo).isFile()) {
+    problema(nomeArquivo, `"${endereco}" em ${origem} não existe em dist/.`);
+  }
 }
 
 const idsPorArquivo = new Map();
@@ -166,12 +201,21 @@ function verificarSeguranca(nomeArquivo, tags) {
 }
 
 function verificarAncora(nomeArquivo, href) {
-  if (!href.includes("#") || ehExterno(href)) return;
-  if (!href.startsWith("#") && !href.startsWith(BASE)) return;
+  if (!href.includes("#") || (ehExterno(href) && !ehDoSite(href))) return;
+  if (!href.startsWith("#") && !href.startsWith(BASE) && !ehDoSite(href)) {
+    return;
+  }
 
   const destino = href.startsWith("#")
     ? join(DIST, nomeArquivo)
     : arquivoNoDist(href);
+  if (destino === null) {
+    problema(
+      nomeArquivo,
+      `href="${href}" tem caminho inválido ou fora de ${BASE}.`,
+    );
+    return;
+  }
   const fragmento = href.slice(href.indexOf("#") + 1);
   let id;
   try {
@@ -243,12 +287,30 @@ function verificarPagina(nomeArquivo) {
       ...enderecosDoSrcset(atributos.get("srcset") ?? ""),
     ];
     for (const endereco of enderecos) {
-      if (endereco === undefined || ehExterno(endereco)) continue;
+      if (endereco === undefined) continue;
+      if (ehExterno(endereco)) {
+        // Endereço absoluto do próprio site também precisa existir no build.
+        if (ehDoSite(endereco) && !endereco.includes("#")) {
+          verificarArquivo(nomeArquivo, endereco, `<${nome}>`);
+        }
+        continue;
+      }
       if (!endereco.startsWith(BASE) && !endereco.startsWith("#")) {
         problema(
           nomeArquivo,
           `caminho interno "${endereco}" em <${nome}> não começa com "${BASE}" nem com "#". Use import.meta.env.BASE_URL.`,
         );
+      } else if (!endereco.includes("#")) {
+        // Endereços com "#" são conferidos por verificarAncora.
+        verificarArquivo(nomeArquivo, endereco, `<${nome}>`);
+      }
+    }
+
+    // A prévia do link (Open Graph) usa endereço absoluto do próprio site.
+    if (nome === "meta" && atributos.get("property") === "og:image") {
+      const imagem = atributos.get("content") ?? "";
+      if (ehDoSite(imagem)) {
+        verificarArquivo(nomeArquivo, imagem, '<meta property="og:image">');
       }
     }
 
@@ -275,7 +337,7 @@ function pesoDaPaginaInicial(tags, cssEmbutido) {
 
   function arquivoExistente(endereco) {
     const arquivo = arquivoNoDist(endereco);
-    if (existsSync(arquivo)) return arquivo;
+    if (arquivo !== null && existsSync(arquivo)) return arquivo;
     problema("index.html", `o arquivo "${endereco}" não existe em dist/.`);
     return undefined;
   }
@@ -296,10 +358,14 @@ function pesoDaPaginaInicial(tags, cssEmbutido) {
   for (const tag of tags) {
     adicionarDoCss(tag.atributos.get("style") ?? "");
 
+    // Ausências nas tags já são avisadas por verificarArquivo.
     const locais = recursosDaTag(tag)
       .filter((endereco) => endereco && endereco.startsWith(BASE))
-      .map(arquivoExistente)
-      .filter(Boolean);
+      .map(arquivoNoDist)
+      .filter(
+        (arquivo) =>
+          arquivo !== null && existsSync(arquivo) && statSync(arquivo).isFile(),
+      );
     if (locais.length === 0) continue;
 
     if (tag.nome === "img" || tag.nome === "source") {
@@ -353,6 +419,23 @@ if (!existsSync(SITEMAP)) {
   }
   if (!enderecos.includes(inicio)) {
     problema("sitemap.xml", `não lista a página inicial (${inicio}).`);
+  }
+  for (const [, url] of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
+    const lastmod = url.match(/<lastmod>([^<]*)<\/lastmod>/)?.[1].trim();
+    const data = /^\d{4}-\d{2}-\d{2}$/.test(lastmod ?? "")
+      ? new Date(`${lastmod}T00:00:00Z`)
+      : undefined;
+    // Mês 13 vira "Invalid Date"; dia 30 de fevereiro vira 2 de março.
+    if (
+      !data ||
+      Number.isNaN(data.getTime()) ||
+      data.toISOString().slice(0, 10) !== lastmod
+    ) {
+      problema(
+        "sitemap.xml",
+        `<lastmod> precisa ser uma data AAAA-MM-DD válida; está "${lastmod ?? "ausente"}".`,
+      );
+    }
   }
   for (const endereco of enderecos) {
     if (!endereco.startsWith(inicio)) {
@@ -455,6 +538,61 @@ for (const { nome } of lerConteudo("guia")) {
       "index.html",
       `o item "${nome}" (guia.json) não aparece na seção #guia.`,
     );
+  }
+}
+
+// SEO: um bloco JSON-LD (schema.org) com o site e a organização, lido do HTML bruto.
+const blocosJsonLd = [
+  ...htmlDaInicial.matchAll(
+    /<script\b[^>]*\btype="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi,
+  ),
+].map(([, json]) => json);
+if (blocosJsonLd.length !== 1) {
+  problema(
+    "index.html",
+    `precisa de exatamente um bloco JSON-LD (schema.org), tem ${blocosJsonLd.length}.`,
+  );
+} else {
+  let dados;
+  try {
+    dados = JSON.parse(blocosJsonLd[0]);
+  } catch {
+    problema("index.html", "o bloco JSON-LD não é um JSON válido.");
+  }
+  if (dados !== undefined) {
+    if (dados?.["@context"] !== "https://schema.org") {
+      problema(
+        "index.html",
+        'o JSON-LD precisa de "@context": "https://schema.org".',
+      );
+    }
+    const itens = Array.isArray(dados?.["@graph"]) ? dados["@graph"] : [dados];
+    const site = itens.find((item) => item?.["@type"] === "WebSite");
+    const inicio = new URL(BASE, config.site).href;
+    if (site?.url !== inicio) {
+      problema(
+        "index.html",
+        `o JSON-LD precisa de um WebSite com url ${inicio}.`,
+      );
+    }
+    const organizacao = itens.find(
+      (item) => item?.["@type"] === "Organization",
+    );
+    if (!organizacao) {
+      problema("index.html", "o JSON-LD precisa de uma Organization.");
+    } else if (
+      typeof organizacao.logo !== "string" ||
+      !ehDoSite(organizacao.logo) ||
+      !/\.(png|jpe?g|webp)$/i.test(organizacao.logo)
+    ) {
+      // O Google só usa logotipo matricial (PNG, JPEG ou WebP).
+      problema(
+        "index.html",
+        `o logo da Organization no JSON-LD precisa ser PNG, JPEG ou WebP sob ${inicio}; está "${organizacao.logo ?? "ausente"}".`,
+      );
+    } else {
+      verificarArquivo("index.html", organizacao.logo, "Organization.logo");
+    }
   }
 }
 

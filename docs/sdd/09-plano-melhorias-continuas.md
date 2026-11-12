@@ -1,9 +1,9 @@
-# Plano de melhorias contínuas (M5–M8)
+# Plano de melhorias contínuas (M5–M9)
 
 | Campo | Valor |
 |---|---|
 | Projeto | Compostagem Enactus UCB (SocialTech) |
-| Versão | 1.1 (12/11/2026) — achados da revisão rubber duck aplicados |
+| Versão | 1.2 (12/11/2026) — release do M5–M8 publicada, Lighthouse registrado e M9 incluído |
 | Status | 🚧 Em execução |
 | Base | [Requisitos](../requisitos.md), [Arquitetura](../arquitetura.md), [Plano M1–M4](08-plano-milestones.md) |
 
@@ -23,6 +23,7 @@ flowchart LR
   M5[M5 · Segurança] --> M8[M8 · Release e medição]
   M6[M6 · Visual e acessibilidade] --> M8
   M7[M7 · Arquitetura e qualidade] --> M8
+  M8 --> M9[M9 · Refinamentos pós-release]
 ```
 
 ## 2. Milestones
@@ -47,7 +48,7 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 
 - [x] Nenhum `uses:` aponta para tag ou branch; cada SHA leva a versão em comentário (`# vN`).
 - [x] Cada SHA confere com a release indicada.
-- [ ] CI, links, controle de merge e deploy continuam verdes.
+- [x] CI, links, controle de merge e deploy continuam verdes.
 - [x] O `controle-merge-main` mantém `pull_request_target`: ele não faz checkout do PR e não pode ser alterado pelo próprio PR.
 
 **T-41 — critérios de aceite**
@@ -55,7 +56,7 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 - [x] O job `build` tem só `contents: read` e `pages: read` (exigido por `configure-pages`).
 - [x] Só o job `deploy` recebe `pages: write` e `id-token: write`.
 - [x] Todos os `actions/checkout` usam `persist-credentials: false`.
-- [ ] O deploy publica normalmente.
+- [x] O deploy publica normalmente.
 
 **T-42 — critérios de aceite**
 
@@ -253,13 +254,13 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 | T-64 | #136 | Dados estruturados das dúvidas comuns | RNF-04, RF-16 | ❌ não planejada (seção 3) |
 | T-65 | #137 | Monitora o site publicado e os links externos toda semana | RNF-13 | ✅ #155 |
 | T-73 | #180 | Guia explica o limite de peso e lychee com tentativas limitadas | RNF-01, RNF-13 | ✅ #181 |
-| T-66 | #138 | Publica M5–M8 e registra Lighthouse publicado | RNF-01, RNF-02, RNF-03 | ⏳ |
+| T-66 | #138 | Publica M5–M8 e registra Lighthouse publicado | RNF-01, RNF-02, RNF-03 | ✅ #183 |
 
 **T-62 — critérios de aceite**
 
 - [x] O `.nvmrc` define a versão; os workflows usam `node-version-file`.
 - [x] O README e o CONTRIBUTING citam o `.nvmrc`.
-- [ ] CI e deploy passam.
+- [x] CI e deploy passam.
 
 **T-63 — critérios de aceite**
 
@@ -281,10 +282,44 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 
 **T-66 — critérios de aceite**
 
-- [ ] Deploy verde; o site publicado tem CSP sem violações.
-- [ ] Lighthouse mobile publicado: desempenho ≥ 90, LCP ≤ 3 s, CLS ≤ 0,1, acessibilidade ≥ 90.
-- [ ] Requisitos, arquitetura e este plano registram a medição; #103 é fechada.
+- [x] Deploy verde; o site publicado tem CSP sem violações e nenhum erro no console.
+- [x] Lighthouse mobile publicado: desempenho ≥ 90, LCP ≤ 3 s, CLS ≤ 0,1, acessibilidade ≥ 90.
+- [x] Requisitos, arquitetura e este plano registram a medição; #103 é fechada.
 
+**Medição publicada (12/11/2026).** Lighthouse 12, modo celular, três execuções em `https://blima-p.github.io/SocialTech/`: Desempenho 99, 100 e 99; Acessibilidade, Boas práticas e SEO 100; LCP de 1,5 a 1,9 s; CLS 0,048; FCP de 1,0 a 1,1 s; TBT de 0 a 50 ms; 279 KiB transferidos. O GoatCounter registrou a visita, o sitemap responde 200 e uma rota inexistente responde 404 com a página de erro.
+
+**Sincronização da `main`.** A `main` recebe as releases por squash, então o PR seguinte da `develop` entra em conflito com ela. Antes da release, um PR para `develop` (#184) registrou a `main` como já incorporada (`git merge -s ours origin/main`, mesclado com merge commit), depois de confirmar que a árvore da `main` era igual à origem da release anterior. Repita o passo a cada release.
+
+### M9 · Refinamentos pós-release
+
+Pequenas melhorias de descoberta, instalação e verificação depois da release do M5–M8, mais as correções da revisão rubber duck do próprio M9 (seção 5.3). Nenhuma muda o conteúdo validado pela Enactus.
+
+| Tarefa | Issue | Entrega | Requisitos | Status |
+|---|---|---|---|---|
+| T-74 | #185 | JSON-LD `WebSite` e `Organization` na página inicial | RNF-13, RNF-14 | ✅ #193 |
+| T-75 | #186 | `<lastmod>` no sitemap | RNF-14 | ✅ #194 |
+| T-76 | #187 | Ícone para a tela de início do iPhone (`apple-touch-icon`) | RNF-11, RNF-16 | ✅ #195 |
+| T-77 | #188 | Manifesto web com nome, escopo e ícones 192/512 | RNF-11, RNF-16 | ✅ #197 |
+| T-78 | #189 | Link "Código aberto (licença MIT)" no rodapé | RNF-06, RNF-07 | ✅ #196 |
+| T-79 | #190 | Verificador exige que recursos internos e `og:image` existam em `dist/` | RNF-14 | ✅ #200 |
+| T-80 | #191 | Links de contato (relato privado de vulnerabilidade e guia) ao abrir issue | RNF-13 | ✅ #198 |
+| T-81 | #192 | Monitoramento confere a CSP publicada e o sitemap | RNF-14, RNF-15 | ✅ #199 |
+| T-82 | #201 | Verificador confere endereços absolutos do site e recusa caminhos fora da base | RNF-13, RNF-14 | ✅ #207 |
+| T-83 | #202 | Verificador exige `@context` e os dois tipos no JSON-LD | RNF-13, RNF-14 | ✅ #208 |
+| T-84 | #203 | Monitoramento recusa CSP com curinga, fonte só de esquema ou `'unsafe-*'` | RNF-14 | ✅ #209 |
+| T-85 | #204 | Verificador trata `<lastmod>` com mês ou dia fora do intervalo | RNF-14 | ✅ #210 |
+| T-86 | #205 | Manifesto com `minimal-ui` e fundo igual ao dos ícones | RNF-11 | ✅ #211 |
+| T-87 | #206 | Logo PNG da organização no JSON-LD | RNF-13, RNF-14 | ✅ #212 |
+
+**Critérios de aceite do M9**
+
+- [x] O JSON-LD fica só na página indexável, não é executado (a CSP não muda) e o verificador exige exatamente um bloco com `@context` schema.org, `WebSite` com a URL inicial e `Organization` com logo PNG existente.
+- [x] Cada `<url>` do sitemap tem `<lastmod>` AAAA-MM-DD real; datas impossíveis viram problema, sem exceção.
+- [x] Ícones PNG opacos de 180, 192 e 512 px; o de 512 também `maskable`, com a marca dentro da zona segura. O manifesto segue o `BASE_URL`, usa `minimal-ui` (sem service worker, voltar e recarregar continuam visíveis) e `background_color` igual ao fundo dos ícones.
+- [x] O verificador confere a existência de todo `href`/`src`/`srcset` interno, inclusive absoluto do próprio site, e recusa caminhos que saem de `/SocialTech/` ou de `dist/`.
+- [x] O monitoramento exige `default-src 'self'` sem curinga nem `'unsafe-*'` e o sitemap com a URL inicial; o run manual passou no site publicado.
+- [x] A página inicial continua abaixo de 350 KB (332,7 KB).
+- [ ] Release do M9 para a `main` publicada, com o manifesto, os ícones e o JSON-LD conferidos no site publicado.
 ## 3. Propostas avaliadas e não incluídas
 
 | Proposta | Decisão | Motivo |
@@ -296,7 +331,7 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 | `security.txt` em `/.well-known/` | Rejeitada | O site fica sob `/SocialTech/`, e a RFC 9116 exige o arquivo na raiz do domínio, que pertence ao GitHub. O `SECURITY.md` e o relato privado do GitHub cobrem o canal (T-46). |
 | Regra de proteção e 2FA para edições do painel na `main` | Recomendação | Depende de configuração da organização e de cada pessoa editora; fica para a equipe responsável, fora do código. |
 
-## 4. Definição de Pronto (M5–M8)
+## 4. Definição de Pronto (M5–M9)
 
 Uma tarefa só fecha quando:
 
@@ -366,3 +401,16 @@ Na release, Claude Sonnet 5.5, que não tinha revisado os milestones, analisou o
 | Folga de 19 KB no orçamento; uma edição pelo painel pode barrar o deploy sem a pessoa entender | Guia de edição explica, na T-73 (#181) |
 | Lychee sem limite de tentativas e de tempo abre issue falsa | `--max-retries 3 --timeout 30` na T-73 (#181) |
 | Falta `robots.txt` com a linha `Sitemap:` | Rejeitado: sob `/SocialTech/` o arquivo não vale (seção 3 e arquitetura) |
+
+### 5.3 Revisão do M9
+
+Dois modelos revisaram o diff `main`…`develop` com T-74 a T-81: GPT-6.1 Terra (corretude do verificador, CSP, schema e manifesto) e Gemini 4 Argon (risco da release, acessibilidade, uso no celular e CI). O Gemini rodou `npm run verify` e os 63 testes Playwright. Nenhum achado bloqueava; parecer do Gemini: **release liberada**. Todos os achados viraram correção:
+
+| Achado | Modelo | Decisão |
+|---|---|---|
+| Endereço absoluto do próprio site passava como externo; `/SocialTech/%2e%2e/package.json` encontrava arquivo fora de `dist/` | GPT | Corrigido na T-82 (#207) |
+| JSON-LD com `@graph: []` ou sem `@context` passava | GPT | Corrigido na T-83 (#208) |
+| Monitoramento aceitava `default-src 'self' *` e `'unsafe-inline'` | GPT | Corrigido na T-84 (#209) |
+| `<lastmod>` com mês 13 lançava `RangeError` em vez de virar problema | Gemini | Corrigido na T-85 (#210) |
+| `standalone` sem service worker esconde voltar e recarregar; fundo branco destoa do ícone escuro | Gemini | Corrigido na T-86 (#211) |
+| `Organization.logo` em SVG não é usado pelo Google | Gemini | Corrigido na T-87 (#212) |

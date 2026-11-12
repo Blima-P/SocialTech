@@ -40,7 +40,7 @@ O projeto segue **SDD**: primeiro a especificação, depois o código. A especif
 | [`docs/sdd/06-plano-melhorias.md`](docs/sdd/06-plano-melhorias.md) | Melhorias depois da entrega (T-18 a T-27): limpeza, verificação automática, design system, fotos, busca, animações, prévia de compartilhamento, quiz e navegação no celular |
 | [`docs/sdd/07-plano-conteudo-enactus.md`](docs/sdd/07-plano-conteudo-enactus.md) | Conteúdo validado pelo Prof. Marcus em 31/10/2026 (T-28 a T-35): guia, ciclo, nome "Compostagem Enactus UCB", dúvidas comuns, fotos, cartaz e quiz |
 | [`docs/sdd/08-plano-milestones.md`](docs/sdd/08-plano-milestones.md) | Encerramento do projeto (T-36 a T-39): governança, homologação operacional, regressão automatizada e desempenho |
-| [`docs/sdd/09-plano-melhorias-continuas.md`](docs/sdd/09-plano-melhorias-continuas.md) | Melhorias contínuas (T-40 a T-67, M5–M8): segurança, acessibilidade, arquitetura, SEO e operação; critérios de aceite e DoD |
+| [`docs/sdd/09-plano-melhorias-continuas.md`](docs/sdd/09-plano-melhorias-continuas.md) | Melhorias contínuas (T-40 a T-87, M5–M9): segurança, acessibilidade, arquitetura, SEO, operação e refinamentos pós-release; critérios de aceite e DoD |
 
 Enquanto esses documentos não existirem ou não estiverem aprovados, siga as seções 2 e 4 deste arquivo e **não implemente funcionalidades** além do que o desenvolvedor pedir explicitamente.
 
@@ -91,7 +91,7 @@ Workflows em `.github/workflows/`:
 | `revisao-dependencias.yml` | Em PRs para `develop`/`main`: check `revisao-dependencias`, que bloqueia dependências alteradas com vulnerabilidades altas ou críticas. |
 | `deploy-pages.yml` | Em pushes para `main` ou execução manual: build e `npm run verificar:site` antes de enviar o artefato e publicar no GitHub Pages. |
 | `controle-merge-main.yml` | Check `aprovacao-main`: confere origem `develop`/`fix/*` do mesmo repositório e aprovação de mantenedor (dispensada se o autor já for mantenedor), sem checkout do código do PR. |
-| `monitoramento.yml` | Semanal (segunda-feira, 11h UTC) ou manual: confere a página inicial, a 404 e links externos publicados; em falha, abre uma issue ou comenta na já aberta. |
+| `monitoramento.yml` | Semanal (segunda-feira, 11h UTC) ou manual: confere a página inicial, a CSP publicada (sem curinga nem `'unsafe-*'`), o sitemap, a 404 e links externos publicados; em falha, abre uma issue ou comenta na já aberta. |
 
 ## 3. Como validar suas mudanças
 
