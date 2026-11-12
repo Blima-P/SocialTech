@@ -94,6 +94,77 @@ function arquivoNoDist(endereco) {
 
 const idsPorArquivo = new Map();
 
+// RNF-14: o GitHub Pages não deixa configurar cabeçalhos, então a CSP e a política
+// de referenciador vão por <meta>. A CSP só protege o que vem depois dela.
+const SCRIPT_REMOTO = "https://gc.zgo.at/count.js";
+const REFERRER_ACEITOS = new Set([
+  "no-referrer",
+  "same-origin",
+  "strict-origin",
+  "strict-origin-when-cross-origin",
+]);
+
+function verificarSeguranca(nomeArquivo, tags) {
+  const indiceCsp = tags.findIndex(
+    ({ nome, atributos }) =>
+      nome === "meta" &&
+      atributos.get("http-equiv")?.toLowerCase() === "content-security-policy",
+  );
+  if (indiceCsp === -1) {
+    problema(
+      nomeArquivo,
+      'sem <meta http-equiv="content-security-policy"> (RNF-14). Verifique security.csp no astro.config.mjs.',
+    );
+  } else {
+    const diretivas = new Map(
+      (tags[indiceCsp].atributos.get("content") ?? "")
+        .split(";")
+        .map((diretiva) => diretiva.trim().split(/\s+/))
+        .filter(([nome]) => nome)
+        .map(([nome, ...valores]) => [nome.toLowerCase(), valores]),
+    );
+    for (const [diretiva, valor] of [
+      ["default-src", "'self'"],
+      ["object-src", "'none'"],
+      ["base-uri", "'self'"],
+    ]) {
+      if (!diretivas.get(diretiva)?.includes(valor)) {
+        problema(
+          nomeArquivo,
+          `a CSP precisa de ${diretiva} ${valor} (RNF-14).`,
+        );
+      }
+    }
+    for (const [diretiva, valores] of diretivas) {
+      if (valores.includes("'unsafe-inline'")) {
+        problema(
+          nomeArquivo,
+          `a CSP não pode ter 'unsafe-inline' (em ${diretiva}) (RNF-14).`,
+        );
+      }
+    }
+    if (tags.slice(0, indiceCsp).some(({ nome }) => nome === "script")) {
+      problema(
+        nomeArquivo,
+        "há <script> antes da meta da CSP, e ele fica fora da política (RNF-14).",
+      );
+    }
+  }
+
+  const referrer = tags
+    .find(
+      ({ nome, atributos }) =>
+        nome === "meta" && atributos.get("name") === "referrer",
+    )
+    ?.atributos.get("content");
+  if (!REFERRER_ACEITOS.has(referrer)) {
+    problema(
+      nomeArquivo,
+      `<meta name="referrer"> precisa ser strict-origin-when-cross-origin ou mais restrita; está "${referrer ?? "ausente"}" (RNF-14).`,
+    );
+  }
+}
+
 function verificarAncora(nomeArquivo, href) {
   if (!href.includes("#") || ehExterno(href)) return;
   if (!href.startsWith("#") && !href.startsWith(BASE)) return;
@@ -131,6 +202,7 @@ function verificarAncora(nomeArquivo, href) {
 function verificarPagina(nomeArquivo) {
   const html = limparHtml(readFileSync(join(DIST, nomeArquivo), "utf8"));
   const tags = lerTags(html);
+  verificarSeguranca(nomeArquivo, tags);
 
   const titulos = tags.filter((tag) => tag.nome === "h1").length;
   if (titulos !== 1) {
@@ -149,12 +221,20 @@ function verificarPagina(nomeArquivo) {
 
     if (atributos.get("target") === "_blank") {
       const rel = (atributos.get("rel") ?? "").split(/\s+/);
-      if (!rel.includes("noopener")) {
+      if (!rel.includes("noopener") || !rel.includes("noreferrer")) {
         problema(
           nomeArquivo,
-          `<${nome} href="${atributos.get("href")}"> abre nova aba sem rel="noopener" (RNF-13).`,
+          `<${nome} href="${atributos.get("href")}"> abre nova aba sem rel="noopener noreferrer" (RNF-13, RNF-14).`,
         );
       }
+    }
+
+    const src = atributos.get("src");
+    if (nome === "script" && src && ehExterno(src) && src !== SCRIPT_REMOTO) {
+      problema(
+        nomeArquivo,
+        `<script src="${src}">: o único script remoto aceito é ${SCRIPT_REMOTO} (RNF-14).`,
+      );
     }
 
     const enderecos = [

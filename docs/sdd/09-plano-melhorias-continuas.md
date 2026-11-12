@@ -38,7 +38,7 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 | T-42 | #114 | Configura Dependabot para npm e GitHub Actions | RNF-14 | ⏳ |
 | T-43 | #115 | Adiciona revisão de dependências nos PRs | RNF-14 | ⏳ |
 | T-44 | #116 | Adiciona CSP e política de referenciador | RNF-14, RNF-15 | ✅ |
-| T-45 | #117 | Verificador exige noreferrer, CSP e único script remoto | RNF-14 | ⏳ |
+| T-45 | #117 | Verificador exige noreferrer, CSP e único script remoto | RNF-14 | ✅ |
 | T-46 | #118 | Publica a política de segurança | RNF-14, RNF-15 | ⏳ |
 | T-67 | #142 | Deploy roda o verificador do site antes de publicar | RNF-13, RNF-14 | ✅ #144 |
 
@@ -80,10 +80,10 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 
 **T-45 — critérios de aceite**
 
-- [ ] Todo `target="_blank"` precisa de `rel` com `noopener` e `noreferrer`.
-- [ ] O build falha sem CSP ou sem a política de referenciador.
-- [ ] O único script remoto aceito é `https://gc.zgo.at/count.js`.
-- [ ] O link da avaliação passa a usar `noopener noreferrer`.
+- [x] Todo `target="_blank"` precisa de `rel` com `noopener` e `noreferrer`.
+- [x] O build falha sem CSP, com CSP incompleta (`default-src`, `object-src`, `base-uri`) ou com `'unsafe-inline'`, com `<script>` antes da meta da CSP ou sem a política de referenciador (`strict-origin-when-cross-origin` ou mais restrita).
+- [x] O único script remoto aceito é `https://gc.zgo.at/count.js`.
+- [x] O link da avaliação passa a usar `noopener noreferrer`.
 
 **T-46 — critérios de aceite**
 
