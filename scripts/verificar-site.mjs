@@ -516,26 +516,31 @@ if (blocosJsonLd.length !== 1) {
     `precisa de exatamente um bloco JSON-LD (schema.org), tem ${blocosJsonLd.length}.`,
   );
 } else {
-  let itens = [];
+  let dados;
   try {
-    const dados = JSON.parse(blocosJsonLd[0]);
-    itens = dados["@graph"] ?? [dados];
+    dados = JSON.parse(blocosJsonLd[0]);
   } catch {
     problema("index.html", "o bloco JSON-LD não é um JSON válido.");
   }
-  const site = itens.find((item) => item["@type"] === "WebSite");
-  const inicio = new URL(BASE, config.site).href;
-  if (itens.length > 0 && site?.url !== inicio) {
-    problema(
-      "index.html",
-      `o JSON-LD precisa de um WebSite com url ${inicio}.`,
-    );
-  }
-  if (
-    itens.length > 0 &&
-    !itens.some((item) => item["@type"] === "Organization")
-  ) {
-    problema("index.html", "o JSON-LD precisa de uma Organization.");
+  if (dados !== undefined) {
+    if (dados?.["@context"] !== "https://schema.org") {
+      problema(
+        "index.html",
+        'o JSON-LD precisa de "@context": "https://schema.org".',
+      );
+    }
+    const itens = Array.isArray(dados?.["@graph"]) ? dados["@graph"] : [dados];
+    const site = itens.find((item) => item?.["@type"] === "WebSite");
+    const inicio = new URL(BASE, config.site).href;
+    if (site?.url !== inicio) {
+      problema(
+        "index.html",
+        `o JSON-LD precisa de um WebSite com url ${inicio}.`,
+      );
+    }
+    if (!itens.some((item) => item?.["@type"] === "Organization")) {
+      problema("index.html", "o JSON-LD precisa de uma Organization.");
+    }
   }
 }
 
