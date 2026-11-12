@@ -15,7 +15,12 @@ const visiveis = 3;
   <h2 id="titulo-guia">O que pode ir nesta lixeira?</h2>
   <div class="busca" hidden data-busca>
     <label for="busca-guia">Procure um item</label>
-    <input id="busca-guia" type="search" autocomplete="off" />
+    <input
+      id="busca-guia"
+      type="search"
+      autocomplete="off"
+      placeholder="Ex.: borra de café, isopor"
+    />
     <p class="contagem" aria-live="polite" data-contagem></p>
   </div>
   <div class="grupos">
@@ -171,13 +176,21 @@ const visiveis = 3;
     font-weight: 700;
   }
 
+  /* Cores explícitas: sem elas, o tema escuro usa o estilo nativo do navegador. */
   .busca input {
     width: 100%;
     min-height: var(--alvo-toque);
     border: 2px solid var(--cor-texto-suave);
     border-radius: var(--raio);
     padding-inline: 0.75rem;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
     font: inherit;
+  }
+
+  .busca input::placeholder {
+    color: var(--cor-texto-suave);
+    opacity: 1;
   }
 
   .contagem {
