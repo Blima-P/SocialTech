@@ -10,7 +10,7 @@ let sequencia = 0;
 const urlset = (...enderecos) =>
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${enderecos.map((endereco) => `  <url><loc>${endereco}</loc></url>`).join("\n")}
+${enderecos.map((endereco) => `  <url><loc>${endereco}</loc><lastmod>2026-11-12</lastmod></url>`).join("\n")}
 </urlset>
 `;
 const SITEMAP_VALIDO = urlset("https://blima-p.github.io/SocialTech/");
@@ -273,6 +273,26 @@ test("exige um JSON-LD válido com WebSite e Organization na página inicial", (
   ]) {
     const resultado = verificar({ dadosEstruturados });
     assert.equal(resultado.status, 1);
+    assert.match(resultado.saida, mensagem);
+  }
+});
+
+test("exige lastmod AAAA-MM-DD válido em cada URL do sitemap", () => {
+  const inicio = "https://blima-p.github.io/SocialTech/";
+  for (const [trecho, mensagem] of [
+    [`<loc>${inicio}</loc>`, /está "ausente"/],
+    [
+      `<loc>${inicio}</loc><lastmod>12/11/2026</lastmod>`,
+      /está "12\/11\/2026"/,
+    ],
+    [`<loc>${inicio}</loc><lastmod>2026-02-30</lastmod>`, /está "2026-02-30"/],
+  ]) {
+    const resultado = verificar({
+      sitemap: `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>${trecho}</url></urlset>`,
+    });
+    assert.equal(resultado.status, 1);
+    assert.match(resultado.saida, /<lastmod> precisa ser uma data/);
     assert.match(resultado.saida, mensagem);
   }
 });
