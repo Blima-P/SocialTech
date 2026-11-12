@@ -485,3 +485,27 @@ test("ícone da tela de início do iPhone é um PNG opaco de 180 × 180", async 
   expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([180, 180]);
   expect([2, 3]).toContain(png[25]);
 });
+
+test("manifesto web dá nome, escopo e ícones ao atalho no Android", async ({
+  page,
+}) => {
+  await page.goto(paginaInicial);
+  const href = await page.locator('link[rel="manifest"]').getAttribute("href");
+  expect(href).toBe(`${paginaInicial}site.webmanifest`);
+
+  const manifesto = await (await page.request.get(href!)).json();
+  expect(manifesto).toMatchObject({
+    name: "Compostagem Enactus UCB",
+    lang: "pt-BR",
+    start_url: paginaInicial,
+    scope: paginaInicial,
+  });
+  for (const { src, sizes } of manifesto.icons) {
+    const png = await (await page.request.get(src)).body();
+    const [largura, altura] = [png.readUInt32BE(16), png.readUInt32BE(20)];
+    expect(`${largura}x${altura}`).toBe(sizes);
+  }
+  expect(manifesto.icons).toContainEqual(
+    expect.objectContaining({ purpose: "maskable" }),
+  );
+});
