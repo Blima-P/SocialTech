@@ -425,7 +425,12 @@ if (!existsSync(SITEMAP)) {
     const data = /^\d{4}-\d{2}-\d{2}$/.test(lastmod ?? "")
       ? new Date(`${lastmod}T00:00:00Z`)
       : undefined;
-    if (!data || data.toISOString().slice(0, 10) !== lastmod) {
+    // Mês 13 vira "Invalid Date"; dia 30 de fevereiro vira 2 de março.
+    if (
+      !data ||
+      Number.isNaN(data.getTime()) ||
+      data.toISOString().slice(0, 10) !== lastmod
+    ) {
       problema(
         "sitemap.xml",
         `<lastmod> precisa ser uma data AAAA-MM-DD válida; está "${lastmod ?? "ausente"}".`,
@@ -548,26 +553,31 @@ if (blocosJsonLd.length !== 1) {
     `precisa de exatamente um bloco JSON-LD (schema.org), tem ${blocosJsonLd.length}.`,
   );
 } else {
-  let itens = [];
+  let dados;
   try {
-    const dados = JSON.parse(blocosJsonLd[0]);
-    itens = dados["@graph"] ?? [dados];
+    dados = JSON.parse(blocosJsonLd[0]);
   } catch {
     problema("index.html", "o bloco JSON-LD não é um JSON válido.");
   }
-  const site = itens.find((item) => item["@type"] === "WebSite");
-  const inicio = new URL(BASE, config.site).href;
-  if (itens.length > 0 && site?.url !== inicio) {
-    problema(
-      "index.html",
-      `o JSON-LD precisa de um WebSite com url ${inicio}.`,
-    );
-  }
-  if (
-    itens.length > 0 &&
-    !itens.some((item) => item["@type"] === "Organization")
-  ) {
-    problema("index.html", "o JSON-LD precisa de uma Organization.");
+  if (dados !== undefined) {
+    if (dados?.["@context"] !== "https://schema.org") {
+      problema(
+        "index.html",
+        'o JSON-LD precisa de "@context": "https://schema.org".',
+      );
+    }
+    const itens = Array.isArray(dados?.["@graph"]) ? dados["@graph"] : [dados];
+    const site = itens.find((item) => item?.["@type"] === "WebSite");
+    const inicio = new URL(BASE, config.site).href;
+    if (site?.url !== inicio) {
+      problema(
+        "index.html",
+        `o JSON-LD precisa de um WebSite com url ${inicio}.`,
+      );
+    }
+    if (!itens.some((item) => item?.["@type"] === "Organization")) {
+      problema("index.html", "o JSON-LD precisa de uma Organization.");
+    }
   }
 }
 

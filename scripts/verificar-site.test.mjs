@@ -255,7 +255,7 @@ test("sitemap lista apenas a página inicial", () => {
   assert.match(resultado.saida, /inexistente\/: o site tem uma página só/);
 });
 
-test("exige um JSON-LD válido com WebSite e Organization na página inicial", () => {
+test("exige um JSON-LD schema.org com WebSite e Organization na página inicial", () => {
   for (const [dadosEstruturados, mensagem] of [
     ["", /exatamente um bloco JSON-LD \(schema\.org\), tem 0/],
     [jsonLd("{ inválido"), /não é um JSON válido/],
@@ -270,6 +270,20 @@ test("exige um JSON-LD válido com WebSite e Organization na página inicial", (
       }),
       /precisa de uma Organization/,
     ],
+    [
+      jsonLd({ "@context": "https://schema.org", "@graph": [] }),
+      /WebSite com url[\s\S]*precisa de uma Organization/,
+    ],
+    [
+      jsonLd({
+        "@graph": [
+          { "@type": "WebSite", url: "https://blima-p.github.io/SocialTech/" },
+          { "@type": "Organization", name: "Enactus UCB" },
+        ],
+      }),
+      /precisa de "@context": "https:\/\/schema\.org"/,
+    ],
+    [jsonLd("null"), /precisa de "@context"[\s\S]*WebSite com url/],
   ]) {
     const resultado = verificar({ dadosEstruturados });
     assert.equal(resultado.status, 1);
@@ -286,6 +300,8 @@ test("exige lastmod AAAA-MM-DD válido em cada URL do sitemap", () => {
       /está "12\/11\/2026"/,
     ],
     [`<loc>${inicio}</loc><lastmod>2026-02-30</lastmod>`, /está "2026-02-30"/],
+    [`<loc>${inicio}</loc><lastmod>2026-13-01</lastmod>`, /está "2026-13-01"/],
+    [`<loc>${inicio}</loc><lastmod>2026-00-10</lastmod>`, /está "2026-00-10"/],
   ]) {
     const resultado = verificar({
       sitemap: `<?xml version="1.0" encoding="UTF-8"?>
