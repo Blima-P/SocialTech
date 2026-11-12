@@ -38,6 +38,26 @@ test.describe("guia de descarte", () => {
       await expect(botao).toHaveAttribute("aria-expanded", "false");
     }
   });
+
+  test("campo de busca usa as cores do tema escuro", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    const busca = page.getByLabel("Procure um item");
+    await expect(busca).toHaveAttribute("placeholder", /^Ex\.: /);
+
+    // Converte os tokens do tema para rgb() pelo próprio navegador.
+    const esperado = await page.evaluate(() => {
+      const amostra = document.createElement("span");
+      amostra.style.backgroundColor = "var(--cor-fundo)";
+      amostra.style.color = "var(--cor-texto)";
+      document.body.append(amostra);
+      const { backgroundColor, color } = getComputedStyle(amostra);
+      amostra.remove();
+      return { backgroundColor, color };
+    });
+    expect(esperado.backgroundColor).not.toBe(esperado.color);
+    await expect(busca).toHaveCSS("background-color", esperado.backgroundColor);
+    await expect(busca).toHaveCSS("color", esperado.color);
+  });
 });
 
 test.describe("ciclo do resíduo", () => {
