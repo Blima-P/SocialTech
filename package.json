@@ -16,8 +16,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:e2e": "playwright test",
+    "test:verificador": "node --test scripts/verificar-site.test.mjs",
     "verificar:site": "node scripts/verificar-site.mjs",
-    "verify": "npm run format:check && npm run lint && npm run check && npm run build && npm run verificar:site",
+    "verify": "npm run format:check && npm run lint && npm run check && npm run build && npm run verificar:site && npm run test:verificador",
     "astro": "astro"
   },
   "dependencies": {

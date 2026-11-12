@@ -92,6 +92,42 @@ function arquivoNoDist(endereco) {
     : arquivo;
 }
 
+const idsPorArquivo = new Map();
+
+function verificarAncora(nomeArquivo, href) {
+  if (!href.includes("#") || ehExterno(href)) return;
+  if (!href.startsWith("#") && !href.startsWith(BASE)) return;
+
+  const destino = href.startsWith("#")
+    ? join(DIST, nomeArquivo)
+    : arquivoNoDist(href);
+  const fragmento = href.slice(href.indexOf("#") + 1);
+  let id;
+  try {
+    id = decodeURIComponent(fragmento);
+  } catch {
+    problema(nomeArquivo, `href="${href}" tem id inválido: "${fragmento}".`);
+    return;
+  }
+  if (!existsSync(destino) || !statSync(destino).isFile()) {
+    problema(
+      nomeArquivo,
+      `href="${href}": página de destino não existe; id "${id}" ausente.`,
+    );
+    return;
+  }
+  if (!idsPorArquivo.has(destino)) {
+    const tags = lerTags(limparHtml(readFileSync(destino, "utf8")));
+    idsPorArquivo.set(
+      destino,
+      new Set(tags.map((tag) => tag.atributos.get("id")).filter(Boolean)),
+    );
+  }
+  if (!idsPorArquivo.get(destino).has(id)) {
+    problema(nomeArquivo, `href="${href}": id "${id}" ausente no destino.`);
+  }
+}
+
 function verificarPagina(nomeArquivo) {
   const html = limparHtml(readFileSync(join(DIST, nomeArquivo), "utf8"));
   const tags = lerTags(html);
@@ -103,6 +139,8 @@ function verificarPagina(nomeArquivo) {
 
   for (const tag of tags) {
     const { nome, atributos } = tag;
+    const href = atributos.get("href");
+    if (href !== undefined) verificarAncora(nomeArquivo, href);
 
     if (nome === "img" && !atributos.has("alt")) {
       const src = atributos.get("src") ?? "(sem src)";
@@ -207,7 +245,13 @@ if (!existsSync(join(DIST, "index.html"))) {
   process.exit(1);
 }
 
-const paginas = readdirSync(DIST).filter((nome) => nome.endsWith(".html"));
+if (!existsSync(join(DIST, "404.html"))) {
+  problema("404.html", "dist/404.html não existe. Verifique a página de erro.");
+}
+
+const paginas = readdirSync(DIST, { recursive: true }).filter((nome) =>
+  nome.endsWith(".html"),
+);
 let tagsDaInicial = [];
 for (const pagina of paginas) {
   const tags = verificarPagina(pagina);
