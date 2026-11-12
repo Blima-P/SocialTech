@@ -110,9 +110,12 @@ const atalhos = [
     padding: 0.625rem var(--recuo-lateral) 0.25rem;
   }
 
+  /* A margem completa a altura do botão de tema, que só aparece com JavaScript:
+     revelá-lo não muda a altura da linha nem desloca a página (CLS). */
   .barra img {
     width: auto;
     height: 2.25rem;
+    margin-block: calc((var(--alvo-toque) - 2.25rem) / 2);
   }
 
   .logo-claro {
