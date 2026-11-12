@@ -35,39 +35,39 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 |---|---|---|---|---|
 | T-40 | #112 | Fixa GitHub Actions por SHA imutável | RNF-14 | ✅ #139 |
 | T-41 | #113 | Aplica permissões mínimas por job e checkout sem credenciais | RNF-14 | ✅ #141 |
-| T-42 | #114 | Configura Dependabot para npm e GitHub Actions | RNF-14 | ⏳ |
-| T-43 | #115 | Adiciona revisão de dependências nos PRs | RNF-14 | ⏳ |
-| T-44 | #116 | Adiciona CSP e política de referenciador | RNF-14, RNF-15 | ✅ |
-| T-45 | #117 | Verificador exige noreferrer, CSP e único script remoto | RNF-14 | ✅ |
-| T-46 | #118 | Publica a política de segurança | RNF-14, RNF-15 | ⏳ |
+| T-42 | #114 | Configura Dependabot para npm e GitHub Actions | RNF-14 | ✅ #147 |
+| T-43 | #115 | Adiciona revisão de dependências nos PRs | RNF-14 | ✅ #149 |
+| T-44 | #116 | Adiciona CSP e política de referenciador | RNF-14, RNF-15 | ✅ #166 |
+| T-45 | #117 | Verificador exige noreferrer, CSP e único script remoto | RNF-14 | ✅ #169 |
+| T-46 | #118 | Publica a política de segurança | RNF-14, RNF-15 | ✅ #153 |
 | T-67 | #142 | Deploy roda o verificador do site antes de publicar | RNF-13, RNF-14 | ✅ #144 |
 
 **T-40 — critérios de aceite**
 
-- [ ] Nenhum `uses:` aponta para tag ou branch; cada SHA leva a versão em comentário (`# vN`).
-- [ ] Cada SHA confere com a release indicada.
+- [x] Nenhum `uses:` aponta para tag ou branch; cada SHA leva a versão em comentário (`# vN`).
+- [x] Cada SHA confere com a release indicada.
 - [ ] CI, links, controle de merge e deploy continuam verdes.
-- [ ] O `controle-merge-main` mantém `pull_request_target`: ele não faz checkout do PR e não pode ser alterado pelo próprio PR.
+- [x] O `controle-merge-main` mantém `pull_request_target`: ele não faz checkout do PR e não pode ser alterado pelo próprio PR.
 
 **T-41 — critérios de aceite**
 
-- [ ] O job `build` tem só `contents: read` e `pages: read` (exigido por `configure-pages`).
-- [ ] Só o job `deploy` recebe `pages: write` e `id-token: write`.
-- [ ] Todos os `actions/checkout` usam `persist-credentials: false`.
+- [x] O job `build` tem só `contents: read` e `pages: read` (exigido por `configure-pages`).
+- [x] Só o job `deploy` recebe `pages: write` e `id-token: write`.
+- [x] Todos os `actions/checkout` usam `persist-credentials: false`.
 - [ ] O deploy publica normalmente.
 
 **T-42 — critérios de aceite**
 
-- [ ] `.github/dependabot.yml` cobre `npm` e `github-actions`, roda semanalmente e abre PRs para `develop`.
-- [ ] Patch e minor vêm agrupados; atualizações major ficam fora do Dependabot e são feitas à mão, com revisão; poucos PRs abertos ao mesmo tempo.
-- [ ] A instalação continua só por `npm ci`.
+- [x] `.github/dependabot.yml` cobre `npm` e `github-actions`, roda semanalmente e abre PRs para `develop`.
+- [x] Patch e minor vêm agrupados; atualizações major ficam fora do Dependabot e são feitas à mão, com revisão; poucos PRs abertos ao mesmo tempo.
+- [x] A instalação continua só por `npm ci`.
 
 **T-43 — critérios de aceite**
 
-- [ ] Workflow `dependency-review-action` (fixado por SHA) roda nos PRs para `develop` e `main`.
-- [ ] Falha com vulnerabilidade alta ou crítica.
-- [ ] Tem `timeout-minutes` e só `contents: read`.
-- [ ] PR sem mudança de dependência passa.
+- [x] Workflow `dependency-review-action` (fixado por SHA) roda nos PRs para `develop` e `main`.
+- [x] Falha com vulnerabilidade alta ou crítica.
+- [x] Tem `timeout-minutes` e só `contents: read`.
+- [x] PR sem mudança de dependência passa.
 
 **T-44 — critérios de aceite**
 
@@ -87,14 +87,14 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 
 **T-46 — critérios de aceite**
 
-- [ ] `SECURITY.md` em português aponta para o relato privado de vulnerabilidades do GitHub e pede que não se publique dado pessoal em issue.
-- [ ] O relato privado de vulnerabilidades está ativado no repositório.
-- [ ] Nenhum e-mail pessoal ou segredo é publicado.
+- [x] `SECURITY.md` em português aponta para o relato privado de vulnerabilidades do GitHub e pede que não se publique dado pessoal em issue.
+- [x] O relato privado de vulnerabilidades está ativado no repositório.
+- [x] Nenhum e-mail pessoal ou segredo é publicado.
 
 **T-67 — critérios de aceite**
 
-- [ ] O workflow de deploy roda `npm run verificar:site` depois do build e antes de enviar o artefato.
-- [ ] Um site que falha no verificador não é publicado.
+- [x] O workflow de deploy roda `npm run verificar:site` depois do build e antes de enviar o artefato.
+- [x] Um site que falha no verificador não é publicado.
 
 ### M6 · Visual e acessibilidade
 
@@ -104,63 +104,63 @@ Corrigir lacunas de WCAG 2.1 AA e de leitura rápida no celular, sem mudar o con
 |---|---|---|---|---|
 | T-47 | #119 | Adiciona link "Pular para o conteúdo" | RNF-05, RNF-06 | ✅ #143 |
 | T-48 | #120 | Campo de busca usa as cores do tema e mostra exemplo | RF-02, RNF-05 | ✅ #146 |
-| T-49 | #121 | Botão "Limpar busca" com alvo de toque | RF-02, RNF-05 | ⏳ |
-| T-50 | #122 | Botão desabilitado continua parecendo botão e setas navegam as etapas | RF-05, RNF-05 | ⏳ |
-| T-51 | #123 | Destaca a alternativa escolhida e foca o feedback só por teclado | RF-17, RNF-05 | ⏳ |
-| T-52 | #124 | Alterna o fundo de seções vizinhas | RNF-07, ADR-007 | ⏳ |
-| T-53 | #125 | Atalhos sublinhados, espaçados e com alvo de toque | RNF-05 | ⏳ |
-| T-54 | #126 | Versão para impressão com todo o conteúdo | RNF-10 | ⏳ |
+| T-49 | #121 | Botão "Limpar busca" com alvo de toque | RF-02, RNF-05 | ✅ #154 |
+| T-50 | #122 | Botão desabilitado continua parecendo botão e setas navegam as etapas | RF-05, RNF-05 | ✅ #156 |
+| T-51 | #123 | Destaca a alternativa escolhida e foca o feedback só por teclado | RF-17, RNF-05 | ✅ #157 |
+| T-52 | #124 | Alterna o fundo de seções vizinhas | RNF-07, ADR-007 | ✅ #159 |
+| T-53 | #125 | Atalhos sublinhados, espaçados e com alvo de toque | RNF-05 | ✅ #161 |
+| T-54 | #126 | Versão para impressão com todo o conteúdo | RNF-10 | ✅ #163 |
 
 **T-47 — critérios de aceite**
 
-- [ ] O primeiro Tab foca "Pular para o conteúdo", visível e com no mínimo 44 px.
-- [ ] Enter leva o foco para o `main`.
-- [ ] Fora do foco, o link não ocupa espaço nem gera CLS.
-- [ ] Teste Playwright cobre o fluxo.
+- [x] O primeiro Tab foca "Pular para o conteúdo", visível e com no mínimo 44 px.
+- [x] Enter leva o foco para o `main`.
+- [x] Fora do foco, o link não ocupa espaço nem gera CLS.
+- [x] Teste Playwright cobre o fluxo.
 
 **T-48 — critérios de aceite**
 
-- [ ] Nos dois temas, o campo usa `--cor-fundo` e `--cor-texto`.
-- [ ] O placeholder dá exemplo, tem contraste AA e não substitui o rótulo.
-- [ ] Teste Playwright no tema escuro.
+- [x] Nos dois temas, o campo usa `--cor-fundo` e `--cor-texto`.
+- [x] O placeholder dá exemplo, tem contraste AA e não substitui o rótulo.
+- [x] Teste Playwright no tema escuro.
 
 **T-49 — critérios de aceite**
 
-- [ ] "Limpar busca" só aparece quando há texto e mede no mínimo 44 × 44 px.
-- [ ] Ao tocar, esvazia o campo, mostra a lista inicial e devolve o foco ao campo.
-- [ ] Sem JavaScript nada muda (a busca continua oculta).
-- [ ] Teste Playwright.
+- [x] "Limpar busca" só aparece quando há texto e mede no mínimo 44 × 44 px.
+- [x] Ao tocar, esvazia o campo, mostra a lista inicial e devolve o foco ao campo.
+- [x] Sem JavaScript nada muda (a busca continua oculta).
+- [x] Teste Playwright.
 
 **T-50 — critérios de aceite**
 
-- [ ] "Anterior" desabilitado mantém contorno e fundo distintos de "Próxima".
-- [ ] Seta direita/esquerda só move o foco entre os atalhos (com `preventDefault`); Enter ou Espaço ativam a etapa focada. Roving tabindex não é exigido.
-- [ ] O arraste no celular continua igual.
-- [ ] O teste do ciclo cobre as setas, e o teste "não anuncia etapas intermediárias" continua passando.
+- [x] "Anterior" desabilitado mantém contorno e fundo distintos de "Próxima".
+- [x] Seta direita/esquerda só move o foco entre os atalhos (com `preventDefault`); Enter ou Espaço ativam a etapa focada. Roving tabindex não é exigido.
+- [x] O arraste no celular continua igual.
+- [x] O teste do ciclo cobre as setas, e o teste "não anuncia etapas intermediárias" continua passando.
 
 **T-51 — critérios de aceite**
 
-- [ ] A alternativa escolhida fica em negrito e com borda reforçada; as não escolhidas ficam esmaecidas com contraste AA.
-- [ ] O anel de foco do feedback usa `:focus-visible`.
-- [ ] Teste Playwright.
+- [x] A alternativa escolhida fica em negrito e com borda reforçada; as não escolhidas ficam esmaecidas com contraste AA.
+- [x] O anel de foco do feedback usa `:focus-visible`.
+- [x] Teste Playwright.
 
 **T-52 — critérios de aceite**
 
-- [ ] Seções vizinhas em `main` nunca têm o mesmo fundo sem divisória.
-- [ ] O contraste dos textos continua AA nos dois temas.
-- [ ] Teste Playwright percorre as seções; captura em 360 px.
+- [x] Seções vizinhas em `main` nunca têm o mesmo fundo sem divisória.
+- [x] O contraste dos textos continua AA nos dois temas.
+- [x] Teste Playwright percorre as seções; captura em 360 px.
 
 **T-53 — critérios de aceite**
 
-- [ ] Os atalhos da 404 têm sublinhado, espaço entre si e no mínimo 44 px de altura.
-- [ ] Teste Playwright em `/SocialTech/404.html`.
+- [x] Os atalhos da 404 têm sublinhado, espaço entre si e no mínimo 44 px de altura.
+- [x] Teste Playwright em `/SocialTech/404.html`.
 
 **T-54 — critérios de aceite**
 
-- [ ] Na impressão, todos os cartões do guia e as cinco etapas do ciclo aparecem, inclusive os que o JavaScript esconde com `hidden`.
-- [ ] Tema, busca, "Ver mais", navegação do ciclo e quiz ficam ocultos.
-- [ ] Fundos escuros viram texto escuro sobre branco.
-- [ ] Teste Playwright com `emulateMedia({ media: "print" })`.
+- [x] Na impressão, todos os cartões do guia e as cinco etapas do ciclo aparecem, inclusive os que o JavaScript esconde com `hidden`.
+- [x] Tema, busca, "Ver mais", navegação do ciclo e quiz ficam ocultos.
+- [x] Fundos escuros viram texto escuro sobre branco.
+- [x] Teste Playwright com `emulateMedia({ media: "print" })`.
 
 ### M7 · Arquitetura e qualidade
 
@@ -169,51 +169,51 @@ Fazer o painel, o verificador e os testes pegarem erros antes da publicação, e
 | Tarefa | Issue | Entrega | Requisitos | Status |
 |---|---|---|---|---|
 | T-55 | #127 | Ordena dúvidas e links pelo id numérico | RF-14, RF-16 | ✅ #140 |
-| T-56 | #128 | Painel aplica as regras do schema que ele consegue expressar | RF-14, RNF-11 | ⏳ |
-| T-57 | #129 | Troca asserções não nulas por checagem explícita | RNF-14 | ⏳ |
-| T-58 | #130 | Exige 404.html e âncoras internas existentes | RNF-13, RNF-14 | ⏳ |
-| T-59 | #131 | Todo item de guia.json aparece no HTML | RF-01, RF-14 | ⏳ |
-| T-60 | #132 | Cobre a página 404 e o quiz sem alternativa | RF-17, RNF-13 | ⏳ |
-| T-61 | #133 | Alinha AGENTS.md com código e CI | RNF-14 | ⏳ |
+| T-56 | #128 | Painel aplica as regras do schema que ele consegue expressar | RF-14, RNF-11 | ✅ #165 |
+| T-57 | #129 | Troca asserções não nulas por checagem explícita | RNF-14 | ✅ #158 |
+| T-58 | #130 | Exige 404.html e âncoras internas existentes | RNF-13, RNF-14 | ✅ #160 |
+| T-59 | #131 | Todo item de guia.json aparece no HTML | RF-01, RF-14 | ✅ #162 |
+| T-60 | #132 | Cobre a página 404 e o quiz sem alternativa | RF-17, RNF-13 | ✅ #164 |
+| T-61 | #133 | Alinha AGENTS.md com código e CI | RNF-14 | ✅ #168 |
 
 **T-55 — critérios de aceite**
 
-- [ ] `DuvidasComuns` e `ListaLinks` ordenam por `Number(id)`, como os outros componentes.
-- [ ] A ordem no HTML segue a do JSON.
+- [x] `DuvidasComuns` e `ListaLinks` ordenam por `Number(id)`, como os outros componentes.
+- [x] A ordem no HTML segue a do JSON.
 
 **T-56 — critérios de aceite**
 
-- [ ] O `.pages.yml` usa `pattern`, `minlength` e `min`/`max` só onde a regra do zod tem equivalente direto.
-- [ ] Regras que o painel não expressa ficam só no zod e no `npm run verify`, com texto de ajuda no campo: o `endereco` dos links (união de formatos, sem `pattern` único) e `correta ≤ número de alternativas` (o painel aceita `correta` com mínimo 1).
-- [ ] Nenhum valor aceito pelo zod é recusado pelo painel.
-- [ ] O `content.config.ts` indica o campo correspondente no painel.
+- [x] O `.pages.yml` usa `pattern`, `minlength` e `min`/`max` só onde a regra do zod tem equivalente direto.
+- [x] Regras que o painel não expressa ficam só no zod e no `npm run verify`, com texto de ajuda no campo: o `endereco` dos links (união de formatos, sem `pattern` único) e `correta ≤ número de alternativas` (o painel aceita `correta` com mínimo 1).
+- [x] Nenhum valor aceito pelo zod é recusado pelo painel.
+- [x] O `content.config.ts` indica o campo correspondente no painel.
 
 **T-57 — critérios de aceite**
 
-- [ ] Uma função `exigir` lança erro com o seletor em cada um dos três scripts.
-- [ ] Não sobra `!` de asserção não nula nos scripts de cliente.
-- [ ] `npm run verify` e o e2e passam.
+- [x] Uma função `exigir` (`src/scripts/exigir.ts`), usada pelos três scripts, lança erro com o seletor.
+- [x] Não sobra `!` de asserção não nula nos scripts de cliente.
+- [x] `npm run verify` e o e2e passam.
 
 **T-58 — critérios de aceite**
 
-- [ ] O build falha sem `dist/404.html`.
-- [ ] Todo `href` interno com `#` precisa apontar para um `id` existente na página de destino. O verificador resolve o arquivo de destino: os atalhos da 404 apontam para âncoras da página inicial.
-- [ ] Só `node:fs`, sem dependência nova.
+- [x] O build falha sem `dist/404.html`.
+- [x] Todo `href` interno com `#` precisa apontar para um `id` existente na página de destino. O verificador resolve o arquivo de destino: os atalhos da 404 apontam para âncoras da página inicial.
+- [x] Só `node:fs`, sem dependência nova.
 
 **T-59 — critérios de aceite**
 
-- [ ] O verificador lê `src/content/guia.json` e exige cada `nome` em `dist/index.html`.
-- [ ] Falha citando o item ausente.
+- [x] O verificador lê `src/content/guia.json` e exige cada `nome` em `dist/index.html`.
+- [x] Falha citando o item ausente.
 
 **T-60 — critérios de aceite**
 
-- [ ] A 404 mostra o `h1`, o link para o início e os atalhos.
-- [ ] "Responder" sem alternativa mostra o aviso e não avança.
-- [ ] Os dois projetos Playwright passam.
+- [x] A 404 mostra o `h1`, o link para o início e os atalhos.
+- [x] "Responder" sem alternativa mostra o aviso e não avança.
+- [x] Os dois projetos Playwright passam.
 
 **T-61 — critérios de aceite**
 
-- [ ] As três afirmações batem com `astro.config.mjs`, a árvore `src/` e o `ci.yml`.
+- [x] As três afirmações batem com `astro.config.mjs`, a árvore `src/` e o `ci.yml`.
 
 ### M8 · Desempenho, SEO e operação
 
@@ -222,15 +222,15 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 | Tarefa | Issue | Entrega | Requisitos | Status |
 |---|---|---|---|---|
 | T-62 | #134 | Fixa a versão do Node em .nvmrc | RNF-14 | ✅ #145 |
-| T-63 | #135 | Publica sitemap da página canônica | RNF-04 | ✅ |
+| T-63 | #135 | Publica sitemap da página canônica | RNF-04 | ✅ #167 |
 | T-64 | #136 | Dados estruturados das dúvidas comuns | RNF-04, RF-16 | ❌ não planejada (seção 3) |
-| T-65 | #137 | Monitora o site publicado e os links externos toda semana | RNF-13 | ⏳ |
+| T-65 | #137 | Monitora o site publicado e os links externos toda semana | RNF-13 | ✅ #155 |
 | T-66 | #138 | Publica M5–M8 e registra Lighthouse publicado | RNF-01, RNF-02, RNF-03 | ⏳ |
 
 **T-62 — critérios de aceite**
 
-- [ ] O `.nvmrc` define a versão; os workflows usam `node-version-file`.
-- [ ] O README e o CONTRIBUTING citam o `.nvmrc`.
+- [x] O `.nvmrc` define a versão; os workflows usam `node-version-file`.
+- [x] O README e o CONTRIBUTING citam o `.nvmrc`.
 - [ ] CI e deploy passam.
 
 **T-63 — critérios de aceite**
@@ -241,10 +241,10 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 
 **T-65 — critérios de aceite**
 
-- [ ] Um workflow agendado e manual confere: início retorna 200 com o título esperado; rota inexistente retorna 404 com a página de erro; Lychee valida os links do site publicado.
-- [ ] Permissões `contents: read` e `issues: write`; em falha, abre ou comenta uma única issue de alerta.
-- [ ] Timeout e tentativas limitadas.
-- [ ] A documentação avisa que o GitHub desativa workflows agendados após 60 dias sem atividade no repositório.
+- [x] Um workflow agendado e manual confere: início retorna 200 com o título esperado; rota inexistente retorna 404 com a página de erro; Lychee valida os links do site publicado.
+- [x] Permissões `contents: read` e `issues: write`; em falha, abre ou comenta uma única issue de alerta.
+- [x] Timeout e tentativas limitadas.
+- [x] A documentação avisa que o GitHub desativa workflows agendados após 60 dias sem atividade no repositório.
 
 **T-66 — critérios de aceite**
 
