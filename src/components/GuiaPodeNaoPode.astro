@@ -100,6 +100,7 @@ const visiveis = 3;
 </section>
 
 <script>
+  import { exigir } from "../scripts/exigir";
   // Busca local: o que é digitado não é guardado nem enviado.
   const semAcento = (texto: string) =>
     texto
@@ -109,10 +110,10 @@ const visiveis = 3;
       .trim();
 
   for (const guia of document.querySelectorAll<HTMLElement>("[data-guia]")) {
-    const busca = guia.querySelector<HTMLElement>("[data-busca]")!;
-    const campo = busca.querySelector("input")!;
-    const limpar = busca.querySelector<HTMLButtonElement>("[data-limpar]")!;
-    const contagem = guia.querySelector<HTMLElement>("[data-contagem]")!;
+    const busca = exigir(guia, "[data-busca]");
+    const campo = exigir<HTMLInputElement>(busca, "input");
+    const limpar = exigir<HTMLButtonElement>(busca, "[data-limpar]");
+    const contagem = exigir(guia, "[data-contagem]");
     const cartoes = [...guia.querySelectorAll<HTMLElement>(".cartao")];
     const textos = cartoes.map((cartao) =>
       semAcento(cartao.querySelector("strong")?.textContent ?? ""),
@@ -157,7 +158,7 @@ const visiveis = 3;
     };
 
     for (const botao of botoes) {
-      const textoFechado = botao.textContent!.trim();
+      const textoFechado = (botao.textContent ?? "").trim();
       botao.addEventListener("click", () => {
         const abrir = botao.getAttribute("aria-expanded") !== "true";
         botao.setAttribute("aria-expanded", String(abrir));

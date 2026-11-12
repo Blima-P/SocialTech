@@ -62,16 +62,22 @@ const perguntas = (await getCollection("quiz")).sort(
 )}
 
 <script>
+  import { exigir } from "../scripts/exigir";
+
   // O quiz só ensina: nada é enviado nem guardado (Q-12).
   for (const quiz of document.querySelectorAll<HTMLElement>("[data-quiz]")) {
     const perguntas = [
       ...quiz.querySelectorAll<HTMLFieldSetElement>("[data-pergunta]"),
     ];
-    const placar = quiz.querySelector<HTMLElement>("[data-placar]")!;
-    const refazer = quiz.querySelector<HTMLButtonElement>("[data-refazer]")!;
+    const placar = exigir(quiz, "[data-placar]");
+    const refazer = exigir<HTMLButtonElement>(quiz, "[data-refazer]");
     const acertos = new Map<HTMLFieldSetElement, boolean>();
-    const itens = perguntas.map((pergunta) => pergunta.closest("li")!);
-    quiz.querySelector<HTMLElement>("[data-so-com-js]")!.hidden = false;
+    const itens = perguntas.map((pergunta) => {
+      const item = pergunta.closest("li");
+      if (!item) throw new Error("Elemento obrigatório não encontrado: li");
+      return item;
+    });
+    exigir(quiz, "[data-so-com-js]").hidden = false;
 
     // Uma pergunta de cada vez: a seguinte surge quando a anterior é respondida.
     const revelar = (indice: number) => {
@@ -86,8 +92,7 @@ const perguntas = (await getCollection("quiz")).sort(
       pergunta: HTMLFieldSetElement,
       acertou: boolean,
     ) => {
-      const resultado =
-        pergunta.querySelector<HTMLElement>("[data-resultado]")!;
+      const resultado = exigir(pergunta, "[data-resultado]");
       const simbolo = document.createElement("span");
       simbolo.setAttribute("aria-hidden", "true");
       simbolo.textContent = acertou ? "✓ " : "✕ ";
@@ -95,21 +100,20 @@ const perguntas = (await getCollection("quiz")).sort(
       texto.className = acertou ? "certo" : "errado";
       texto.append(simbolo, acertou ? "Certo." : "Errado.");
       resultado.replaceChildren(texto);
-      pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = false;
-      const feedback = pergunta.querySelector<HTMLElement>("[data-feedback]")!;
+      exigir(pergunta, "[data-explicacao]").hidden = false;
+      const feedback = exigir(pergunta, "[data-feedback]");
       feedback.classList.toggle("feedback--certo", acertou);
       feedback.classList.toggle("feedback--errado", !acertou);
       feedback.focus();
     };
 
     for (const pergunta of perguntas) {
-      const responder =
-        pergunta.querySelector<HTMLButtonElement>("[data-responder]")!;
+      const responder = exigir<HTMLButtonElement>(pergunta, "[data-responder]");
       responder.hidden = false;
       responder.addEventListener("click", () => {
         const escolhida =
           pergunta.querySelector<HTMLInputElement>("input:checked");
-        const aviso = pergunta.querySelector<HTMLElement>("[data-aviso]")!;
+        const aviso = exigir(pergunta, "[data-aviso]");
         if (!escolhida) {
           aviso.textContent = "Escolha uma alternativa.";
           return;
@@ -138,15 +142,14 @@ const perguntas = (await getCollection("quiz")).sort(
           opcao.disabled = false;
           opcao.checked = false;
         }
-        pergunta
-          .querySelector<HTMLElement>("[data-resultado]")!
-          .replaceChildren();
-        pergunta
-          .querySelector<HTMLElement>("[data-feedback]")!
-          .classList.remove("feedback--certo", "feedback--errado");
-        pergunta.querySelector<HTMLElement>("[data-aviso]")!.textContent = "";
-        pergunta.querySelector<HTMLElement>("[data-explicacao]")!.hidden = true;
-        pergunta.querySelector<HTMLElement>("[data-responder]")!.hidden = false;
+        exigir(pergunta, "[data-resultado]").replaceChildren();
+        exigir(pergunta, "[data-feedback]").classList.remove(
+          "feedback--certo",
+          "feedback--errado",
+        );
+        exigir(pergunta, "[data-aviso]").textContent = "";
+        exigir(pergunta, "[data-explicacao]").hidden = true;
+        exigir(pergunta, "[data-responder]").hidden = false;
       }
       placar.textContent = "";
       refazer.hidden = true;
