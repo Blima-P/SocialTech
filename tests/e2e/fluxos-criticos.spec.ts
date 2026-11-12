@@ -194,6 +194,52 @@ test.describe("ciclo do resíduo", () => {
       )
       .toEqual(["Etapa 5 de 5: Gastronomia/Nutrição"]);
   });
+
+  test("setas movem o foco entre os atalhos e Enter escolhe a etapa", async ({
+    page,
+  }) => {
+    const atalhos = page.locator("[data-atalhos] button");
+    const posicao = page.locator("[data-posicao]");
+    await atalhos.first().focus();
+
+    await page.keyboard.press("ArrowRight");
+    await expect(atalhos.nth(1)).toBeFocused();
+    await expect(posicao).toContainText("Etapa 1 de 5");
+    await page.keyboard.press("End");
+    await expect(atalhos.last()).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(atalhos.last()).toBeFocused();
+    await page.keyboard.press("ArrowLeft");
+    await expect(atalhos.nth(3)).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(posicao).toContainText("Etapa 4 de 5");
+    await page.keyboard.press("Home");
+    await expect(atalhos.first()).toBeFocused();
+    await expect(posicao).toContainText("Etapa 4 de 5");
+  });
+
+  test("botão desabilitado mantém contorno e fundo próprios", async ({
+    page,
+  }) => {
+    const estilo = (nome: string) =>
+      page.getByRole("button", { name: nome }).evaluate((botao) => {
+        const css = getComputedStyle(botao);
+        return {
+          borda: css.borderTopStyle,
+          corBorda: css.borderTopColor,
+          fundo: css.backgroundColor,
+          fundoSecao: getComputedStyle(botao.closest("section")!)
+            .backgroundColor,
+        };
+      });
+    const anterior = await estilo("Anterior");
+    const proxima = await estilo("Próxima");
+
+    await expect(page.getByRole("button", { name: "Anterior" })).toBeDisabled();
+    expect(anterior.borda).toBe("dashed");
+    expect(anterior.corBorda).not.toBe(anterior.fundoSecao);
+    expect(anterior.fundo).not.toBe(proxima.fundo);
+  });
 });
 
 test("quiz revela perguntas, calcula o placar e permite refazer", async ({
