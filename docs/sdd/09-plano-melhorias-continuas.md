@@ -3,7 +3,7 @@
 | Campo | Valor |
 |---|---|
 | Projeto | Compostagem Enactus UCB (SocialTech) |
-| Versão | 1.2 (12/11/2026) — release do M5–M8 publicada, Lighthouse registrado e M9 incluído |
+| Versão | 1.3 (12/11/2026) — T-88 e T-89 incluídas e release do M9 publicada |
 | Status | 🚧 Em execução |
 | Base | [Requisitos](../requisitos.md), [Arquitetura](../arquitetura.md), [Plano M1–M4](08-plano-milestones.md) |
 
@@ -300,7 +300,7 @@ Pequenas melhorias de descoberta, instalação e verificação depois da release
 | T-75 | #186 | `<lastmod>` no sitemap | RNF-14 | ✅ #194 |
 | T-76 | #187 | Ícone para a tela de início do iPhone (`apple-touch-icon`) | RNF-11, RNF-16 | ✅ #195 |
 | T-77 | #188 | Manifesto web com nome, escopo e ícones 192/512 | RNF-11, RNF-16 | ✅ #197 |
-| T-78 | #189 | Link "Código aberto (licença MIT)" no rodapé | RNF-06, RNF-07 | ✅ #196 |
+| T-78 | #189 | Link "Código aberto (licença MIT)" no rodapé (retirado na T-89) | RNF-06, RNF-07 | ✅ #196 |
 | T-79 | #190 | Verificador exige que recursos internos e `og:image` existam em `dist/` | RNF-14 | ✅ #200 |
 | T-80 | #191 | Links de contato (relato privado de vulnerabilidade e guia) ao abrir issue | RNF-13 | ✅ #198 |
 | T-81 | #192 | Monitoramento confere a CSP publicada e o sitemap | RNF-14, RNF-15 | ✅ #199 |
@@ -310,6 +310,8 @@ Pequenas melhorias de descoberta, instalação e verificação depois da release
 | T-85 | #204 | Verificador trata `<lastmod>` com mês ou dia fora do intervalo | RNF-14 | ✅ #210 |
 | T-86 | #205 | Manifesto com `minimal-ui` e fundo igual ao dos ícones | RNF-11 | ✅ #211 |
 | T-87 | #206 | Logo PNG da organização no JSON-LD | RNF-13, RNF-14 | ✅ #212 |
+| T-88 | #215 | Tema claro com `color-scheme: only light`: o modo escuro automático do Chrome/Edge não inverte mais a página | RF-17, RNF-04, RNF-11 | ✅ #216 |
+| T-89 | #217 | Rodapé em duas colunas com barra inferior e botão "Voltar ao topo"; sem o link da licença, a pedido da dona do projeto | RNF-05, RNF-07 | ✅ #218 |
 
 **Critérios de aceite do M9**
 
@@ -319,7 +321,7 @@ Pequenas melhorias de descoberta, instalação e verificação depois da release
 - [x] O verificador confere a existência de todo `href`/`src`/`srcset` interno, inclusive absoluto do próprio site, e recusa caminhos que saem de `/SocialTech/` ou de `dist/`.
 - [x] O monitoramento exige `default-src 'self'` sem curinga nem `'unsafe-*'` e o sitemap com a URL inicial; o run manual passou no site publicado.
 - [x] A página inicial continua abaixo de 350 KB (332,7 KB).
-- [ ] Release do M9 para a `main` publicada, com o manifesto, os ícones e o JSON-LD conferidos no site publicado.
+- [x] Release do M9 para a `main` publicada (#219), com o manifesto, os ícones, o JSON-LD, a CSP, o tema e o rodapé conferidos no site publicado; o monitoramento passou depois do deploy.
 ## 3. Propostas avaliadas e não incluídas
 
 | Proposta | Decisão | Motivo |
@@ -414,3 +416,5 @@ Dois modelos revisaram o diff `main`…`develop` com T-74 a T-81: GPT-6.1 Terra 
 | `<lastmod>` com mês 13 lançava `RangeError` em vez de virar problema | Gemini | Corrigido na T-85 (#210) |
 | `standalone` sem service worker esconde voltar e recarregar; fundo branco destoa do ícone escuro | Gemini | Corrigido na T-86 (#211) |
 | `Organization.logo` em SVG não é usado pelo Google | Gemini | Corrigido na T-87 (#212) |
+
+T-88 e T-89 também passaram por rubber duck (Claude): nada bloqueante. Na T-89, a borda do botão "Voltar ao topo" subiu para 3,4:1 e o teste passou a cobrir a página 404.
