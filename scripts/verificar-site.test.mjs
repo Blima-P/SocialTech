@@ -286,6 +286,8 @@ test("exige lastmod AAAA-MM-DD válido em cada URL do sitemap", () => {
       /está "12\/11\/2026"/,
     ],
     [`<loc>${inicio}</loc><lastmod>2026-02-30</lastmod>`, /está "2026-02-30"/],
+    [`<loc>${inicio}</loc><lastmod>2026-13-01</lastmod>`, /está "2026-13-01"/],
+    [`<loc>${inicio}</loc><lastmod>2026-00-10</lastmod>`, /está "2026-00-10"/],
   ]) {
     const resultado = verificar({
       sitemap: `<?xml version="1.0" encoding="UTF-8"?>
