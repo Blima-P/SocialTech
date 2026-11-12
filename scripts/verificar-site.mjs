@@ -570,8 +570,23 @@ if (blocosJsonLd.length !== 1) {
         `o JSON-LD precisa de um WebSite com url ${inicio}.`,
       );
     }
-    if (!itens.some((item) => item?.["@type"] === "Organization")) {
+    const organizacao = itens.find(
+      (item) => item?.["@type"] === "Organization",
+    );
+    if (!organizacao) {
       problema("index.html", "o JSON-LD precisa de uma Organization.");
+    } else if (
+      typeof organizacao.logo !== "string" ||
+      !ehDoSite(organizacao.logo) ||
+      !/\.(png|jpe?g|webp)$/i.test(organizacao.logo)
+    ) {
+      // O Google só usa logotipo matricial (PNG, JPEG ou WebP).
+      problema(
+        "index.html",
+        `o logo da Organization no JSON-LD precisa ser PNG, JPEG ou WebP sob ${inicio}; está "${organizacao.logo ?? "ausente"}".`,
+      );
+    } else {
+      verificarArquivo("index.html", organizacao.logo, "Organization.logo");
     }
   }
 }

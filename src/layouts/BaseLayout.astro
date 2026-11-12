@@ -41,7 +41,8 @@ const dadosEstruturados = JSON.stringify({
       "@id": `${inicio}#organizacao`,
       name: "Enactus UCB",
       url: inicio,
-      logo: new URL(`${import.meta.env.BASE_URL}favicon.svg`, Astro.site).href,
+      logo: new URL(`${import.meta.env.BASE_URL}icone-512.png`, Astro.site)
+        .href,
       parentOrganization: {
         "@type": "CollegeOrUniversity",
         name: "Universidade Católica de Brasília",
