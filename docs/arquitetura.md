@@ -384,7 +384,7 @@ sequenceDiagram
   V->>C: aponta para o QR Code da lixeira
   C->>N: abre o endereço do QR (campanha lixeira, origem qr)
   N->>P: pede a página por HTTPS
-  P-->>N: HTML, CSS, logo e fontes (menos de 500 KB)
+  P-->>N: HTML, CSS, imagens e fontes (meta interna abaixo de 350 KB)
   N->>G: count.js registra a visita, sem cookie
   N-->>V: mostra o título e o guia logo no topo
   V->>N: procura o item na lista ou na busca
@@ -497,13 +497,15 @@ flowchart LR
 | Tipos e templates | `astro check` | Local e CI | RNF-14 |
 | Schema do conteúdo | `astro build` (zod) | Local, CI e deploy | RF-15, RNF-15 |
 | Links quebrados | lychee (`*.md`, `src/**/*.astro` e `src/content/**/*.json`) | CI em todo PR, em `push` na `develop` e na `main` (edições do painel) | T-16, T-19 |
-| Site gerado | `npm run verificar:site` (`scripts/verificar-site.mjs`, Node puro): página inicial < 500 KB, um único `<h1>`, `alt` em todo `<img>`, caminhos internos com `/SocialTech/` ou `#`, só o GoatCounter como script externo, `target="_blank"` com `rel="noopener"` | Local (`npm run verify`) e CI | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 (T-19) |
+| Site gerado | `npm run verificar:site` (`scripts/verificar-site.mjs`, Node puro): orçamento interno da página inicial < 350 KB (margem sobre o RNF-01 de 500 KB), um único `<h1>`, `alt` em todo `<img>`, caminhos internos com `/SocialTech/` ou `#`, só o GoatCounter como script externo, `target="_blank"` com `rel="noopener"` | Local (`npm run verify`) e CI | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 (T-19, T-39) |
 | Layout em 360 px e 1366 px | Modo responsivo do navegador + capturas no PR | Toda tarefa visual (DoD) | RNF-05 |
 | Teclado, foco e leitor de tela | Tab/Enter/Espaço; TalkBack ou VoiceOver | Tarefas interativas e homologação | RNF-07 |
 | Sem JavaScript | Desativar o JavaScript no navegador | T-12, T-14, T-15 e homologação | RNF-10 |
 | Privacidade | Aba Rede e aba Aplicação (Cookies, Local Storage) | T-08, T-14, T-15 e homologação | RNF-12 |
 | Desempenho e acessibilidade | Lighthouse em modo celular, na página publicada | H2 | RNF-01 a RNF-03 |
 | Celulares reais | 2 celulares (Android e iPhone, se possível), 4G | Antes de cada release e nas homologações | RNF-11 |
+
+**Medição da T-39:** o verificador local registrou 326,6 KB no pior caso das imagens responsivas. O Lighthouse 12 em modo celular, sobre o build de produção local, transferiu 276 KiB e obteve Desempenho 100, Acessibilidade 100, Boas práticas 100, SEO 100, LCP 1,6 s e CLS 0.
 
 Não há testes automatizados de comportamento (busca, ciclo, quiz): eles são verificados à mão pelos critérios de aceite (dívida DT-01). A estrutura do HTML gerado (peso, `<h1>`, `alt`, caminhos, terceiros e `noopener`) é conferida automaticamente desde a T-19.
 
@@ -524,7 +526,7 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 | RH-09 | Tocar em "Responder o formulário" | Abre o formulário certo em nova aba | RF-12 | H1-5 | — |
 | RH-10 | O Prof. Marcus edita pelo painel um número de impacto e uma pergunta do quiz (em rascunho), sem ajuda | Consegue sozinho | RF-15 | — | H2-8 |
 | RH-11 | Em 360 px e 1366 px: rolar a página toda, navegar com Tab e repetir com o JavaScript desativado | Sem rolagem horizontal; foco visível; conteúdo legível sem JavaScript | RNF-05, RNF-07, RNF-10 | H1-7 | H2-1 |
-| RH-12 | Rodar o Lighthouse (modo celular) e conferir os cookies | Acessibilidade ≥ 90; peso < 500 KB; nenhum cookie | RNF-01 a RNF-03, RNF-12 | — | H2-6 |
+| RH-12 | Rodar o Lighthouse (modo celular) e conferir os cookies | Acessibilidade ≥ 90; peso < 500 KB, com meta interna < 350 KB; nenhum cookie | RNF-01 a RNF-03, RNF-12 | — | H2-6 |
 
 **Validação de conteúdo:** a Enactus confere os itens do guia e os nomes do ciclo (H1-2, H1-3, H2-3); o Prof. Marcus confere os textos.
 
@@ -644,7 +646,7 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 |---|---|---|---|
 | DT-01 | Sem testes automatizados de comportamento (busca, ciclo, quiz) | Regressões só aparecem no teste manual | Aceito pelo prazo; critérios de aceite e roteiro de homologação cobrem os casos. Desde a T-19, o `npm run verificar:site` confere a estrutura do HTML gerado (`<h1>`, `alt`, caminhos, terceiros), mas não o comportamento |
 | DT-02 | Edições do painel vão direto para a `main`, sem revisão (ADR-002) | A `develop` fica atrás da `main` | `git merge origin/main` na `develop` antes e depois de cada release |
-| DT-03 | Lighthouse não roda no CI | Desempenho e acessibilidade podem piorar sem aviso | Desde a T-19, o CI falha se a página inicial passar de 500 KB (RNF-01) ou perder o `<h1>` único ou o `alt`; as notas do Lighthouse (RNF-02, RNF-03) continuam medidas à mão (RH-12) |
+| DT-03 | Lighthouse não roda no CI | Desempenho e acessibilidade podem piorar sem aviso | Desde a T-39, o CI usa um orçamento interno de 350 KB, mais restritivo que o RNF-01, e continua conferindo `<h1>` e `alt`; as notas do Lighthouse (RNF-02, RNF-03) permanecem manuais (RH-12) |
 | DT-04 | O QR estático aponta para `blima-p.github.io/SocialTech` | Renomear o repositório ou trocar de domínio quebra o QR impresso | Não renomear o repositório; se mudar, reimprimir o adesivo |
 | DT-05 | Dependência de serviços gratuitos (GoatCounter, Pages CMS) | Se saírem do ar, a contagem ou a edição param; o site continua no ar | Aceito; o site não depende deles para funcionar |
 | DT-06 | `.pages.yml` e `content.config.ts` podem divergir se só um for alterado | O painel salva um dado que o build recusa | Regra do `AGENTS.md` §4.9 e revisão de PR |
