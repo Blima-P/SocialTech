@@ -5,9 +5,9 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.3 (04/11/2026): situação final das T-18 a T-35 |
-| Status | 🚦 Em revisão pela equipe |
-| Tarefa | T-16 (issue #37) |
+| Versão | 1.4 (12/11/2026): encerramento documental e milestones T-36 a T-39 |
+| Status | ✅ Aprovado como referência da implementação; evidências operacionais no M2 |
+| Tarefa | T-16 (issue #37); atualização T-36 (issue #99) |
 | Base | [Constituição](sdd/00-constituicao.md), [Especificação](sdd/01-especificacao.md), [Clarificações](sdd/02-clarificacoes.md), [Plano do MVP](sdd/03-plano-tarefas.md), [Plano da entrega final](sdd/05-plano-entrega-final.md) |
 
 ---
@@ -28,12 +28,14 @@ Este documento diz **o que** o site precisa fazer (requisitos funcionais), **com
 
 **Fora:** o que está em [especificação §4.1](sdd/01-especificacao.md#41-fora-do-escopo-wont-neste-semestre) (login, dados em tempo real, aplicativo, ranking, outros idiomas, mapa com geolocalização, chatbot). As atividades fora do site (ação no campus, cartazes, análise do formulário) estão na [especificação §4.2](sdd/01-especificacao.md#42-fora-do-site-mas-dentro-do-projeto).
 
-### 1.3 Situação em 04/11/2026
+### 1.3 Situação em 12/11/2026
 
 - O **MVP** (requisitos **Must**) foi publicado na `main` em 26/10/2026 (PR #29) e está em `https://blima-p.github.io/SocialTech/`.
 - Os requisitos **Should** foram entregues pelas tarefas T-11 a T-16 ([plano da entrega final](sdd/05-plano-entrega-final.md)) e publicados na release final de 29/10/2026 (PR #47).
-- As melhorias depois da entrega (T-18 a T-27, [plano de melhorias](sdd/06-plano-melhorias.md)) estão todas concluídas. As T-18, T-22, T-25 e T-26 saíram na release de 01/11/2026; as outras entram na `main` na release de 04/11/2026 ([seção 8.2](#82-tarefa--requisitos)).
-- Em 31/10/2026, o Prof. Marcus respondeu às perguntas de conteúdo ([clarificações](sdd/02-clarificacoes.md), Q-01 a Q-05 e Q-15). O [plano 07](sdd/07-plano-conteudo-enactus.md) (T-28 a T-35) está concluído: o conteúdo validado (T-29) e a faixa de parceria (T-35) saíram na release de 01/11/2026 (PR #78); o nome "Compostagem Enactus UCB", as dúvidas comuns (RF-16), as fotos, o cartaz e o quiz entram na release de 04/11/2026. O que ainda falta está na [seção 6](#6-requisitos-de-conteúdo).
+- As melhorias T-18 a T-27 e o conteúdo T-28 a T-35 estão concluídos e publicados na `main` pela release de 04/11/2026.
+- O carrossel mobile do ciclo foi acrescentado no PR #98 e está na `develop`.
+- O encerramento segue o [plano de milestones](sdd/08-plano-milestones.md): documentação (M1), evidências operacionais (M2), regressão automatizada (M3) e desempenho (M4).
+- O que ainda depende de resposta ou evidência externa está nas [seções 6 e 9](#6-requisitos-de-conteúdo).
 - O plano do MVP foi feito antes deste documento (exceção aprovada em [03-plano-tarefas.md §0.1](sdd/03-plano-tarefas.md#01-exceção-aprovada-à-definição-de-preparado)). A [seção 8](#8-matriz-de-rastreabilidade) liga cada tarefa já feita aos requisitos daqui.
 
 ### 1.4 Convenções
@@ -665,7 +667,7 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 
 ## 6. Requisitos de conteúdo
 
-Situação em 31/10/2026, depois das respostas do Prof. Marcus. O conteúdo publicado está nos arquivos de `src/content/` da `main` (a versão oficial, editada pelo painel); o conteúdo validado entra pelas tarefas do [plano 07](sdd/07-plano-conteudo-enactus.md).
+Situação em 12/11/2026. O conteúdo oficial está nos arquivos de `src/content/` da `main`, editados pelo painel. As pendências abaixo não autorizam inventar ou substituir conteúdo.
 
 | ID | Conteúdo | Onde aparece | Quem fornece | Tarefa fora do código | Status |
 |---|---|---|---|---|---|
@@ -683,7 +685,7 @@ Situação em 31/10/2026, depois das respostas do Prof. Marcus. O conteúdo publ
 | RC-12 | 3 a 5 perguntas do quiz com alternativas, gabarito e explicação | `quiz.json` (RF-11) | Equipe rascunha, Prof. Marcus aprova | E-08 | [CONFIRMADO] 04/11: 5 perguntas da T-34 (PR #83), aceite registrado por Pedro; o Prof. Marcus pode revisá-las pelo painel |
 | RC-13 | 4 números de impacto com fonte | `impacto.json` (RF-10) | Roteiro (ABREMA, SLU, PDAD/IPEDF) | — | [CONFIRMADO] lista definida na T-13. Não há dados do próprio projeto (primeira coleta) |
 | RC-14 | Nome, logos, cores e fonte | Cabeçalho, rodapé, faixa de parceria, tokens (RF-09) | `enactus.org.br` (Q-22) e Prof. Marcus (Q-15) | — | [CONFIRMADO] nome "Enactus UCB", sem o logo do grupo SocialTech, logos da UCB e da Enactus (T-30, T-35); [PENDENTE] arquivo oficial do logo da UCB (Q-25) |
-| RC-15 | Texto, arte e impressão do adesivo do QR e dos cartazes | `docs/materiais/` (RF-14) | Equipe | E-03 | [CONFIRMADO] arte do adesivo pronta (PR #25) e cartazes autorizados (Q-13); cartaz A4 pronto (T-33, PR #82); [PENDENTE] impressão e fixação |
+| RC-15 | Texto, arte e impressão do adesivo do QR e dos cartazes | `docs/materiais/` (RF-14) | Equipe | E-03 | [CONFIRMADO] arquivos prontos; impressão, fixação e teste físico serão registrados no M2 |
 | RC-16 | Fotos e depoimentos da ação | C-14 (fora desta entrega) | Equipe | E-09, E-10 | [PENDENTE] autorização de imagem |
 | RC-17 | Perguntas e respostas das dúvidas comuns | `duvidas.json` (RF-16) | Respostas do Prof. Marcus de 31/10 | — | [CONFIRMADO] 7 dúvidas publicadas na T-31 (PR #81); capacidade de 60 kg a esclarecer (Q-28) |
 
@@ -746,7 +748,7 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 
 As tarefas do [plano de melhorias](sdd/06-plano-melhorias.md) e do [plano 07](sdd/07-plano-conteudo-enactus.md), em 04/11/2026:
 
-| Tarefa | Requisitos | Issue / PR | Situação em 04/11/2026 |
+| Tarefa | Requisitos | Issue / PR | Situação em 12/11/2026 |
 |---|---|---|---|
 | T-18 Limpeza pós-entrega | RNF-14, RF-15 | #49 / PR #55 | ✅ Concluída |
 | T-19 Verificação automática do site gerado | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 | #50 / PR #79 | ✅ Concluída |
@@ -771,7 +773,7 @@ As tarefas do [plano de melhorias](sdd/06-plano-melhorias.md) e do [plano 07](sd
 
 ### 9.1 Conteúdo pendente
 
-Os requisitos de conteúdo **[PENDENTE]** da [seção 6](#6-requisitos-de-conteúdo) são: RC-14 (logo da UCB, Q-25), RC-15 (impressão e fixação do cartaz) e RC-16. Os responsáveis e prazos estão nas tarefas E-01 a E-05 ([plano do MVP §4](sdd/03-plano-tarefas.md#4-tarefas-fora-do-código-equipe-sem-github)), E-06 a E-10 ([plano da entrega final §4](sdd/05-plano-entrega-final.md#4-tarefas-fora-do-código-equipe-sem-github)) e no [plano 07](sdd/07-plano-conteudo-enactus.md).
+Os requisitos de conteúdo **[PENDENTE]** são RC-14 (arquivo oficial do logo da UCB, Q-25) e RC-16 (fotos/depoimentos da ação com autorização). A evidência física de RC-15 será registrada no M2. Q-24 e Q-26 a Q-28 continuam abertas e não bloqueiam o site atual.
 
 ### 9.2 Riscos
 
