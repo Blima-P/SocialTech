@@ -39,7 +39,8 @@ ODS trabalhados: 12 (principal), 11, 13 e 17.
 
 ## Rodando localmente
 
-Requer Node.js 22.22 ou superior.
+Requer Node.js 22.22 ou superior. A versão exata usada no CI está no arquivo
+`.nvmrc`; com o nvm instalado, execute `nvm use`.
 
 ```bash
 npm ci
