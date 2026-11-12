@@ -50,6 +50,9 @@ jobs:
       - name: Verificar site gerado
         run: npm run verificar:site && npm run test:verificador
 
+      - name: Validar regras do painel
+        run: npm run test:painel
+
       - name: Instalar Chromium do Playwright
         run: npx playwright install --with-deps chromium
 
