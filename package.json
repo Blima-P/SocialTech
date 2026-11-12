@@ -16,25 +16,27 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:e2e": "playwright test",
+    "test:verificador": "node --test scripts/verificar-site.test.mjs",
+    "test:painel": "node --test scripts/validar-painel.test.mjs",
     "verificar:site": "node scripts/verificar-site.mjs",
-    "verify": "npm run format:check && npm run lint && npm run check && npm run build && npm run verificar:site",
+    "verify": "npm run format:check && npm run lint && npm run check && npm run build && npm run verificar:site && npm run test:verificador && npm run test:painel",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.4.0"
+    "astro": "^7.4.8"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
+    "@astrojs/check": "^0.9.12",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.65.0",
-    "eslint": "^10.12.0",
+    "eslint": "^10.14.0",
     "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-jsx-a11y-x": "^0.2.0",
-    "globals": "^17.13.0",
+    "globals": "^17.14.0",
     "prettier": "^3.9.10",
-    "prettier-plugin-astro": "^1.1.1",
+    "prettier-plugin-astro": "^1.1.2",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.71.2"
+    "typescript-eslint": "^8.72.2"
   },
   "overrides": {
     "minimatch": "^11.0.4"

@@ -172,6 +172,11 @@ h3 {
   outline-offset: 2px;
 }
 
+/* Destino do "Pular para o conteúdo": recebe foco por script, não é um controle. */
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+
 /* Botão principal do site (arquitetura, seção 5.5). */
 .botao {
   display: inline-flex;
@@ -219,5 +224,76 @@ h3 {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Impressão (RNF-10): texto escuro sobre branco, todo o conteúdo aberto e sem os
+   controles que só servem na tela. O !important vence os estilos dos componentes. */
+@media print {
+  :root {
+    color-scheme: light;
+    --exibir-no-claro: inline !important;
+    --exibir-no-escuro: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    /* As animações de rolagem deixariam transparente o que ainda não entrou na tela. */
+    animation: none !important;
+    transition: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  [data-alternar-tema],
+  [data-busca],
+  [data-ver-mais],
+  [data-atalhos],
+  [data-navegacao],
+  [data-dica-arraste],
+  [data-quiz],
+  header nav,
+  header .botao,
+  #duvidas .icone,
+  .parceria .fundo,
+  .pular,
+  footer .topo {
+    display: none !important;
+  }
+
+  /* Cartões guardados no "Ver mais" ou filtrados pela busca. */
+  [data-guia] .grupo[hidden],
+  [data-guia] .cartao[hidden] {
+    display: block !important;
+  }
+
+  /* O carrossel do ciclo vira lista: no papel não dá para arrastar. */
+  [data-ciclo] .etapas {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  [data-ciclo] .etapas > li,
+  [data-ciclo] .etapas > li[hidden] {
+    display: flex !important;
+    margin-bottom: 0.75rem;
+    break-inside: avoid;
+  }
+
+  details::details-content {
+    content-visibility: visible !important;
+  }
+
+  /* O logo do rodapé é branco (feito para a faixa escura). */
+  footer img {
+    filter: brightness(0);
   }
 }

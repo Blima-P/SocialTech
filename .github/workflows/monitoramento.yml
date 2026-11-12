@@ -1,0 +1,79 @@
+name: Monitoramento do site publicado
+
+# O GitHub desativa workflows agendados após 60 dias sem atividade no repositório.
+on:
+  schedule:
+    - cron: "0 11 * * 1"
+  workflow_dispatch:
+
+jobs:
+  monitoramento:
+    name: monitoramento
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Verificar página inicial
+        run: |
+          status="$(
+            curl --retry 3 --retry-delay 10 --fail --silent --show-error --location \
+              --output pagina-inicial.html \
+              --write-out "%{http_code}" \
+              "https://blima-p.github.io/SocialTech/"
+          )"
+          test "$status" = "200"
+          grep --fixed-strings --quiet "Compostagem Enactus UCB" pagina-inicial.html
+
+      - name: Verificar página 404
+        run: |
+          status="$(
+            curl --retry 3 --retry-delay 10 --silent --show-error --location \
+              --output pagina-404.html \
+              --write-out "%{http_code}" \
+              "https://blima-p.github.io/SocialTech/nao-existe-monitoramento"
+          )"
+          test "$status" = "404"
+          grep --fixed-strings --quiet "Página não encontrada" pagina-404.html
+
+      - name: Verificar links externos
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          fail: true
+          args: >-
+            --no-progress
+            --max-retries 3
+            --timeout 30
+            --base-url "https://blima-p.github.io/SocialTech/"
+            --accept "200..=299,403,429"
+            --exclude "blima-p\.github\.io"
+            --exclude "^mailto:"
+            --exclude "%7B"
+            --exclude-path node_modules
+            --exclude-path dist
+            "pagina-inicial.html"
+
+      - name: Registrar falha em issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          titulo="Monitoramento do site publicado falhou"
+          url_execucao="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          numero="$(
+            gh issue list \
+              --repo "$GITHUB_REPOSITORY" \
+              --state open \
+              --limit 100 \
+              --json number,title \
+              --jq '.[] | select(.title == "Monitoramento do site publicado falhou") | .number' |
+              head -n 1
+          )"
+          mensagem="O monitoramento automático falhou: ${url_execucao}"
+
+          if [ -n "$numero" ]; then
+            gh issue comment "$numero" --repo "$GITHUB_REPOSITORY" --body "$mensagem"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$titulo" --body "$mensagem"
+          fi

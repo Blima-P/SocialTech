@@ -40,6 +40,7 @@ O projeto segue **SDD**: primeiro a especificação, depois o código. A especif
 | [`docs/sdd/06-plano-melhorias.md`](docs/sdd/06-plano-melhorias.md) | Melhorias depois da entrega (T-18 a T-27): limpeza, verificação automática, design system, fotos, busca, animações, prévia de compartilhamento, quiz e navegação no celular |
 | [`docs/sdd/07-plano-conteudo-enactus.md`](docs/sdd/07-plano-conteudo-enactus.md) | Conteúdo validado pelo Prof. Marcus em 31/10/2026 (T-28 a T-35): guia, ciclo, nome "Compostagem Enactus UCB", dúvidas comuns, fotos, cartaz e quiz |
 | [`docs/sdd/08-plano-milestones.md`](docs/sdd/08-plano-milestones.md) | Encerramento do projeto (T-36 a T-39): governança, homologação operacional, regressão automatizada e desempenho |
+| [`docs/sdd/09-plano-melhorias-continuas.md`](docs/sdd/09-plano-melhorias-continuas.md) | Melhorias contínuas (T-40 a T-67, M5–M8): segurança, acessibilidade, arquitetura, SEO e operação; critérios de aceite e DoD |
 
 Enquanto esses documentos não existirem ou não estiverem aprovados, siga as seções 2 e 4 deste arquivo e **não implemente funcionalidades** além do que o desenvolvedor pedir explicitamente.
 
@@ -59,6 +60,9 @@ Decisão registrada no **ADR-001** (aprovado pela equipe em 15/10/2026): **Astro
 | Node.js | 22.22 ou superior |
 | Python | Apenas como **ferramenta auxiliar** fora do site (ex.: gerar QR Code, analisar respostas do Forms) |
 
+O `astro.config.mjs` define `site` e `base`. A saída estática é o padrão do Astro:
+não há `output: "static"` explícito nem adaptador de servidor nessa configuração.
+
 Estrutura:
 
 ```
@@ -68,28 +72,50 @@ src/
 ├── components/       # componentes reutilizáveis (ex.: GuiaPodeNaoPode.astro, Quiz.astro)
 ├── content/          # conteúdo editável pelo painel (JSON e secoes/*.md), separado da lógica
 ├── content.config.ts # schemas zod das coleções de conteúdo
-├── scripts/          # TypeScript de interatividade no navegador
+├── scripts/          # helper exigir.ts, importado pelos scripts de cliente dos componentes
 ├── assets/           # imagens otimizadas pelo Astro (astro:assets); assets/conteudo/ recebe os uploads do painel
 └── styles/           # CSS global e tokens do design system
 public/               # arquivos copiados sem processamento (favicon, compartilhar.png da prévia nas redes)
-scripts/              # ferramentas do build e do CI em Node puro (ex.: verificar-site.mjs); não vão para o site
+scripts/              # verificador do build e testes Node do verificador/painel; não vão para o site
+tests/e2e/            # testes Playwright, com projetos mobile (360px) e desktop
 docs/                 # especificação SDD: requisitos, arquitetura, ADRs, plano de tarefas
 ```
 
-Configuração na raiz: `astro.config.mjs`, `tsconfig.json`, `eslint.config.mjs`, `.prettierrc.json`, `.editorconfig`, `.pages.yml` (painel de conteúdo), `package.json` e `package-lock.json`.
-CI em `.github/workflows/` (`ci.yml`, `deploy-pages.yml`, `controle-merge-main.yml`).
+Configuração na raiz: `astro.config.mjs`, `tsconfig.json`, `eslint.config.mjs`, `.prettierrc.json`, `.editorconfig`, `.pages.yml` (painel de conteúdo), `playwright.config.ts`, `.nvmrc` (versão do Node usada pelo CI), `package.json` e `package-lock.json`.
+
+Workflows em `.github/workflows/`:
+
+| Arquivo | Verificação ou publicação |
+|---|---|
+| `ci.yml` | Em PRs e pushes para `develop`/`main`: job `lint` com formatação, ESLint, tipos, build, verificador, testes Node do verificador/painel e Playwright; job `links` com lychee. Também permite execução manual. |
+| `revisao-dependencias.yml` | Em PRs para `develop`/`main`: check `revisao-dependencias`, que bloqueia dependências alteradas com vulnerabilidades altas ou críticas. |
+| `deploy-pages.yml` | Em pushes para `main` ou execução manual: build e `npm run verificar:site` antes de enviar o artefato e publicar no GitHub Pages. |
+| `controle-merge-main.yml` | Check `aprovacao-main`: confere origem `develop`/`fix/*` do mesmo repositório e aprovação de mantenedor (dispensada se o autor já for mantenedor), sem checkout do código do PR. |
+| `monitoramento.yml` | Semanal (segunda-feira, 11h UTC) ou manual: confere a página inicial, a 404 e links externos publicados; em falha, abre uma issue ou comenta na já aberta. |
 
 ## 3. Como validar suas mudanças
 
 ```bash
-npm ci            # instala exatamente as versões do package-lock.json
-npm run dev       # servidor local: http://localhost:4321/SocialTech/
-npm run verify    # formatação + lint + tipos + build + verificação do site gerado (o mesmo que o CI)
-npm run test:e2e  # busca, ciclo, quiz, tema, movimento reduzido e modo sem JavaScript
-npm run format    # corrige a formatação automaticamente
+npm ci                    # instala exatamente as versões do package-lock.json
+npm run dev               # servidor local: http://localhost:4321/SocialTech/
+npm run build             # gera dist/
+npm run preview           # serve o dist/ já gerado
+npm run verify            # formatação + lint + tipos + build + verificador + testes Node
+npm run format:check      # confere formatação; format corrige automaticamente
+npm run lint              # ESLint
+npm run check             # astro check
+npm run verificar:site    # confere o dist/ já gerado
+npm run test:verificador  # regressões do verificador com o runner nativo do Node
+npm run test:painel       # YAML e regras do Pages CMS, sem acessar o painel externo
+npm run test:e2e          # Playwright: guia, ciclo, quiz, 404, tema, acessibilidade e impressão
+npm run format            # corrige a formatação automaticamente
 ```
 
-Rode `npm run verify` e, em mudanças de comportamento, `npm run test:e2e` antes de propor qualquer commit. A verificação do site gerado (`npm run verificar:site`) confere no `dist/` o peso da página inicial, o `<h1>` único, o `alt` das imagens, os caminhos com `/SocialTech/`, os scripts de terceiros e o `rel="noopener"`. O CI também verifica links quebrados (lychee), inclusive os do conteúdo em `src/content/`, e executa os testes Playwright. Todos os checks precisam passar.
+Rode `npm run verify` e, em mudanças de comportamento, `npm run test:e2e` antes de propor qualquer commit. `verify` não equivale ao CI completo: não executa Playwright, lychee nem revisão de dependências. O script `npm run astro -- <comando>` permite chamar a CLI do Astro.
+
+A verificação do site gerado (`npm run verificar:site`) confere no `dist/` o peso da página inicial (abaixo de 350 KB), o `<h1>` único por página, o `alt` das imagens, os caminhos com `/SocialTech/`, os scripts de terceiros e o `rel="noopener"`. Também exige `404.html`, âncoras internas existentes na página de destino, todos os nomes do guia no HTML e a ordem de dúvidas/links do painel. O CI verifica links quebrados (lychee), inclusive os do conteúdo em `src/content/`, executa Playwright e revisa dependências alteradas nos PRs. Todos os checks precisam passar.
+
+Antes do Playwright, deixe a porta 4321 livre: ele sobe o próprio servidor (build e preview localmente; no CI, usa o build anterior). Os testes também cobrem teclado, movimento reduzido e conteúdo sem JavaScript.
 
 ---
 
@@ -108,7 +134,7 @@ Rode `npm run verify` e, em mudanças de comportamento, `npm run test:e2e` antes
 - Identificadores de código podem ser em inglês ou português; siga o padrão já existente.
 
 ### 4.3 Stack definida
-- Use **Astro + TypeScript + CSS puro**, com saída **estática** (`output: "static"`). Não adicione adaptadores de servidor, SSR, API routes nem banco de dados.
+- Use **Astro + TypeScript + CSS puro**, mantendo a saída **estática** (padrão do Astro, sem `output` explícito no `astro.config.mjs` atual). Não adicione adaptadores de servidor, SSR, API routes nem banco de dados.
 - Interatividade em **TypeScript** dentro de `<script>` dos componentes ou em `src/scripts/`. Frameworks de UI (Preact, Svelte, React) e diretivas `client:*` **só com aprovação**, quando o TypeScript puro ficar complexo demais.
 - Sem Tailwind, Sass, Bootstrap, jQuery ou outros frameworks de CSS/JS sem aprovação.
 - Mudanças de stack exigem novo ADR aprovado pela equipe **e** atualização deste arquivo. Nunca mude a stack por conta própria.

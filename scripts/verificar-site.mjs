@@ -92,9 +92,117 @@ function arquivoNoDist(endereco) {
     : arquivo;
 }
 
+const idsPorArquivo = new Map();
+
+// RNF-14: o GitHub Pages não deixa configurar cabeçalhos, então a CSP e a política
+// de referenciador vão por <meta>. A CSP só protege o que vem depois dela.
+const SCRIPT_REMOTO = "https://gc.zgo.at/count.js";
+const REFERRER_ACEITOS = new Set([
+  "no-referrer",
+  "same-origin",
+  "strict-origin",
+  "strict-origin-when-cross-origin",
+]);
+
+function verificarSeguranca(nomeArquivo, tags) {
+  const indiceCsp = tags.findIndex(
+    ({ nome, atributos }) =>
+      nome === "meta" &&
+      atributos.get("http-equiv")?.toLowerCase() === "content-security-policy",
+  );
+  if (indiceCsp === -1) {
+    problema(
+      nomeArquivo,
+      'sem <meta http-equiv="content-security-policy"> (RNF-14). Verifique security.csp no astro.config.mjs.',
+    );
+  } else {
+    const diretivas = new Map(
+      (tags[indiceCsp].atributos.get("content") ?? "")
+        .split(";")
+        .map((diretiva) => diretiva.trim().split(/\s+/))
+        .filter(([nome]) => nome)
+        .map(([nome, ...valores]) => [nome.toLowerCase(), valores]),
+    );
+    for (const [diretiva, valor] of [
+      ["default-src", "'self'"],
+      ["object-src", "'none'"],
+      ["base-uri", "'self'"],
+    ]) {
+      if (!diretivas.get(diretiva)?.includes(valor)) {
+        problema(
+          nomeArquivo,
+          `a CSP precisa de ${diretiva} ${valor} (RNF-14).`,
+        );
+      }
+    }
+    for (const [diretiva, valores] of diretivas) {
+      if (valores.includes("'unsafe-inline'")) {
+        problema(
+          nomeArquivo,
+          `a CSP não pode ter 'unsafe-inline' (em ${diretiva}) (RNF-14).`,
+        );
+      }
+    }
+    if (tags.slice(0, indiceCsp).some(({ nome }) => nome === "script")) {
+      problema(
+        nomeArquivo,
+        "há <script> antes da meta da CSP, e ele fica fora da política (RNF-14).",
+      );
+    }
+  }
+
+  const referrer = tags
+    .find(
+      ({ nome, atributos }) =>
+        nome === "meta" && atributos.get("name") === "referrer",
+    )
+    ?.atributos.get("content");
+  if (!REFERRER_ACEITOS.has(referrer)) {
+    problema(
+      nomeArquivo,
+      `<meta name="referrer"> precisa ser strict-origin-when-cross-origin ou mais restrita; está "${referrer ?? "ausente"}" (RNF-14).`,
+    );
+  }
+}
+
+function verificarAncora(nomeArquivo, href) {
+  if (!href.includes("#") || ehExterno(href)) return;
+  if (!href.startsWith("#") && !href.startsWith(BASE)) return;
+
+  const destino = href.startsWith("#")
+    ? join(DIST, nomeArquivo)
+    : arquivoNoDist(href);
+  const fragmento = href.slice(href.indexOf("#") + 1);
+  let id;
+  try {
+    id = decodeURIComponent(fragmento);
+  } catch {
+    problema(nomeArquivo, `href="${href}" tem id inválido: "${fragmento}".`);
+    return;
+  }
+  if (!existsSync(destino) || !statSync(destino).isFile()) {
+    problema(
+      nomeArquivo,
+      `href="${href}": página de destino não existe; id "${id}" ausente.`,
+    );
+    return;
+  }
+  if (!idsPorArquivo.has(destino)) {
+    const tags = lerTags(limparHtml(readFileSync(destino, "utf8")));
+    idsPorArquivo.set(
+      destino,
+      new Set(tags.map((tag) => tag.atributos.get("id")).filter(Boolean)),
+    );
+  }
+  if (!idsPorArquivo.get(destino).has(id)) {
+    problema(nomeArquivo, `href="${href}": id "${id}" ausente no destino.`);
+  }
+}
+
 function verificarPagina(nomeArquivo) {
   const html = limparHtml(readFileSync(join(DIST, nomeArquivo), "utf8"));
   const tags = lerTags(html);
+  verificarSeguranca(nomeArquivo, tags);
 
   const titulos = tags.filter((tag) => tag.nome === "h1").length;
   if (titulos !== 1) {
@@ -103,6 +211,8 @@ function verificarPagina(nomeArquivo) {
 
   for (const tag of tags) {
     const { nome, atributos } = tag;
+    const href = atributos.get("href");
+    if (href !== undefined) verificarAncora(nomeArquivo, href);
 
     if (nome === "img" && !atributos.has("alt")) {
       const src = atributos.get("src") ?? "(sem src)";
@@ -111,12 +221,20 @@ function verificarPagina(nomeArquivo) {
 
     if (atributos.get("target") === "_blank") {
       const rel = (atributos.get("rel") ?? "").split(/\s+/);
-      if (!rel.includes("noopener")) {
+      if (!rel.includes("noopener") || !rel.includes("noreferrer")) {
         problema(
           nomeArquivo,
-          `<${nome} href="${atributos.get("href")}"> abre nova aba sem rel="noopener" (RNF-13).`,
+          `<${nome} href="${atributos.get("href")}"> abre nova aba sem rel="noopener noreferrer" (RNF-13, RNF-14).`,
         );
       }
+    }
+
+    const src = atributos.get("src");
+    if (nome === "script" && src && ehExterno(src) && src !== SCRIPT_REMOTO) {
+      problema(
+        nomeArquivo,
+        `<script src="${src}">: o único script remoto aceito é ${SCRIPT_REMOTO} (RNF-14).`,
+      );
     }
 
     const enderecos = [
@@ -207,7 +325,52 @@ if (!existsSync(join(DIST, "index.html"))) {
   process.exit(1);
 }
 
-const paginas = readdirSync(DIST).filter((nome) => nome.endsWith(".html"));
+if (!existsSync(join(DIST, "404.html"))) {
+  problema("404.html", "dist/404.html não existe. Verifique a página de erro.");
+}
+
+// RNF-04: o sitemap lista só as páginas indexáveis, com o endereço público.
+const SITEMAP = join(DIST, "sitemap.xml");
+if (!existsSync(SITEMAP)) {
+  problema(
+    "sitemap.xml",
+    "dist/sitemap.xml não existe. Verifique src/pages/sitemap.xml.ts.",
+  );
+} else {
+  const xml = readFileSync(SITEMAP, "utf8").trim();
+  const inicio = new URL(BASE, config.site).href;
+  const enderecos = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) =>
+    loc.trim(),
+  );
+  if (
+    !xml.startsWith("<?xml") ||
+    !/<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/.test(
+      xml,
+    ) ||
+    !xml.endsWith("</urlset>")
+  ) {
+    problema("sitemap.xml", "não é um <urlset> do protocolo Sitemaps 0.9.");
+  }
+  if (!enderecos.includes(inicio)) {
+    problema("sitemap.xml", `não lista a página inicial (${inicio}).`);
+  }
+  for (const endereco of enderecos) {
+    if (!endereco.startsWith(inicio)) {
+      problema("sitemap.xml", `${endereco} está fora de ${inicio}.`);
+    } else if (/404/.test(endereco)) {
+      problema("sitemap.xml", `${endereco}: a página de erro não é indexada.`);
+    } else if (endereco !== inicio) {
+      problema(
+        "sitemap.xml",
+        `${endereco}: o site tem uma página só; liste apenas ${inicio}.`,
+      );
+    }
+  }
+}
+
+const paginas = readdirSync(DIST, { recursive: true }).filter((nome) =>
+  nome.endsWith(".html"),
+);
 let tagsDaInicial = [];
 for (const pagina of paginas) {
   const tags = verificarPagina(pagina);
@@ -223,6 +386,77 @@ const cssEmbutido = [
 ]
   .map(([, css]) => css)
   .join("\n");
+
+// Texto como o Astro escreve no HTML (escapa &, <, >, " e '). O schema aplica
+// trim() aos campos, então o espaço nas pontas do JSON não chega à página.
+function comoNoHtml(texto) {
+  return texto
+    .trim()
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function lerConteudo(nome) {
+  return JSON.parse(
+    readFileSync(join(RAIZ, "src", "content", `${nome}.json`), "utf8"),
+  );
+}
+
+// Trecho do HTML entre a tag que abre o bloco e o fechamento dele.
+function trechoDoBloco(html, abertura, fechamento) {
+  const inicio = html.indexOf(abertura);
+  if (inicio === -1) return undefined;
+  const fim = html.indexOf(fechamento, inicio);
+  return html.slice(inicio, fim === -1 ? undefined : fim);
+}
+
+// RF-14: o painel edita listas; o site precisa mostrá-las na mesma ordem.
+function verificarOrdem(colecao, campo, trecho) {
+  const itens = lerConteudo(colecao);
+  if (itens.length === 0) return;
+  if (trecho === undefined) {
+    problema("index.html", `a lista "${colecao}" não foi encontrada.`);
+    return;
+  }
+  let posicao = 0;
+  for (const item of itens) {
+    const achado = trecho.indexOf(comoNoHtml(item[campo]), posicao);
+    if (achado === -1) {
+      problema(
+        "index.html",
+        `"${item[campo]}" (${colecao}.json) falta ou está fora da ordem do painel.`,
+      );
+      return;
+    }
+    posicao = achado + 1;
+  }
+}
+
+verificarOrdem(
+  "duvidas",
+  "pergunta",
+  trechoDoBloco(htmlDaInicial, 'id="duvidas"', "</section>"),
+);
+verificarOrdem(
+  "links",
+  "nome",
+  trechoDoBloco(htmlDaInicial, 'aria-labelledby="titulo-links"', "</nav>"),
+);
+
+// O nome também pode aparecer no quiz; só vale o que está na seção do guia.
+const htmlDoGuia =
+  trechoDoBloco(htmlDaInicial, 'id="guia"', "</section>") ?? "";
+for (const { nome } of lerConteudo("guia")) {
+  if (!htmlDoGuia.includes(comoNoHtml(nome))) {
+    problema(
+      "index.html",
+      `o item "${nome}" (guia.json) não aparece na seção #guia.`,
+    );
+  }
+}
 
 const kb = pesoDaPaginaInicial(tagsDaInicial, cssEmbutido) / 1024;
 if (kb >= LIMITE_KB) {

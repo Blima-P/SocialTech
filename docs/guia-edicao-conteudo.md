@@ -118,8 +118,26 @@ Para criar uma seção nova, clique no botão de adicionar (**Add**) no topo da 
 
 Cerca de **2 minutos** depois de salvar. Recarregue a página do site: **https://blima-p.github.io/SocialTech/**
 
-Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto). Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
+Se depois de 5 minutos a mudança não aparecer, algum campo pode estar inválido (por exemplo, uma imagem sem descrição ou um e-mail incompleto) ou a página pode ter passado do limite interno de peso (350 KB), o que costuma acontecer quando se acrescentam fotos. O site já reduz o tamanho de cada foto sozinho, então não adianta reenviar a imagem menor. Nesse caso o site continua com a versão anterior, sem quebrar. Avise o Pedro (@Blima-P) para ele verificar.
 
-## 13. Dúvidas
+## 13. Validações do painel
+
+O painel já avisa quando um texto contém só espaços, quando o link da avaliação
+não usa HTTPS ou quando a alternativa correta é menor que 1. Campos opcionais
+podem continuar vazios. As alternativas do quiz continuam limitadas a 2–4 itens;
+os textos não têm tamanho máximo.
+
+Algumas regras só são conferidas pelo build: o endereço de contato depende do
+tipo escolhido (site HTTP/HTTPS, e-mail ou WhatsApp de 12–13 dígitos); a alternativa
+correta precisa existir; números de ordem e de alternativa precisam ser inteiros;
+uma foto exige descrição. Leia a ajuda do campo antes de salvar.
+
+Para a equipe técnica: `npm run test:painel` valida o YAML e exercita as restrições
+declaradas, inclusive valores aceitos pelo zod. As opções seguem a
+[documentação de campos do Pages CMS](https://pagescms.org/docs/configuration/content/fields/):
+`pattern` fica no campo, `minlength` em `options` de string/text e `min` em
+`options` de number. Nenhuma dependência foi adicionada.
+
+## 14. Dúvidas
 
 Fale com o Pedro, responsável técnico do projeto.

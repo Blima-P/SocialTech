@@ -15,7 +15,23 @@ const visiveis = 3;
   <h2 id="titulo-guia">O que pode ir nesta lixeira?</h2>
   <div class="busca" hidden data-busca>
     <label for="busca-guia">Procure um item</label>
-    <input id="busca-guia" type="search" autocomplete="off" />
+    <div class="campo">
+      <input
+        id="busca-guia"
+        type="search"
+        autocomplete="off"
+        placeholder="Ex.: borra de café, isopor"
+      />
+      <button
+        class="limpar"
+        type="button"
+        aria-label="Limpar busca"
+        hidden
+        data-limpar
+      >
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
     <p class="contagem" aria-live="polite" data-contagem></p>
   </div>
   <div class="grupos">
@@ -84,6 +100,7 @@ const visiveis = 3;
 </section>
 
 <script>
+  import { exigir } from "../scripts/exigir";
   // Busca local: o que é digitado não é guardado nem enviado.
   const semAcento = (texto: string) =>
     texto
@@ -93,9 +110,10 @@ const visiveis = 3;
       .trim();
 
   for (const guia of document.querySelectorAll<HTMLElement>("[data-guia]")) {
-    const busca = guia.querySelector<HTMLElement>("[data-busca]")!;
-    const campo = busca.querySelector("input")!;
-    const contagem = guia.querySelector<HTMLElement>("[data-contagem]")!;
+    const busca = exigir(guia, "[data-busca]");
+    const campo = exigir<HTMLInputElement>(busca, "input");
+    const limpar = exigir<HTMLButtonElement>(busca, "[data-limpar]");
+    const contagem = exigir(guia, "[data-contagem]");
     const cartoes = [...guia.querySelectorAll<HTMLElement>(".cartao")];
     const textos = cartoes.map((cartao) =>
       semAcento(cartao.querySelector("strong")?.textContent ?? ""),
@@ -124,6 +142,7 @@ const visiveis = 3;
         if (termo && mostra) achados += 1;
       });
       for (const botao of botoes) botao.hidden = termo.length > 0;
+      limpar.hidden = campo.value.length === 0;
       for (const grupo of grupos) {
         grupo.hidden =
           termo.length > 0 &&
@@ -139,7 +158,7 @@ const visiveis = 3;
     };
 
     for (const botao of botoes) {
-      const textoFechado = botao.textContent!.trim();
+      const textoFechado = (botao.textContent ?? "").trim();
       botao.addEventListener("click", () => {
         const abrir = botao.getAttribute("aria-expanded") !== "true";
         botao.setAttribute("aria-expanded", String(abrir));
@@ -150,11 +169,21 @@ const visiveis = 3;
     }
 
     campo.addEventListener("input", atualizar);
+    limpar.addEventListener("click", () => {
+      campo.value = "";
+      atualizar();
+      campo.focus();
+    });
     atualizar();
   }
 </script>
 
 <style>
+  /* Faixa cinza: separa o guia do ciclo e do ponto de coleta (fundo alternado). */
+  section {
+    background: var(--cor-fundo-suave);
+  }
+
   .grupos {
     display: grid;
     gap: 0.75rem;
@@ -171,13 +200,49 @@ const visiveis = 3;
     font-weight: 700;
   }
 
+  .campo {
+    position: relative;
+  }
+
+  /* Cores explícitas: sem elas, o tema escuro usa o estilo nativo do navegador. */
   .busca input {
     width: 100%;
     min-height: var(--alvo-toque);
     border: 2px solid var(--cor-texto-suave);
     border-radius: var(--raio);
-    padding-inline: 0.75rem;
+    padding-inline: 0.75rem var(--alvo-toque);
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
     font: inherit;
+  }
+
+  /* O botão "Limpar busca" substitui o X nativo, pequeno demais para o toque. */
+  .busca input::-webkit-search-cancel-button {
+    appearance: none;
+  }
+
+  .limpar {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    display: grid;
+    place-items: center;
+    width: var(--alvo-toque);
+    border: 0;
+    border-radius: var(--raio);
+    background: none;
+    color: var(--cor-texto);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .limpar[hidden] {
+    display: none;
+  }
+
+  .busca input::placeholder {
+    color: var(--cor-texto-suave);
+    opacity: 1;
   }
 
   .contagem {
@@ -194,7 +259,7 @@ const visiveis = 3;
     margin-top: var(--espaco);
     border-radius: var(--raio);
     padding: 0.75rem var(--espaco);
-    background: var(--cor-fundo-suave);
+    background: var(--cor-fundo);
   }
 
   .nao-listado h3 {

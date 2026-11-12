@@ -35,7 +35,11 @@ O professor edita textos, imagens e links pelo painel ([guia](docs/guia-edicao-c
 
 ## Preparar o ambiente (uma vez)
 
-Requisitos: [Node.js](https://nodejs.org/) 22.22 ou superior e Git. No VS Code, instale as extensões recomendadas (Astro, ESLint, Prettier) quando o editor sugerir. O Explorer agrupa os arquivos de configuração da raiz sob o `package.json` e esconde as pastas geradas (`node_modules`, `dist`, `.astro`); veja `.vscode/settings.json`.
+Requisitos: [Node.js](https://nodejs.org/) 22.22 ou superior e Git. Use a versão
+exata indicada no `.nvmrc` (`nvm use`). No VS Code, instale as extensões
+recomendadas (Astro, ESLint, Prettier) quando o editor sugerir. O Explorer agrupa
+os arquivos de configuração da raiz sob o `package.json` e esconde as pastas
+geradas (`node_modules`, `dist`, `.astro`); veja `.vscode/settings.json`.
 
 ```bash
 git clone https://github.com/Blima-P/SocialTech.git

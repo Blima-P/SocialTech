@@ -39,19 +39,28 @@ ODS trabalhados: 12 (principal), 11, 13 e 17.
 
 ## Rodando localmente
 
-Requer Node.js 22.22 ou superior.
+Requer Node.js 22.22 ou superior. A versão exata usada no CI está no arquivo
+`.nvmrc`; com o nvm instalado, execute `nvm use`.
 
 ```bash
 npm ci
 npm run dev      # http://localhost:4321/SocialTech/
-npm run verify   # formatação, lint, tipos, build e verificação do site gerado (o mesmo que o CI)
+npm run verify   # formatação, lint, tipos, build, verificação do site e testes do verificador/painel
+npm run test:e2e # testes no navegador (o CI também roda links e revisão de dependências)
 ```
+
+O verificador exige `dist/404.html` e confere as âncoras internas na página de
+destino, inclusive os atalhos da 404 para a página inicial. Também exige que cada
+nome de `src/content/guia.json` apareça no HTML inicial, citando os itens ausentes.
+Para testar só essas regras, rode `npm run test:verificador` (testes nativos do
+Node, sem pacote novo).
 
 ## Documentação
 
 - [Especificação e plano do MVP](docs/sdd/): o projeto segue Spec-Driven Development
 - [CONTRIBUTING.md](CONTRIBUTING.md): branches, commits e PRs
 - [AGENTS.md](AGENTS.md): regras para agentes de IA
+- [SECURITY.md](SECURITY.md): política e relato privado de vulnerabilidades
 - [Tarefas em aberto](https://github.com/Blima-P/SocialTech/issues)
 
 ## Equipe

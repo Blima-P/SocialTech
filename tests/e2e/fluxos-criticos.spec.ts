@@ -1,4 +1,10 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
+import quiz from "../../src/content/quiz.json" with { type: "json" };
+
+// O painel edita o quiz; o gabarito vem do mesmo JSON que gera a página.
+const respostasCorretas = quiz.map(
+  ({ alternativas, correta }) => alternativas[correta - 1],
+);
 
 const paginaInicial = "/SocialTech/";
 
@@ -37,6 +43,48 @@ test.describe("guia de descarte", () => {
       await botao.click();
       await expect(botao).toHaveAttribute("aria-expanded", "false");
     }
+  });
+
+  test("campo de busca usa as cores do tema escuro", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" });
+    const busca = page.getByLabel("Procure um item");
+    await expect(busca).toHaveAttribute("placeholder", /^Ex\.: /);
+
+    // Converte os tokens do tema para rgb() pelo próprio navegador.
+    const esperado = await page.evaluate(() => {
+      const amostra = document.createElement("span");
+      amostra.style.backgroundColor = "var(--cor-fundo)";
+      amostra.style.color = "var(--cor-texto)";
+      document.body.append(amostra);
+      const { backgroundColor, color } = getComputedStyle(amostra);
+      amostra.remove();
+      return { backgroundColor, color };
+    });
+    expect(esperado.backgroundColor).not.toBe(esperado.color);
+    await expect(busca).toHaveCSS("background-color", esperado.backgroundColor);
+    await expect(busca).toHaveCSS("color", esperado.color);
+  });
+
+  test("limpar busca restaura a lista e devolve o foco", async ({ page }) => {
+    const busca = page.getByLabel("Procure um item");
+    const limpar = page.getByRole("button", { name: "Limpar busca" });
+    const cartoes = page.locator("#guia .cartao:visible");
+    const inicial = await cartoes.count();
+
+    await expect(limpar).toBeHidden();
+    await busca.fill("citrica");
+    await expect(cartoes).toHaveCount(1);
+
+    const caixa = await limpar.boundingBox();
+    expect(caixa?.width).toBeGreaterThanOrEqual(44);
+    expect(caixa?.height).toBeGreaterThanOrEqual(44);
+
+    await limpar.click();
+    await expect(busca).toHaveValue("");
+    await expect(busca).toBeFocused();
+    await expect(limpar).toBeHidden();
+    await expect(cartoes).toHaveCount(inicial);
+    await expect(page.locator("[data-contagem]")).toHaveText("");
   });
 });
 
@@ -144,13 +192,73 @@ test.describe("ciclo do resíduo", () => {
       .getByRole("button", { name: /Etapa 5: Gastronomia\/Nutrição/ })
       .click();
     await expect(page.locator("[data-posicao]")).toContainText("Etapa 5 de 5");
+    // Só confere a lista depois que a rolagem suave chega ao fim; antes disso
+    // um anúncio intermediário ainda poderia aparecer.
     await expect
       .poll(() =>
-        page.evaluate(
-          () => (window as Window & { anunciosCiclo?: string[] }).anunciosCiclo,
-        ),
+        page.locator(".etapas").evaluate((lista) => {
+          const faixa = lista as HTMLElement;
+          return faixa.scrollWidth - faixa.clientWidth - faixa.scrollLeft;
+        }),
       )
-      .toEqual(["Etapa 5 de 5: Gastronomia/Nutrição"]);
+      .toBeLessThan(2);
+    await page.evaluate(
+      () =>
+        new Promise((pronto) =>
+          requestAnimationFrame(() => requestAnimationFrame(pronto)),
+        ),
+    );
+    expect(
+      await page.evaluate(
+        () => (window as Window & { anunciosCiclo?: string[] }).anunciosCiclo,
+      ),
+    ).toEqual(["Etapa 5 de 5: Gastronomia/Nutrição"]);
+  });
+
+  test("setas movem o foco entre os atalhos e Enter escolhe a etapa", async ({
+    page,
+  }) => {
+    const atalhos = page.locator("[data-atalhos] button");
+    const posicao = page.locator("[data-posicao]");
+    await atalhos.first().focus();
+
+    await page.keyboard.press("ArrowRight");
+    await expect(atalhos.nth(1)).toBeFocused();
+    await expect(posicao).toContainText("Etapa 1 de 5");
+    await page.keyboard.press("End");
+    await expect(atalhos.last()).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(atalhos.last()).toBeFocused();
+    await page.keyboard.press("ArrowLeft");
+    await expect(atalhos.nth(3)).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(posicao).toContainText("Etapa 4 de 5");
+    await page.keyboard.press("Home");
+    await expect(atalhos.first()).toBeFocused();
+    await expect(posicao).toContainText("Etapa 4 de 5");
+  });
+
+  test("botão desabilitado mantém contorno e fundo próprios", async ({
+    page,
+  }) => {
+    const estilo = (nome: string) =>
+      page.getByRole("button", { name: nome }).evaluate((botao) => {
+        const css = getComputedStyle(botao);
+        return {
+          borda: css.borderTopStyle,
+          corBorda: css.borderTopColor,
+          fundo: css.backgroundColor,
+          fundoSecao: getComputedStyle(botao.closest("section")!)
+            .backgroundColor,
+        };
+      });
+    const anterior = await estilo("Anterior");
+    const proxima = await estilo("Próxima");
+
+    await expect(page.getByRole("button", { name: "Anterior" })).toBeDisabled();
+    expect(anterior.borda).toBe("dashed");
+    expect(anterior.corBorda).not.toBe(anterior.fundoSecao);
+    expect(anterior.fundo).not.toBe(proxima.fundo);
   });
 });
 
@@ -160,18 +268,14 @@ test("quiz revela perguntas, calcula o placar e permite refazer", async ({
   await page.goto(`${paginaInicial}#quiz`);
   const perguntas = page.locator("[data-pergunta]");
   const total = await perguntas.count();
-  const respostasCorretas = [
-    "Não",
-    "Borra de café com o filtro de papel",
-    "Não colocar e consultar o Enactus UCB",
-    "Para o cultivo de plantas no Horto Botânico da UCB",
-    "Cerca de 4 meses",
-  ];
+  expect(total).toBe(quiz.length);
 
   for (let indice = 0; indice < total; indice += 1) {
     const pergunta = perguntas.nth(indice);
     await expect(pergunta).toBeVisible();
-    await pergunta.getByLabel(respostasCorretas[indice]).check();
+    await pergunta
+      .getByLabel(respostasCorretas[indice], { exact: true })
+      .check();
     await pergunta.getByRole("button", { name: "Responder" }).click();
   }
 
@@ -182,6 +286,45 @@ test("quiz revela perguntas, calcula o placar e permite refazer", async ({
   await expect(perguntas.first()).toBeVisible();
   await expect(perguntas.nth(1)).toBeHidden();
   await expect(page.locator("[data-placar]")).toBeEmpty();
+});
+
+test("quiz destaca a escolha e só mostra o anel de foco por teclado", async ({
+  page,
+}) => {
+  await page.goto(`${paginaInicial}#quiz`);
+  const perguntas = page.locator("[data-pergunta]");
+  const estilo = (rotulo: Locator) =>
+    rotulo.evaluate((elemento) => {
+      const css = getComputedStyle(elemento);
+      return { peso: css.fontWeight, borda: css.borderTopWidth };
+    });
+  const corDe = (alvo: Locator) =>
+    alvo.evaluate((elemento) => getComputedStyle(elemento).color);
+
+  const primeira = perguntas.first();
+  const [certa, errada] = [
+    respostasCorretas[0],
+    quiz[0].alternativas.find((texto) => texto !== respostasCorretas[0])!,
+  ];
+  const escolhida = primeira.locator("label").filter({ hasText: certa });
+  const outra = primeira.locator("label").filter({ hasText: errada });
+  const corAntes = await corDe(outra);
+  await escolhida.click();
+  expect(await estilo(escolhida)).toEqual({ peso: "700", borda: "2px" });
+  await primeira.getByRole("button", { name: "Responder" }).click();
+  const feedback = primeira.locator("[data-feedback]");
+  await expect(feedback).toBeFocused();
+  await expect(feedback).toHaveCSS("outline-style", "none");
+  expect(await corDe(outra)).not.toBe(corAntes);
+  expect(await corDe(outra)).toBe(await corDe(page.locator(".intro")));
+
+  const segunda = perguntas.nth(1);
+  await segunda.locator("input").first().check();
+  await segunda.getByRole("button", { name: "Responder" }).focus();
+  await page.keyboard.press("Enter");
+  const feedbackTeclado = segunda.locator("[data-feedback]");
+  await expect(feedbackTeclado).toBeFocused();
+  await expect(feedbackTeclado).toHaveCSS("outline-style", "solid");
 });
 
 test("tema alterna e persiste sem dado pessoal", async ({ page }) => {
@@ -209,6 +352,29 @@ test("tema segue a preferência do sistema sem escolha salva", async ({
 
   await page.emulateMedia({ colorScheme: "light" });
   await expect(botao).toHaveAttribute("aria-pressed", "false");
+});
+
+test("revelar o botão de tema não desloca a página", async ({
+  browser,
+  page,
+}) => {
+  const topoDoMain = async (alvo: typeof page) => {
+    await alvo.goto(paginaInicial);
+    await alvo.evaluate(() => document.fonts.ready);
+    return alvo.locator("main").evaluate((m) => m.getBoundingClientRect().top);
+  };
+
+  const semJs = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: page.viewportSize(),
+  });
+  const topoSemBotao = await topoDoMain(await semJs.newPage());
+  await semJs.close();
+
+  const topoComBotao = await topoDoMain(page);
+  await expect(page.getByRole("button", { name: "Modo escuro" })).toBeVisible();
+
+  expect(Math.abs(topoComBotao - topoSemBotao)).toBeLessThan(1);
 });
 
 test("movimento reduzido não inicia animações CSS", async ({ page }) => {
@@ -252,4 +418,52 @@ test("conteúdo principal continua legível sem JavaScript", async ({
     .toBe(true);
 
   await contexto.close();
+});
+
+test("impressão abre todo o conteúdo, esconde controles e usa texto escuro sobre branco", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto(paginaInicial);
+  const controles = page.locator(
+    "[data-alternar-tema], [data-busca], [data-ver-mais], [data-atalhos], [data-navegacao], #quiz",
+  );
+  const conteudo = "#guia .cartao, #ciclo .etapas > li, #duvidas details > p";
+  const ocultos = () =>
+    page.evaluate(
+      (seletor) =>
+        [...document.querySelectorAll<HTMLElement>(seletor)].filter(
+          (el) => !el.checkVisibility(),
+        ).length,
+      conteudo,
+    );
+  // Na tela, parte do conteúdo fica guardada e os controles aparecem.
+  await expect(page.locator("#quiz")).toBeVisible();
+  expect(await ocultos()).toBeGreaterThan(0);
+
+  await page.emulateMedia({ colorScheme: "dark", media: "print" });
+  expect(await ocultos()).toBe(0);
+  expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
+  for (const controle of await controles.all()) {
+    await expect(controle).toBeHidden();
+  }
+  const etapasCabem = await page
+    .locator("#ciclo .etapas")
+    .evaluate((lista) => lista.scrollWidth <= lista.clientWidth);
+  expect(etapasCabem).toBe(true);
+
+  const cores = await page.evaluate(() => {
+    const estilo = (el: Element) => getComputedStyle(el);
+    const impacto = document.querySelector("#impacto")!;
+    return {
+      pagina: estilo(document.body).backgroundColor,
+      impactoFundo: estilo(impacto).backgroundColor,
+      impactoTexto: estilo(impacto).color,
+    };
+  });
+  expect(cores).toEqual({
+    pagina: "rgb(255, 255, 255)",
+    impactoFundo: "rgba(0, 0, 0, 0)",
+    impactoTexto: "rgb(0, 0, 0)",
+  });
 });

@@ -61,16 +61,18 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
 </section>
 
 <script>
+  import { exigir } from "../scripts/exigir";
+
   // Sem JavaScript, a lista mostra todas as etapas. No celular, o modo interativo permite arrastar.
   for (const ciclo of document.querySelectorAll<HTMLElement>("[data-ciclo]")) {
-    const lista = ciclo.querySelector<HTMLOListElement>(".etapas")!;
+    const lista = exigir<HTMLOListElement>(ciclo, ".etapas");
     const etapas = [...ciclo.querySelectorAll<HTMLElement>(".etapas > li")];
     const atalhos = [
       ...ciclo.querySelectorAll<HTMLButtonElement>("[data-atalhos] button"),
     ];
-    const anterior = ciclo.querySelector<HTMLButtonElement>("[data-anterior]")!;
-    const proxima = ciclo.querySelector<HTMLButtonElement>("[data-proxima]")!;
-    const posicao = ciclo.querySelector<HTMLElement>("[data-posicao]")!;
+    const anterior = exigir<HTMLButtonElement>(ciclo, "[data-anterior]");
+    const proxima = exigir<HTMLButtonElement>(ciclo, "[data-proxima]");
+    const posicao = exigir(ciclo, "[data-posicao]");
     const modoCarrossel = window.matchMedia("(max-width: 63.999rem)");
     const movimentoReduzido = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -123,9 +125,21 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
       }
     };
 
-    atalhos.forEach((botao, indice) =>
-      botao.addEventListener("click", () => ir(indice)),
-    );
+    atalhos.forEach((botao, indice) => {
+      botao.addEventListener("click", () => ir(indice));
+      // Setas, Home e End só movem o foco; Enter ou Espaço escolhem a etapa.
+      botao.addEventListener("keydown", (evento) => {
+        const destino = {
+          ArrowRight: indice + 1,
+          ArrowLeft: indice - 1,
+          Home: 0,
+          End: atalhos.length - 1,
+        }[evento.key];
+        if (destino === undefined) return;
+        evento.preventDefault();
+        atalhos[Math.min(Math.max(destino, 0), atalhos.length - 1)].focus();
+      });
+    });
     anterior.addEventListener("click", () => ir(atual - 1));
     proxima.addEventListener("click", () => ir(atual + 1));
     lista.addEventListener("pointerdown", cancelarRolagemProgramatica, {
@@ -174,9 +188,9 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
       ir(atual, false);
     });
     ciclo.classList.add("interativo");
-    ciclo.querySelector<HTMLElement>("[data-atalhos]")!.hidden = false;
-    ciclo.querySelector<HTMLElement>("[data-navegacao]")!.hidden = false;
-    ciclo.querySelector<HTMLElement>("[data-dica-arraste]")!.hidden = false;
+    exigir(ciclo, "[data-atalhos]").hidden = false;
+    exigir(ciclo, "[data-navegacao]").hidden = false;
+    exigir(ciclo, "[data-dica-arraste]").hidden = false;
     ir(0);
   }
 </script>
@@ -369,8 +383,17 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     color: var(--cor-sobre-destaque);
   }
 
+  /* O anel global usa currentcolor; no atalho atual seria a cor escura do texto
+     sobre o amarelo, invisível no fundo do tema escuro. */
+  button:focus-visible {
+    outline-color: var(--cor-texto);
+  }
+
+  /* Desabilitado continua com cara de botão: contorno tracejado e fundo próprio. */
   button:disabled {
-    border-color: var(--cor-fundo-suave);
+    border-style: dashed;
+    border-color: var(--cor-texto-suave);
+    background: var(--cor-fundo-suave);
     color: var(--cor-texto-suave);
     cursor: default;
   }

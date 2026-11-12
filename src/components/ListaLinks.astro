@@ -3,7 +3,10 @@ import { getCollection, type CollectionEntry } from "astro:content";
 
 type Link = CollectionEntry<"links">["data"];
 
-const links = await getCollection("links");
+// O id é a posição no JSON ("0", "1"…): ordenar como número mantém a ordem do painel.
+const links = (await getCollection("links")).sort(
+  (a, b) => Number(a.id) - Number(b.id),
+);
 
 function hrefDo(link: Link): string {
   switch (link.tipo) {

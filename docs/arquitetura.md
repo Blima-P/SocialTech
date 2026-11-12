@@ -135,7 +135,7 @@ A página `src/pages/index.astro` só compõe os componentes, na ordem da seçã
 
 A página `src/pages/404.astro` vira o `404.html`, que o GitHub Pages mostra em qualquer endereço inexistente dentro de `/SocialTech/`. Ela leva de volta ao início e às seções principais (links com `BASE_URL` completo), não é indexada (`noindex`) e não é contada no GoatCounter (T-25).
 
-**Prévia de compartilhamento (T-25).** O `BaseLayout` gera as metatags Open Graph (`og:title`, `og:description`, `og:url`, `og:image`) e o `link rel="canonical"`, sempre com endereço absoluto (`Astro.site` + `BASE_URL`). A imagem é `public/compartilhar.png` (1200 × 630 px, até 100 KB desde a T-30, com o nome "Compostagem Enactus UCB"; o WhatsApp aceita até 300 KB). Não há `robots.txt` nem `sitemap.xml`: num site de projeto do GitHub Pages, o `robots.txt` só vale na raiz do domínio (`blima-p.github.io`, que é outro repositório), e o sitemap só ajudaria se fosse enviado ao Google Search Console.
+**Prévia de compartilhamento (T-25).** O `BaseLayout` gera as metatags Open Graph (`og:title`, `og:description`, `og:url`, `og:image`) e o `link rel="canonical"`, sempre com endereço absoluto (`Astro.site` + `BASE_URL`). A imagem é `public/compartilhar.png` (1200 × 630 px, até 100 KB desde a T-30, com o nome "Compostagem Enactus UCB"; o WhatsApp aceita até 300 KB). **Sitemap (T-63, RNF-04).** `src/pages/sitemap.xml.ts` gera `/SocialTech/sitemap.xml` no build, só com a página inicial (a 404 tem `noindex` e fica de fora); o verificador falha se ele faltar, sair do protocolo Sitemaps 0.9 ou listar outro endereço. Não há `robots.txt`: num site de projeto do GitHub Pages ele só vale na raiz do domínio (`blima-p.github.io`, que é outro repositório), então ninguém aponta o sitemap por ali. Por isso, depois do deploy, quem administra o site envia `https://blima-p.github.io/SocialTech/sitemap.xml` uma vez no Google Search Console (propriedade com prefixo de URL `https://blima-p.github.io/SocialTech/`).
 
 ## 4. Arquitetura da informação
 
@@ -469,6 +469,7 @@ flowchart LR
 - **Gatilho:** push na `main` (merge de release, `fix/*` ou edição do painel) ou execução manual do workflow.
 - **Passos:** `npm ci` → `npm run build` (gera `dist/`) → upload do artefato → `deploy-pages`. Tempo típico: cerca de 2 minutos.
 - **Contagem de acessos:** o script do GoatCounter só entra no build de produção (`import.meta.env.PROD`).
+- **Segurança da página (RNF-14):** o GitHub Pages não deixa configurar cabeçalhos, então a Content-Security-Policy vai numa `<meta>` gerada pelo `security.csp` do Astro (`astro.config.mjs`): `default-src 'self'`, sem `'unsafe-inline'`, liberando só o GoatCounter. Script inline novo precisa de hash: siga o padrão do `BaseLayout` (`Astro.csp.insertScriptHash`). A `<meta name="referrer">` usa `strict-origin-when-cross-origin`. O teste `tests/e2e/seguranca.spec.ts` falha se alguma interação violar a CSP.
 
 ### 9.3 QR Code
 
