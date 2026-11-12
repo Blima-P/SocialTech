@@ -501,6 +501,7 @@ flowchart LR
 | Schema do conteúdo | `astro build` (zod) | Local, CI e deploy | RF-15, RNF-15 |
 | Links quebrados | lychee (`*.md`, `src/**/*.astro` e `src/content/**/*.json`) | CI em todo PR, em `push` na `develop` e na `main` (edições do painel) | T-16, T-19 |
 | Site gerado | `npm run verificar:site` (`scripts/verificar-site.mjs`, Node puro): página inicial < 500 KB, um único `<h1>`, `alt` em todo `<img>`, caminhos internos com `/SocialTech/` ou `#`, só o GoatCounter como script externo, `target="_blank"` com `rel="noopener"` | Local (`npm run verify`) e CI | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 (T-19) |
+| Comportamento no navegador | Playwright com Chromium: busca, lista compacta, ciclo, quiz, tema, movimento reduzido e modo sem JavaScript | Local (`npm run test:e2e`) e CI | RF-01, RF-02, RF-05, RF-11, RF-17; RNF-05, RNF-07, RNF-09, RNF-10, RNF-12 |
 | Layout em 360 px e 1366 px | Modo responsivo do navegador + capturas no PR | Toda tarefa visual (DoD) | RNF-05 |
 | Teclado, foco e leitor de tela | Tab/Enter/Espaço; TalkBack ou VoiceOver | Tarefas interativas e homologação | RNF-07 |
 | Sem JavaScript | Desativar o JavaScript no navegador | T-12, T-14, T-15 e homologação | RNF-10 |
@@ -508,7 +509,7 @@ flowchart LR
 | Desempenho e acessibilidade | Lighthouse em modo celular, na página publicada | H2 | RNF-01 a RNF-03 |
 | Celulares reais | 2 celulares (Android e iPhone, se possível), 4G | Antes de cada release e nas homologações | RNF-11 |
 
-Não há testes automatizados de comportamento (busca, ciclo, quiz): eles são verificados à mão pelos critérios de aceite (dívida DT-01). A estrutura do HTML gerado (peso, `<h1>`, `alt`, caminhos, terceiros e `noopener`) é conferida automaticamente desde a T-19.
+Os fluxos críticos têm regressão automatizada desde a T-38. Testes com leitor de tela e em celulares físicos continuam manuais porque dependem de tecnologia assistiva e hardware real.
 
 ### 10.2 Roteiro de homologação
 
@@ -548,6 +549,7 @@ O registro mais recente está em
 | [ADR-006](#adr-006--conteúdo-em-coleções-json-com-schema) | Conteúdo em coleções JSON com schema | Aceito | 22/10/2026 |
 | [ADR-007](#adr-007--layout-em-faixas-de-largura-total) | Layout em faixas de largura total | Aceito | 26/10/2026 |
 | [ADR-008](#adr-008--interatividade-com-aprimoramento-progressivo) | Interatividade com aprimoramento progressivo | Aceito | 26/10/2026 |
+| [ADR-009](#adr-009--playwright-para-regressão-no-navegador) | Playwright para regressão no navegador | Aceito | 12/11/2026 |
 
 ### ADR-001 · Stack: Astro + TypeScript + CSS puro, site estático
 
@@ -644,11 +646,20 @@ O registro mais recente está em
 - **Consequências:** sem JavaScript, o guia aparece completo, o ciclo mostra todas as etapas e o quiz mostra as perguntas com um aviso `<noscript>`; nenhuma dependência nova; o quiz não mede nada (RN-06, Q-12).
 - **Requisitos:** RF-02, RF-05, RF-11, RNF-07, RNF-10, RNF-12, RNF-16.
 
+### ADR-009 · Playwright para regressão no navegador
+
+- **Status:** Aceito em 12/11/2026 para a T-38.
+- **Contexto:** os fluxos críticos eram validados apenas manualmente, permitindo regressões na busca, no ciclo, no quiz, no tema e no funcionamento sem JavaScript.
+- **Opções:** manter apenas o roteiro manual; criar testes unitários sem navegador; usar Cypress; **usar Playwright com Chromium no desenvolvimento e no CI (escolhida)**.
+- **Decisão:** `@playwright/test` é dependência exclusiva de desenvolvimento. A suíte executa o build estático em Chromium com projetos de 360 px e 1366 px e retém trace, vídeo e captura somente em falhas.
+- **Consequências:** o pacote não entra no JavaScript entregue ao visitante; o CI baixa o Chromium e fica mais demorado; relatórios gerados são ignorados pelo Git e pelo ESLint; aparelhos reais e leitores de tela continuam no roteiro manual.
+- **Requisitos:** RF-01, RF-02, RF-05, RF-11, RF-17, RNF-05, RNF-07, RNF-09, RNF-10, RNF-12, RNF-14, RNF-16.
+
 ## 12. Riscos técnicos e dívidas aceitas
 
 | ID | Dívida ou risco | Consequência | Tratamento |
 |---|---|---|---|
-| DT-01 | Sem testes automatizados de comportamento (busca, ciclo, quiz) | Regressões só aparecem no teste manual | Aceito pelo prazo; critérios de aceite e roteiro de homologação cobrem os casos. Desde a T-19, o `npm run verificar:site` confere a estrutura do HTML gerado (`<h1>`, `alt`, caminhos, terceiros), mas não o comportamento |
+| DT-01 | Testes de leitor de tela e aparelhos reais continuam manuais | Diferenças específicas de TalkBack, VoiceOver ou navegador móvel podem escapar do CI | Playwright cobre os fluxos críticos; RH-05, RH-08 e RH-11 continuam obrigatórios em hardware real |
 | DT-02 | Edições do painel vão direto para a `main`, sem revisão (ADR-002) | A `develop` fica atrás da `main` | `git merge origin/main` na `develop` antes e depois de cada release |
 | DT-03 | Lighthouse não roda no CI | Desempenho e acessibilidade podem piorar sem aviso | Desde a T-19, o CI falha se a página inicial passar de 500 KB (RNF-01) ou perder o `<h1>` único ou o `alt`; as notas do Lighthouse (RNF-02, RNF-03) continuam medidas à mão (RH-12) |
 | DT-04 | O QR estático aponta para `blima-p.github.io/SocialTech` | Renomear o repositório ou trocar de domínio quebra o QR impresso | Não renomear o repositório; se mudar, reimprimir o adesivo |

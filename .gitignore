@@ -12,6 +12,9 @@ dist/
 .astro/
 .cache/
 .lycheecache
+playwright-report/
+test-results/
+blob-report/
 
 # Sistema operacional
 .DS_Store
