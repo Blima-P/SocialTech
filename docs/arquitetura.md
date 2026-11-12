@@ -533,6 +533,9 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 
 **Registro:** na descrição do PR de release `develop` → `main`, anotar data, aprovadores, celulares usados (modelo e sistema), resultado de cada passo e problemas encontrados. Esse registro é evidência para o relatório (roteiro, item 2.9; E-10).
 
+O registro mais recente está em
+[`docs/homologacao-operacional.md`](homologacao-operacional.md).
+
 ## 11. Decisões de arquitetura (ADR)
 
 | ADR | Decisão | Status | Data |
