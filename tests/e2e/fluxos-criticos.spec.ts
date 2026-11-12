@@ -74,6 +74,22 @@ test.describe("ciclo do resíduo", () => {
           trilha.evaluate((lista) => lista.scrollWidth > lista.clientWidth),
         )
         .toBe(true);
+      const preenchimento = await trilha
+        .locator("> li")
+        .nth(1)
+        .evaluate((etapa) => {
+          const conteudo = etapa.querySelector<HTMLElement>(":scope > div")!;
+          const foto = etapa.querySelector<HTMLImageElement>(".foto")!;
+          return {
+            diferenca: Math.abs(
+              conteudo.getBoundingClientRect().width -
+                foto.getBoundingClientRect().width,
+            ),
+            ajuste: getComputedStyle(foto).objectFit,
+          };
+        });
+      expect(preenchimento.diferenca).toBeLessThan(1);
+      expect(preenchimento.ajuste).toBe("cover");
 
       const caixa = await trilha.boundingBox();
       expect(caixa).not.toBeNull();

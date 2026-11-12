@@ -229,11 +229,11 @@ Funcionalidade: Ciclo do resíduo
 
 | Campo | Valor |
 |---|---|
-| Descrição | Com JavaScript, o ciclo pode ser navegado etapa por etapa, com botões numerados, "Anterior" e "Próxima" |
+| Descrição | Com JavaScript, o ciclo pode ser navegado etapa por etapa por botões, teclado e, no celular, arraste horizontal direto sobre as fotos |
 | Prioridade | Should |
 | Origem | OE-1 · C-03b · Jornada J2 |
 | Conteúdo | RC-04, RC-05; fotos (RC-06): campo na T-21 e fotos do professor na T-32 |
-| Situação | ✅ Implementado (T-12, PR #46); fotos do professor nas 5 etapas (T-21, PR #59; T-32, PR #86) |
+| Situação | ✅ Implementado (T-12, PR #46); fotos do professor nas 5 etapas (T-21, PR #59; T-32, PR #86); arraste mobile e regressão automatizada (T-38, PR #102) |
 
 ```gherkin
 Funcionalidade: Ciclo passo a passo
@@ -768,6 +768,10 @@ As tarefas do [plano de melhorias](sdd/06-plano-melhorias.md) e do [plano 07](sd
 | T-33 Cartaz A4 com QR Code | RF-14, RN-09 | #76 / PR #82 | ✅ Concluída (impressão pela equipe) |
 | T-34 Perguntas do quiz | RF-11, RN-06 | #77 / PR #83 | ✅ Concluída (aceite registrado por Pedro em 04/11) |
 | T-35 Faixa de parceria | RF-09 | #62 / PR #63 | ✅ Concluída (release #78) |
+| T-36 Governança e documentação | RNF-14; ADR-002; DT-02 | #99 / PR #100 | ✅ Concluída |
+| T-37 Homologação operacional | RF-13, RF-14, RF-15; RNF-11, RNF-12, RNF-15 | #105 / PR #106 | 🚧 Registro criado; evidências presenciais pendentes |
+| T-38 Regressão automatizada | RF-01, RF-02, RF-05, RF-11, RF-17; RNF-05, RNF-07, RNF-09, RNF-10, RNF-12 | #101 / PR #102 | ✅ Concluída |
+| T-39 Desempenho e evolução | RNF-01, RNF-02, RNF-16 | #103 / PR #104 | 🚧 Parte técnica concluída; medição publicada pendente |
 
 ## 9. Pendências e riscos
 
