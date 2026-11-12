@@ -19,6 +19,15 @@ const cabecalho = (csp) =>
 const CSP_VALIDA =
   "default-src 'self';object-src 'none';base-uri 'self'; script-src 'self' https://gc.zgo.at 'sha256-abc='";
 const CABECALHO_SEGURO = cabecalho(CSP_VALIDA);
+const jsonLd = (dados) =>
+  `<script type="application/ld+json">${typeof dados === "string" ? dados : JSON.stringify(dados)}</script>`;
+const JSON_LD_VALIDO = jsonLd({
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebSite", url: "https://blima-p.github.io/SocialTech/" },
+    { "@type": "Organization", name: "Enactus UCB" },
+  ],
+});
 
 function verificar({
   inicial = "",
@@ -28,6 +37,7 @@ function verificar({
   guia = [],
   sitemap = SITEMAP_VALIDO,
   topo = CABECALHO_SEGURO,
+  dadosEstruturados = JSON_LD_VALIDO,
 }) {
   const pasta = join(
     raiz,
@@ -47,7 +57,10 @@ function verificar({
     salvar(join("src", "content", "duvidas.json"), "[]");
     salvar(join("src", "content", "links.json"), "[]");
     salvar(join("src", "content", "guia.json"), JSON.stringify(guia));
-    salvar(join("dist", "index.html"), `${topo}<h1>Início</h1>${inicial}`);
+    salvar(
+      join("dist", "index.html"),
+      `${topo}<h1>Início</h1>${dadosEstruturados}${inicial}`,
+    );
     if (!sem404)
       salvar(join("dist", "404.html"), `${topo}<h1>Erro</h1>${erro}`);
     if (sitemap !== null) salvar(join("dist", "sitemap.xml"), sitemap);
@@ -240,4 +253,26 @@ test("sitemap lista apenas a página inicial", () => {
   });
   assert.equal(resultado.status, 1);
   assert.match(resultado.saida, /inexistente\/: o site tem uma página só/);
+});
+
+test("exige um JSON-LD válido com WebSite e Organization na página inicial", () => {
+  for (const [dadosEstruturados, mensagem] of [
+    ["", /exatamente um bloco JSON-LD \(schema\.org\), tem 0/],
+    [jsonLd("{ inválido"), /não é um JSON válido/],
+    [
+      jsonLd({ "@type": "WebSite", url: "https://exemplo.com/" }),
+      /WebSite com url https:\/\/blima-p\.github\.io\/SocialTech\//,
+    ],
+    [
+      jsonLd({
+        "@type": "WebSite",
+        url: "https://blima-p.github.io/SocialTech/",
+      }),
+      /precisa de uma Organization/,
+    ],
+  ]) {
+    const resultado = verificar({ dadosEstruturados });
+    assert.equal(resultado.status, 1);
+    assert.match(resultado.saida, mensagem);
+  }
 });

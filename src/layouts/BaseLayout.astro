@@ -21,6 +21,35 @@ const imagemCompartilhar = new URL(
 );
 const contarAcesso = import.meta.env.PROD && !erro;
 
+// Dados estruturados (schema.org) para buscadores, só na página indexável.
+// Texto fixo do layout; "<" escapado para o JSON não fechar a tag <script>.
+const inicio = new URL(import.meta.env.BASE_URL, Astro.site).href;
+const dadosEstruturados = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${inicio}#site`,
+      url: inicio,
+      name: "Compostagem Enactus UCB",
+      description,
+      inLanguage: "pt-BR",
+      publisher: { "@id": `${inicio}#organizacao` },
+    },
+    {
+      "@type": "Organization",
+      "@id": `${inicio}#organizacao`,
+      name: "Enactus UCB",
+      url: inicio,
+      logo: new URL(`${import.meta.env.BASE_URL}favicon.svg`, Astro.site).href,
+      parentOrganization: {
+        "@type": "CollegeOrUniversity",
+        name: "Universidade Católica de Brasília",
+      },
+    },
+  ],
+}).replaceAll("<", "\\u003c");
+
 // Scripts inline (is:inline). O Astro não calcula o hash deles para a CSP (RNF-14):
 // o hash sai do mesmo texto que vai para a página, então nunca fica desatualizado.
 // RF-17: aplica o tema escolhido antes de desenhar a página, sem piscar.
@@ -101,6 +130,16 @@ if (contarAcesso) await autorizar(scriptGoatcounter);
     {/* Fica no body: o Astro põe a CSP no fim do head, e todo script precisa vir depois dela. */}
     {/* eslint-disable-next-line astro/no-set-html-directive -- texto fixo do próprio layout, sem entrada externa; o set:html garante que o hash da CSP é do mesmo texto */}
     <script is:inline set:html={scriptTema} />
+    {/* Bloco de dados, não é executado: a CSP de script não se aplica a ele. */}
+    {/* eslint-disable astro/no-set-html-directive -- JSON fixo do próprio layout, com "<" escapado */}
+    {!erro && (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={dadosEstruturados}
+      />
+    )}
+    {/* eslint-enable astro/no-set-html-directive */}
     <slot />
     {/* Contagem de acessos sem cookies, só no site publicado (ADR-003). */}
     {contarAcesso && (

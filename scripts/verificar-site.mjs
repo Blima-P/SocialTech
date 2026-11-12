@@ -458,6 +458,41 @@ for (const { nome } of lerConteudo("guia")) {
   }
 }
 
+// SEO: um bloco JSON-LD (schema.org) com o site e a organização, lido do HTML bruto.
+const blocosJsonLd = [
+  ...htmlDaInicial.matchAll(
+    /<script\b[^>]*\btype="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi,
+  ),
+].map(([, json]) => json);
+if (blocosJsonLd.length !== 1) {
+  problema(
+    "index.html",
+    `precisa de exatamente um bloco JSON-LD (schema.org), tem ${blocosJsonLd.length}.`,
+  );
+} else {
+  let itens = [];
+  try {
+    const dados = JSON.parse(blocosJsonLd[0]);
+    itens = dados["@graph"] ?? [dados];
+  } catch {
+    problema("index.html", "o bloco JSON-LD não é um JSON válido.");
+  }
+  const site = itens.find((item) => item["@type"] === "WebSite");
+  const inicio = new URL(BASE, config.site).href;
+  if (itens.length > 0 && site?.url !== inicio) {
+    problema(
+      "index.html",
+      `o JSON-LD precisa de um WebSite com url ${inicio}.`,
+    );
+  }
+  if (
+    itens.length > 0 &&
+    !itens.some((item) => item["@type"] === "Organization")
+  ) {
+    problema("index.html", "o JSON-LD precisa de uma Organization.");
+  }
+}
+
 const kb = pesoDaPaginaInicial(tagsDaInicial, cssEmbutido) / 1024;
 if (kb >= LIMITE_KB) {
   problema(
