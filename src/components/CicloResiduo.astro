@@ -61,16 +61,18 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
 </section>
 
 <script>
+  import { exigir } from "../scripts/exigir";
+
   // Sem JavaScript, a lista mostra todas as etapas. No celular, o modo interativo permite arrastar.
   for (const ciclo of document.querySelectorAll<HTMLElement>("[data-ciclo]")) {
-    const lista = ciclo.querySelector<HTMLOListElement>(".etapas")!;
+    const lista = exigir<HTMLOListElement>(ciclo, ".etapas");
     const etapas = [...ciclo.querySelectorAll<HTMLElement>(".etapas > li")];
     const atalhos = [
       ...ciclo.querySelectorAll<HTMLButtonElement>("[data-atalhos] button"),
     ];
-    const anterior = ciclo.querySelector<HTMLButtonElement>("[data-anterior]")!;
-    const proxima = ciclo.querySelector<HTMLButtonElement>("[data-proxima]")!;
-    const posicao = ciclo.querySelector<HTMLElement>("[data-posicao]")!;
+    const anterior = exigir<HTMLButtonElement>(ciclo, "[data-anterior]");
+    const proxima = exigir<HTMLButtonElement>(ciclo, "[data-proxima]");
+    const posicao = exigir(ciclo, "[data-posicao]");
     const modoCarrossel = window.matchMedia("(max-width: 63.999rem)");
     const movimentoReduzido = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -186,9 +188,9 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
       ir(atual, false);
     });
     ciclo.classList.add("interativo");
-    ciclo.querySelector<HTMLElement>("[data-atalhos]")!.hidden = false;
-    ciclo.querySelector<HTMLElement>("[data-navegacao]")!.hidden = false;
-    ciclo.querySelector<HTMLElement>("[data-dica-arraste]")!.hidden = false;
+    exigir(ciclo, "[data-atalhos]").hidden = false;
+    exigir(ciclo, "[data-navegacao]").hidden = false;
+    exigir(ciclo, "[data-dica-arraste]").hidden = false;
     ir(0);
   }
 </script>
