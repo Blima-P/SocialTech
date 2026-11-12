@@ -1,7 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 
-const duvidas = await getCollection("duvidas");
+// O id é a posição no JSON ("0", "1"…): ordenar como número mantém a ordem do painel.
+const duvidas = (await getCollection("duvidas")).sort(
+  (a, b) => Number(a.id) - Number(b.id),
+);
 ---
 
 {duvidas.length > 0 && (

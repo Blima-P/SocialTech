@@ -224,6 +224,63 @@ const cssEmbutido = [
   .map(([, css]) => css)
   .join("\n");
 
+// Texto como o Astro escreve no HTML (escapa &, <, >, " e ').
+function comoNoHtml(texto) {
+  return texto
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function lerConteudo(nome) {
+  return JSON.parse(
+    readFileSync(join(RAIZ, "src", "content", `${nome}.json`), "utf8"),
+  );
+}
+
+// Trecho do HTML entre a tag que abre o bloco e o fechamento dele.
+function trechoDoBloco(html, abertura, fechamento) {
+  const inicio = html.indexOf(abertura);
+  if (inicio === -1) return undefined;
+  const fim = html.indexOf(fechamento, inicio);
+  return html.slice(inicio, fim === -1 ? undefined : fim);
+}
+
+// RF-14: o painel edita listas; o site precisa mostrá-las na mesma ordem.
+function verificarOrdem(colecao, campo, trecho) {
+  const itens = lerConteudo(colecao);
+  if (itens.length === 0) return;
+  if (trecho === undefined) {
+    problema("index.html", `a lista "${colecao}" não foi encontrada.`);
+    return;
+  }
+  let posicao = 0;
+  for (const item of itens) {
+    const achado = trecho.indexOf(comoNoHtml(item[campo]), posicao);
+    if (achado === -1) {
+      problema(
+        "index.html",
+        `"${item[campo]}" (${colecao}.json) falta ou está fora da ordem do painel.`,
+      );
+      return;
+    }
+    posicao = achado + 1;
+  }
+}
+
+verificarOrdem(
+  "duvidas",
+  "pergunta",
+  trechoDoBloco(htmlDaInicial, 'id="duvidas"', "</section>"),
+);
+verificarOrdem(
+  "links",
+  "nome",
+  trechoDoBloco(htmlDaInicial, 'aria-labelledby="titulo-links"', "</nav>"),
+);
+
 const kb = pesoDaPaginaInicial(tagsDaInicial, cssEmbutido) / 1024;
 if (kb >= LIMITE_KB) {
   problema(
