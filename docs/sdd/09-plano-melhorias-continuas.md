@@ -222,7 +222,7 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 | Tarefa | Issue | Entrega | Requisitos | Status |
 |---|---|---|---|---|
 | T-62 | #134 | Fixa a versão do Node em .nvmrc | RNF-14 | ✅ #145 |
-| T-63 | #135 | Publica sitemap da página canônica | RNF-04 | ⏳ |
+| T-63 | #135 | Publica sitemap da página canônica | RNF-04 | ✅ |
 | T-64 | #136 | Dados estruturados das dúvidas comuns | RNF-04, RF-16 | ❌ não planejada (seção 3) |
 | T-65 | #137 | Monitora o site publicado e os links externos toda semana | RNF-13 | ⏳ |
 | T-66 | #138 | Publica M5–M8 e registra Lighthouse publicado | RNF-01, RNF-02, RNF-03 | ⏳ |
@@ -235,9 +235,9 @@ Tornar builds reproduzíveis, melhorar a descoberta pela busca e detectar falhas
 
 **T-63 — critérios de aceite**
 
-- [ ] `/SocialTech/sitemap.xml` é XML válido com a URL canônica e sem a 404, gerado por um endpoint estático (`src/pages/sitemap.xml.ts`), sem dependência nova.
-- [ ] O verificador exige o sitemap.
-- [ ] A arquitetura explica por que não há `robots.txt` e que o sitemap é enviado à mão no Search Console.
+- [x] `/SocialTech/sitemap.xml` é XML válido com a URL canônica e sem a 404, gerado por um endpoint estático (`src/pages/sitemap.xml.ts`), sem dependência nova.
+- [x] O verificador exige o sitemap.
+- [x] A arquitetura explica por que não há `robots.txt` e que o sitemap é enviado à mão no Search Console.
 
 **T-65 — critérios de aceite**
 

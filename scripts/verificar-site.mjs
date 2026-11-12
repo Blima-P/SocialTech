@@ -249,6 +249,40 @@ if (!existsSync(join(DIST, "404.html"))) {
   problema("404.html", "dist/404.html não existe. Verifique a página de erro.");
 }
 
+// RNF-04: o sitemap lista só as páginas indexáveis, com o endereço público.
+const SITEMAP = join(DIST, "sitemap.xml");
+if (!existsSync(SITEMAP)) {
+  problema(
+    "sitemap.xml",
+    "dist/sitemap.xml não existe. Verifique src/pages/sitemap.xml.ts.",
+  );
+} else {
+  const xml = readFileSync(SITEMAP, "utf8").trim();
+  const inicio = new URL(BASE, config.site).href;
+  const enderecos = [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map(([, loc]) =>
+    loc.trim(),
+  );
+  if (
+    !xml.startsWith("<?xml") ||
+    !/<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/.test(
+      xml,
+    ) ||
+    !xml.endsWith("</urlset>")
+  ) {
+    problema("sitemap.xml", "não é um <urlset> do protocolo Sitemaps 0.9.");
+  }
+  if (!enderecos.includes(inicio)) {
+    problema("sitemap.xml", `não lista a página inicial (${inicio}).`);
+  }
+  for (const endereco of enderecos) {
+    if (!endereco.startsWith(inicio)) {
+      problema("sitemap.xml", `${endereco} está fora de ${inicio}.`);
+    } else if (/404/.test(endereco)) {
+      problema("sitemap.xml", `${endereco}: a página de erro não é indexada.`);
+    }
+  }
+}
+
 const paginas = readdirSync(DIST, { recursive: true }).filter((nome) =>
   nome.endsWith(".html"),
 );
