@@ -211,6 +211,29 @@ test("tema segue a preferência do sistema sem escolha salva", async ({
   await expect(botao).toHaveAttribute("aria-pressed", "false");
 });
 
+test("revelar o botão de tema não desloca a página", async ({
+  browser,
+  page,
+}) => {
+  const topoDoMain = async (alvo: typeof page) => {
+    await alvo.goto(paginaInicial);
+    await alvo.evaluate(() => document.fonts.ready);
+    return alvo.locator("main").evaluate((m) => m.getBoundingClientRect().top);
+  };
+
+  const semJs = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: page.viewportSize(),
+  });
+  const topoSemBotao = await topoDoMain(await semJs.newPage());
+  await semJs.close();
+
+  const topoComBotao = await topoDoMain(page);
+  await expect(page.getByRole("button", { name: "Modo escuro" })).toBeVisible();
+
+  expect(Math.abs(topoComBotao - topoSemBotao)).toBeLessThan(1);
+});
+
 test("movimento reduzido não inicia animações CSS", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(paginaInicial);
