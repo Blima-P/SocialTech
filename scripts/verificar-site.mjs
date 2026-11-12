@@ -3,7 +3,7 @@
 // Só usa módulos do Node e lê o base do astro.config.mjs: nenhuma dependência
 // nova (AGENTS.md §4.4).
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, isAbsolute, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import config from "../astro.config.mjs";
 
@@ -85,11 +85,28 @@ function recursosDaTag({ nome, atributos }) {
   return [];
 }
 
+const INICIO = new URL(BASE, config.site).href;
+
+// Endereço absoluto do próprio site, ex.: "https://blima-p.github.io/SocialTech/…".
+function ehDoSite(endereco) {
+  return endereco.startsWith(INICIO);
+}
+
 // "/SocialTech/_astro/a.css?v=1" -> dist/_astro/a.css
+// Resolve "..", "%2e%2e" e "%2f" como o navegador e o servidor. Devolve null se o
+// caminho for inválido ou sair da base ou de dist/.
 function arquivoNoDist(endereco) {
-  const caminho = decodeURIComponent(endereco.split(/[?#]/)[0]);
-  const relativo = caminho.slice(BASE.length);
+  let relativo;
+  try {
+    const { pathname } = new URL(endereco, INICIO);
+    if (!pathname.startsWith(BASE)) return null;
+    relativo = decodeURIComponent(pathname.slice(BASE.length));
+  } catch {
+    return null;
+  }
   const arquivo = join(DIST, relativo);
+  const dentro = relative(DIST, arquivo);
+  if (dentro.startsWith("..") || isAbsolute(dentro)) return null;
   return relativo === "" || relativo.endsWith("/")
     ? join(arquivo, "index.html")
     : arquivo;
@@ -97,11 +114,12 @@ function arquivoNoDist(endereco) {
 
 // Um ícone, imagem ou folha de estilo citado na página precisa existir em dist/.
 function verificarArquivo(nomeArquivo, endereco, origem) {
-  let arquivo;
-  try {
-    arquivo = arquivoNoDist(endereco);
-  } catch {
-    problema(nomeArquivo, `"${endereco}" em ${origem} tem caminho inválido.`);
+  const arquivo = arquivoNoDist(endereco);
+  if (arquivo === null) {
+    problema(
+      nomeArquivo,
+      `"${endereco}" em ${origem} tem caminho inválido ou fora de ${BASE}.`,
+    );
     return;
   }
   if (!existsSync(arquivo) || !statSync(arquivo).isFile()) {
@@ -183,12 +201,21 @@ function verificarSeguranca(nomeArquivo, tags) {
 }
 
 function verificarAncora(nomeArquivo, href) {
-  if (!href.includes("#") || ehExterno(href)) return;
-  if (!href.startsWith("#") && !href.startsWith(BASE)) return;
+  if (!href.includes("#") || (ehExterno(href) && !ehDoSite(href))) return;
+  if (!href.startsWith("#") && !href.startsWith(BASE) && !ehDoSite(href)) {
+    return;
+  }
 
   const destino = href.startsWith("#")
     ? join(DIST, nomeArquivo)
     : arquivoNoDist(href);
+  if (destino === null) {
+    problema(
+      nomeArquivo,
+      `href="${href}" tem caminho inválido ou fora de ${BASE}.`,
+    );
+    return;
+  }
   const fragmento = href.slice(href.indexOf("#") + 1);
   let id;
   try {
@@ -260,7 +287,14 @@ function verificarPagina(nomeArquivo) {
       ...enderecosDoSrcset(atributos.get("srcset") ?? ""),
     ];
     for (const endereco of enderecos) {
-      if (endereco === undefined || ehExterno(endereco)) continue;
+      if (endereco === undefined) continue;
+      if (ehExterno(endereco)) {
+        // Endereço absoluto do próprio site também precisa existir no build.
+        if (ehDoSite(endereco) && !endereco.includes("#")) {
+          verificarArquivo(nomeArquivo, endereco, `<${nome}>`);
+        }
+        continue;
+      }
       if (!endereco.startsWith(BASE) && !endereco.startsWith("#")) {
         problema(
           nomeArquivo,
@@ -275,13 +309,8 @@ function verificarPagina(nomeArquivo) {
     // A prévia do link (Open Graph) usa endereço absoluto do próprio site.
     if (nome === "meta" && atributos.get("property") === "og:image") {
       const imagem = atributos.get("content") ?? "";
-      const inicio = new URL(BASE, config.site).href;
-      if (imagem.startsWith(inicio)) {
-        verificarArquivo(
-          nomeArquivo,
-          new URL(imagem).pathname,
-          '<meta property="og:image">',
-        );
+      if (ehDoSite(imagem)) {
+        verificarArquivo(nomeArquivo, imagem, '<meta property="og:image">');
       }
     }
 
@@ -308,7 +337,7 @@ function pesoDaPaginaInicial(tags, cssEmbutido) {
 
   function arquivoExistente(endereco) {
     const arquivo = arquivoNoDist(endereco);
-    if (existsSync(arquivo)) return arquivo;
+    if (arquivo !== null && existsSync(arquivo)) return arquivo;
     problema("index.html", `o arquivo "${endereco}" não existe em dist/.`);
     return undefined;
   }
@@ -333,7 +362,10 @@ function pesoDaPaginaInicial(tags, cssEmbutido) {
     const locais = recursosDaTag(tag)
       .filter((endereco) => endereco && endereco.startsWith(BASE))
       .map(arquivoNoDist)
-      .filter((arquivo) => existsSync(arquivo) && statSync(arquivo).isFile());
+      .filter(
+        (arquivo) =>
+          arquivo !== null && existsSync(arquivo) && statSync(arquivo).isFile(),
+      );
     if (locais.length === 0) continue;
 
     if (tag.nome === "img" || tag.nome === "source") {
