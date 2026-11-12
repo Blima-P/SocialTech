@@ -70,3 +70,7 @@ npm run verify   # formatação, lint, tipos, build e verificação do site gera
 | Marcos Gabriel de Albuquerque da Silva                        | Ciência da Computação   |
 
 Coordenador: Prof. Marcus Vinicius Vasconcelos Cerqueira · Professora da UC: Profa. Juliana Olinda Martins Pequeno
+
+## Licença
+
+O código-fonte está disponível sob a [licença MIT](LICENSE). Logos, fotografias, cartazes, QR Codes e demais materiais de identidade visual não são relicenciados pela MIT e permanecem sujeitos aos direitos de seus respectivos titulares.

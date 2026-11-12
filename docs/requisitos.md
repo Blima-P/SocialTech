@@ -5,9 +5,9 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.3 (04/11/2026): situação final das T-18 a T-35 |
-| Status | 🚦 Em revisão pela equipe |
-| Tarefa | T-16 (issue #37) |
+| Versão | 1.4 (12/11/2026): encerramento documental e milestones T-36 a T-39 |
+| Status | ✅ Aprovado como referência da implementação; evidências operacionais no M2 |
+| Tarefa | T-16 (issue #37); atualização T-36 (issue #99) |
 | Base | [Constituição](sdd/00-constituicao.md), [Especificação](sdd/01-especificacao.md), [Clarificações](sdd/02-clarificacoes.md), [Plano do MVP](sdd/03-plano-tarefas.md), [Plano da entrega final](sdd/05-plano-entrega-final.md) |
 
 ---
@@ -28,12 +28,14 @@ Este documento diz **o que** o site precisa fazer (requisitos funcionais), **com
 
 **Fora:** o que está em [especificação §4.1](sdd/01-especificacao.md#41-fora-do-escopo-wont-neste-semestre) (login, dados em tempo real, aplicativo, ranking, outros idiomas, mapa com geolocalização, chatbot). As atividades fora do site (ação no campus, cartazes, análise do formulário) estão na [especificação §4.2](sdd/01-especificacao.md#42-fora-do-site-mas-dentro-do-projeto).
 
-### 1.3 Situação em 04/11/2026
+### 1.3 Situação em 12/11/2026
 
 - O **MVP** (requisitos **Must**) foi publicado na `main` em 26/10/2026 (PR #29) e está em `https://blima-p.github.io/SocialTech/`.
 - Os requisitos **Should** foram entregues pelas tarefas T-11 a T-16 ([plano da entrega final](sdd/05-plano-entrega-final.md)) e publicados na release final de 29/10/2026 (PR #47).
-- As melhorias depois da entrega (T-18 a T-27, [plano de melhorias](sdd/06-plano-melhorias.md)) estão todas concluídas. As T-18, T-22, T-25 e T-26 saíram na release de 01/11/2026; as outras entram na `main` na release de 04/11/2026 ([seção 8.2](#82-tarefa--requisitos)).
-- Em 31/10/2026, o Prof. Marcus respondeu às perguntas de conteúdo ([clarificações](sdd/02-clarificacoes.md), Q-01 a Q-05 e Q-15). O [plano 07](sdd/07-plano-conteudo-enactus.md) (T-28 a T-35) está concluído: o conteúdo validado (T-29) e a faixa de parceria (T-35) saíram na release de 01/11/2026 (PR #78); o nome "Compostagem Enactus UCB", as dúvidas comuns (RF-16), as fotos, o cartaz e o quiz entram na release de 04/11/2026. O que ainda falta está na [seção 6](#6-requisitos-de-conteúdo).
+- As melhorias T-18 a T-27 e o conteúdo T-28 a T-35 estão concluídos e publicados na `main` pela release de 04/11/2026.
+- O carrossel mobile do ciclo foi acrescentado no PR #98 e está na `develop`.
+- O encerramento segue o [plano de milestones](sdd/08-plano-milestones.md): documentação (M1), evidências operacionais (M2), regressão automatizada (M3) e desempenho (M4).
+- O que ainda depende de resposta ou evidência externa está nas [seções 6 e 9](#6-requisitos-de-conteúdo).
 - O plano do MVP foi feito antes deste documento (exceção aprovada em [03-plano-tarefas.md §0.1](sdd/03-plano-tarefas.md#01-exceção-aprovada-à-definição-de-preparado)). A [seção 8](#8-matriz-de-rastreabilidade) liga cada tarefa já feita aos requisitos daqui.
 
 ### 1.4 Convenções
@@ -227,21 +229,27 @@ Funcionalidade: Ciclo do resíduo
 
 | Campo | Valor |
 |---|---|
-| Descrição | Com JavaScript, o ciclo pode ser navegado etapa por etapa, com botões numerados, "Anterior" e "Próxima" |
+| Descrição | Com JavaScript, o ciclo pode ser navegado etapa por etapa por botões, teclado e, no celular, arraste horizontal direto sobre as fotos |
 | Prioridade | Should |
 | Origem | OE-1 · C-03b · Jornada J2 |
 | Conteúdo | RC-04, RC-05; fotos (RC-06): campo na T-21 e fotos do professor na T-32 |
-| Situação | ✅ Implementado (T-12, PR #46); fotos do professor nas 5 etapas (T-21, PR #59; T-32, PR #86) |
+| Situação | ✅ Implementado (T-12, PR #46); fotos do professor nas 5 etapas (T-21, PR #59; T-32, PR #86); arraste mobile e regressão automatizada (T-38, PR #102) |
 
 ```gherkin
 Funcionalidade: Ciclo passo a passo
 
   Cenário: Navegar pelo toque
-    Dado que o ciclo tem 5 etapas e o JavaScript está ativo
+    Dado que o ciclo tem 5 etapas, o JavaScript está ativo e a tela tem pelo menos 64rem
     Quando toco em "Próxima"
     Então só a etapa 2 fica visível
     E o texto "Etapa 2 de 5" é anunciado pelo leitor de tela
     E o botão "2" fica marcado como etapa atual
+
+  Cenário: Arrastar as fotos no celular
+    Dado que abri o ciclo num celular
+    Quando arrasto a foto de uma etapa para o lado
+    Então a próxima etapa se encaixa na área visível
+    E o indicador e os controles passam a representar essa etapa
 
   Cenário: Pontas do ciclo
     Dado que estou na etapa 1
@@ -622,9 +630,9 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 
 | ID | Categoria | Requisito | Como medir | Prioridade | Situação |
 |---|---|---|---|---|---|
-| RNF-01 | Desempenho | Página inicial com **menos de 500 KB** transferidos (HTML, CSS, JS, imagens e fontes) [CONFIRMADO, H2-6] | Lighthouse "Total byte weight" ou aba Rede. Medido em 26/10/2026 na `develop`: cerca de 19 KB do site + o script do GoatCounter; a T-11 acrescenta cerca de 44 KB de fonte. Lighthouse no site publicado em 01/11/2026: **65 KiB** transferidos | **Must** | ✅ |
-| RNF-02 | Desempenho | No Lighthouse em modo celular (4G simulado): **Desempenho ≥ 90** e **LCP ≤ 3 s** [SUPOSIÇÃO: meta proposta pela T-16, a confirmar na H2] | Lighthouse, modo celular, na página publicada | Should | ✅ Medido em 01/11/2026 (Lighthouse 12, modo celular): Desempenho **100**, LCP **1,7 s**, CLS 0,006 |
-| RNF-03 | Acessibilidade | Lighthouse em modo celular: **Acessibilidade ≥ 90** [CONFIRMADO, H2-6] | Lighthouse | **Must** | ✅ Medido em 01/11/2026: Acessibilidade **100** (Boas práticas 96, por causa do `favicon.ico` ausente, que a T-20 resolve; SEO 100) |
+| RNF-01 | Desempenho | Página inicial com **menos de 500 KB** transferidos (HTML, CSS, JS, imagens e fontes) [CONFIRMADO, H2-6] | Lighthouse "Total byte weight" ou aba Rede. O verificador local considera o pior caso das imagens responsivas e, desde a T-39, aplica a meta interna de **350 KB**; medição na branch da T-39: **327,1 KB**, sem GoatCounter | **Must** | ✅ |
+| RNF-02 | Desempenho | No Lighthouse em modo celular (4G simulado): **Desempenho ≥ 90** e **LCP ≤ 3 s** [SUPOSIÇÃO: meta proposta pela T-16, a confirmar na H2] | Lighthouse, modo celular, na página publicada | Should | 🧪 T-39, build de produção local: Desempenho **100**, LCP **1,6 s**, CLS 0,023 e 276 KiB; confirmação no site publicado pendente |
+| RNF-03 | Acessibilidade | Lighthouse em modo celular: **Acessibilidade ≥ 90** [CONFIRMADO, H2-6] | Lighthouse | **Must** | 🧪 T-39, build de produção local: Acessibilidade **100**, Boas práticas **100** e SEO **100**; confirmação no site publicado pendente |
 | RNF-04 | Acessibilidade | Contraste de texto **≥ 4,5:1** (WCAG 2.1 AA), nos temas claro e escuro (RF-17); só os pares de cor da [arquitetura §5.1](arquitetura.md#51-cores-e-contraste) | Tabela de pares; verificador de contraste | **Must** | ✅ |
 | RNF-05 | Acessibilidade | Em **360 px** não há rolagem horizontal; em **1366 px** o conteúdo fica centralizado em até `72rem` | Modo responsivo do navegador e celular real | **Must** (360 px) · Should (1366 px, T-11) | ✅ (1366 px: T-11, PR #44) |
 | RNF-06 | Acessibilidade | Botões, links de ação, campos e alternativas com alvo de toque **≥ 44 × 44 px** (`--alvo-toque`) | Ferramentas do navegador (medir o elemento) | **Must** | ✅ |
@@ -637,7 +645,7 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 | RNF-13 | Segurança | Nenhum segredo no repositório; nenhum `set:html`, `innerHTML`, `eval` ou `new Function` com conteúdo do painel (bloqueado pelo ESLint); links que abrem nova aba com `rel="noopener"`; site só em HTTPS | `npm run lint`; revisão de PR | **Must** | ✅ |
 | RNF-14 | Manutenibilidade | Todo texto, item, etapa, número e pergunta em `src/content/`, validado por schema; `src/content.config.ts` e `.pages.yml` mudam no mesmo PR; `npm run verify` e o CI (`lint` e `links`) passam em todo PR | CI no PR | **Must** | ✅ |
 | RNF-15 | Disponibilidade | Edição salva no painel publicada em **até 5 minutos**; um build que falha **não** derruba o site (a versão anterior continua no ar) | Tempo entre o commit e o fim do workflow `Deploy GitHub Pages` | **Must** | ✅ |
-| RNF-16 | Custo e dependências | **Custo zero**; nenhuma dependência npm, CDN, fonte externa ou framework de UI nova sem ADR aprovado; JavaScript só nos componentes interativos | `package.json` no PR; aba Rede | **Must** | ✅ |
+| RNF-16 | Custo e dependências | **Custo zero**; nenhuma dependência npm, CDN, fonte externa ou framework de UI nova sem ADR aprovado; JavaScript só nos componentes interativos | `package.json` no PR; aba Rede | **Must** | ✅ Playwright aprovado apenas para desenvolvimento e CI (ADR-009) |
 | RNF-17 | Idioma | Interface e documentação em português do Brasil; `<html lang="pt-BR">` | Código-fonte da página | **Must** | ✅ |
 
 ## 5. Regras de negócio e de conteúdo
@@ -659,7 +667,7 @@ Todos têm métrica ou teste verificável (constituição §3.3).
 
 ## 6. Requisitos de conteúdo
 
-Situação em 31/10/2026, depois das respostas do Prof. Marcus. O conteúdo publicado está nos arquivos de `src/content/` da `main` (a versão oficial, editada pelo painel); o conteúdo validado entra pelas tarefas do [plano 07](sdd/07-plano-conteudo-enactus.md).
+Situação em 12/11/2026. O conteúdo oficial está nos arquivos de `src/content/` da `main`, editados pelo painel. As pendências abaixo não autorizam inventar ou substituir conteúdo.
 
 | ID | Conteúdo | Onde aparece | Quem fornece | Tarefa fora do código | Status |
 |---|---|---|---|---|---|
@@ -677,7 +685,7 @@ Situação em 31/10/2026, depois das respostas do Prof. Marcus. O conteúdo publ
 | RC-12 | 3 a 5 perguntas do quiz com alternativas, gabarito e explicação | `quiz.json` (RF-11) | Equipe rascunha, Prof. Marcus aprova | E-08 | [CONFIRMADO] 04/11: 5 perguntas da T-34 (PR #83), aceite registrado por Pedro; o Prof. Marcus pode revisá-las pelo painel |
 | RC-13 | 4 números de impacto com fonte | `impacto.json` (RF-10) | Roteiro (ABREMA, SLU, PDAD/IPEDF) | — | [CONFIRMADO] lista definida na T-13. Não há dados do próprio projeto (primeira coleta) |
 | RC-14 | Nome, logos, cores e fonte | Cabeçalho, rodapé, faixa de parceria, tokens (RF-09) | `enactus.org.br` (Q-22) e Prof. Marcus (Q-15) | — | [CONFIRMADO] nome "Enactus UCB", sem o logo do grupo SocialTech, logos da UCB e da Enactus (T-30, T-35); [PENDENTE] arquivo oficial do logo da UCB (Q-25) |
-| RC-15 | Texto, arte e impressão do adesivo do QR e dos cartazes | `docs/materiais/` (RF-14) | Equipe | E-03 | [CONFIRMADO] arte do adesivo pronta (PR #25) e cartazes autorizados (Q-13); cartaz A4 pronto (T-33, PR #82); [PENDENTE] impressão e fixação |
+| RC-15 | Texto, arte e impressão do adesivo do QR e dos cartazes | `docs/materiais/` (RF-14) | Equipe | E-03 | [CONFIRMADO] arquivos prontos; impressão, fixação e teste físico serão registrados no M2 |
 | RC-16 | Fotos e depoimentos da ação | C-14 (fora desta entrega) | Equipe | E-09, E-10 | [PENDENTE] autorização de imagem |
 | RC-17 | Perguntas e respostas das dúvidas comuns | `duvidas.json` (RF-16) | Respostas do Prof. Marcus de 31/10 | — | [CONFIRMADO] 7 dúvidas publicadas na T-31 (PR #81); capacidade de 60 kg a esclarecer (Q-28) |
 
@@ -740,7 +748,7 @@ Os testes são os itens do checklist da H1 ([plano do MVP, T-09](sdd/03-plano-ta
 
 As tarefas do [plano de melhorias](sdd/06-plano-melhorias.md) e do [plano 07](sdd/07-plano-conteudo-enactus.md), em 04/11/2026:
 
-| Tarefa | Requisitos | Issue / PR | Situação em 04/11/2026 |
+| Tarefa | Requisitos | Issue / PR | Situação em 12/11/2026 |
 |---|---|---|---|
 | T-18 Limpeza pós-entrega | RNF-14, RF-15 | #49 / PR #55 | ✅ Concluída |
 | T-19 Verificação automática do site gerado | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 | #50 / PR #79 | ✅ Concluída |
@@ -760,12 +768,16 @@ As tarefas do [plano de melhorias](sdd/06-plano-melhorias.md) e do [plano 07](sd
 | T-33 Cartaz A4 com QR Code | RF-14, RN-09 | #76 / PR #82 | ✅ Concluída (impressão pela equipe) |
 | T-34 Perguntas do quiz | RF-11, RN-06 | #77 / PR #83 | ✅ Concluída (aceite registrado por Pedro em 04/11) |
 | T-35 Faixa de parceria | RF-09 | #62 / PR #63 | ✅ Concluída (release #78) |
+| T-36 Governança e documentação | RNF-14; ADR-002; DT-02 | #99 / PR #100 | ✅ Concluída |
+| T-37 Homologação operacional | RF-13, RF-14, RF-15; RNF-11, RNF-12, RNF-15 | #105 / PR #106 | 🚧 Registro criado; evidências presenciais pendentes |
+| T-38 Regressão automatizada | RF-01, RF-02, RF-05, RF-11, RF-17; RNF-05, RNF-07, RNF-09, RNF-10, RNF-12 | #101 / PR #102 | ✅ Concluída |
+| T-39 Desempenho e evolução | RNF-01, RNF-02, RNF-16 | #103 / PR #104 | 🚧 Parte técnica concluída; medição publicada pendente |
 
 ## 9. Pendências e riscos
 
 ### 9.1 Conteúdo pendente
 
-Os requisitos de conteúdo **[PENDENTE]** da [seção 6](#6-requisitos-de-conteúdo) são: RC-14 (logo da UCB, Q-25), RC-15 (impressão e fixação do cartaz) e RC-16. Os responsáveis e prazos estão nas tarefas E-01 a E-05 ([plano do MVP §4](sdd/03-plano-tarefas.md#4-tarefas-fora-do-código-equipe-sem-github)), E-06 a E-10 ([plano da entrega final §4](sdd/05-plano-entrega-final.md#4-tarefas-fora-do-código-equipe-sem-github)) e no [plano 07](sdd/07-plano-conteudo-enactus.md).
+Os requisitos de conteúdo **[PENDENTE]** são RC-14 (arquivo oficial do logo da UCB, Q-25) e RC-16 (fotos/depoimentos da ação com autorização). A evidência física de RC-15 será registrada no M2. Q-24 e Q-26 a Q-28 continuam abertas e não bloqueiam o site atual.
 
 ### 9.2 Riscos
 

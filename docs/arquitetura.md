@@ -5,10 +5,10 @@
 
 | Campo | Valor |
 |---|---|
-| Versão | 1.0 (26/10/2026) |
-| Status | 🚦 Em revisão pela equipe |
-| Tarefa | T-16 (issue #37) |
-| Base | [Requisitos](requisitos.md), [Plano do MVP](sdd/03-plano-tarefas.md) §1, [Plano da entrega final](sdd/05-plano-entrega-final.md) §1, código da `develop` em 26/10/2026 |
+| Versão | 1.1 (12/11/2026) |
+| Status | ✅ Atualizada com a implementação entregue e o plano de encerramento |
+| Tarefa | T-16 (issue #37); atualização T-36 (issue #99) |
+| Base | [Requisitos](requisitos.md), [planos SDD](sdd/), código da `develop` em 12/11/2026 |
 
 ---
 
@@ -122,11 +122,11 @@ flowchart TB
 |---|---|---|---|---|---|---|
 | Layout base | `src/layouts/BaseLayout.astro` | — | `<html>`, `<head>`, prévia de compartilhamento | `count.js` (produção) | T-01, T-08, T-25 | ✅ |
 | Cabeçalho | `src/components/Cabecalho.astro` | — | `<header id="topo">`; no celular, o menu vira uma faixa com rolagem lateral | Botão de tema (RF-17) | T-02, T-11, T-27 | ✅ |
-| Guia "Pode / Não pode" | `src/components/GuiaPodeNaoPode.astro` | `guia`, `guiaOrientacao` | `guia` | Busca (T-14) | T-05, T-14 | ✅ · 🔨 busca |
+| Guia "Pode / Não pode" | `src/components/GuiaPodeNaoPode.astro` | `guia`, `guiaOrientacao` | `guia` | Busca e lista compacta | T-05, T-14 | ✅ |
 | Onde está a lixeira | `src/components/PontoColeta.astro` | `pontoColeta` | `ponto-de-coleta` | Não | T-06, T-11 | ✅ |
-| Ciclo do resíduo | `src/components/CicloResiduo.astro` | `ciclo` | `ciclo` | Passo a passo (T-12) | T-03, T-12 | ✅ · 🔨 interativo |
-| Números de impacto | `src/components/NumerosImpacto.astro` | `impacto` | `impacto` | Não | T-13 | 🔨 |
-| Quiz | `src/components/Quiz.astro` | `quiz` | `quiz` | Sim (T-15) | T-15 | 🔨 |
+| Ciclo do resíduo | `src/components/CicloResiduo.astro` | `ciclo` | `ciclo` | Passo a passo e arraste mobile | T-03, T-12, PR #98 | ✅ |
+| Números de impacto | `src/components/NumerosImpacto.astro` | `impacto` | `impacto` | Não | T-13 | ✅ |
+| Quiz | `src/components/Quiz.astro` | `quiz` | `quiz` | Uma pergunta por vez | T-15 | ✅ |
 | Avalie o projeto | `src/components/Avaliacao.astro` | `avaliacao` | `avaliacao` | Não | T-07, T-11 | ✅ |
 | Seção do painel | `src/components/Secao.astro` | `secoes` | título `secao-<id>` | Não | Base | ✅ |
 | Rodapé | `src/components/Rodape.astro` + `ListaLinks.astro` | `links` | `<footer>`, link "Voltar ao topo" (`#topo`) | Não | T-02, T-11, T-27 | ✅ |
@@ -141,19 +141,21 @@ A página `src/pages/404.astro` vira o `404.html`, que o GitHub Pages mostra em 
 
 ### 4.1 Ordem da página e faixas
 
-Página única (ADR-005) em faixas de largura total (ADR-007). A ordem segue a jornada crítica J1: o guia vem logo depois do cabeçalho.
+Página única (ADR-005) em faixas de largura total (ADR-007). Depois da validação do Prof. Marcus, o ciclo passou a ser a primeira seção; o botão principal continua levando diretamente ao guia.
 
 | Ordem | Seção | `id` | Fundo da faixa | Tarefas | Situação |
 |---|---|---|---|---|---|
-| 1 | Cabeçalho: barra branca com logo e menu (no celular, o menu vira uma faixa abaixo do logo, sem JavaScript); destaque amarelo com o título e o botão "O que pode ir na lixeira?" | `<header>` | Branco e amarelo | T-02, T-11 | ✅ · 🔨 |
-| 2 | Guia "Pode / Não pode", com busca e item não listado | `guia` | Branco | T-05, T-14 | ✅ · 🔨 |
-| 3 | Onde está a lixeira agora | `ponto-de-coleta` | Cinza (`--cor-fundo-suave`) | T-06, T-11 | ✅ |
-| 4 | Ciclo do resíduo | `ciclo` | Branco | T-03, T-12 | ✅ · 🔨 |
-| 5 | Números de impacto | `impacto` | Escuro (`--cor-escura`) | T-13 | 🔨 |
-| 6 | Quiz | `quiz` | Branco | T-15 | 🔨 |
-| 7 | Avalie o projeto | `avaliacao` | Amarelo (`--cor-destaque`) | T-07, T-11 | ✅ |
-| 8 | Seções do painel ("Sobre o projeto" etc.) | `secao-<id>` | Cinza | Base, T-11 | ✅ |
-| 9 | Rodapé com contatos, logo e "Voltar ao topo" | `<footer>` | Escuro | T-02, T-11, T-27 | ✅ |
+| 1 | Cabeçalho com menu, tema e botão para o guia | `<header>` | Branco e amarelo | T-02, T-11, T-27, RF-17 | ✅ |
+| 2 | Ciclo do resíduo, com fotos e arraste mobile | `ciclo` | Branco | T-03, T-12, T-21, PR #98 | ✅ |
+| 3 | Guia "Pode / Não pode", com busca e item não listado | `guia` | Branco | T-05, T-14, T-22 | ✅ |
+| 4 | Onde está a lixeira agora | `ponto-de-coleta` | Cinza (`--cor-fundo-suave`) | T-06, T-23 | ✅ |
+| 5 | Dúvidas comuns | `duvidas` | Branco | T-31 | ✅ |
+| 6 | Números de impacto | `impacto` | Escuro (`--cor-faixa-escura`) | T-13 | ✅ |
+| 7 | Quiz | `quiz` | Branco | T-15, T-34 | ✅ |
+| 8 | Avalie o projeto | `avaliacao` | Amarelo (`--cor-destaque`) | T-07 | ✅ |
+| 9 | Seções do painel ("Sobre o projeto" etc.) | `secao-<id>` | Cinza | Base | ✅ |
+| 10 | Faixa de parceria | — | Foto com véu verde | T-35 | ✅ |
+| 11 | Rodapé com contatos, logo e "Voltar ao topo" | `<footer>` | Escuro | T-02, T-27 | ✅ |
 
 Seções sem conteúdo (impacto vazio, quiz vazio, formulário sem link) **não aparecem** (RN-04).
 
@@ -283,7 +285,7 @@ Cores da Enactus (`enactus.org.br`, Q-22), mais verde e vermelho escuros para "P
 | Campo de busca | `<label>` visível "Procure um item" + `<input type="search">`; contagem de resultados em `aria-live="polite"` |
 | "Ver mais" do guia | Botão de ação abaixo de cada grupo com mais de 3 itens, com `aria-expanded` e `aria-controls` apontando para a lista; alterna para "Ver menos". Só existe com JavaScript; some durante a busca, que procura em todos os itens |
 | Etapa do ciclo | Número em círculo (`aria-hidden`), nome e frase; seta entre etapas (decorativa) |
-| Controles do ciclo | Botões numerados com `aria-label="Etapa X: <nome>"` e `aria-current="step"`; "Anterior" e "Próxima" desabilitados nas pontas |
+| Controles do ciclo | No celular, os cartões com fotos formam um carrossel nativo com `scroll-snap` e gesto de arrastar; botões numerados com `aria-label="Etapa X: <nome>"` e `aria-current="step"` e controles "Anterior"/"Próxima" continuam disponíveis |
 | Número de impacto | Número grande em `--cor-destaque` sobre `--cor-faixa-escura`; descrição e fonte em `--cor-sobre-escura`; entram um a um ao rolar, sem contagem animada |
 | Pergunta do quiz | `<fieldset>` com `<legend>`; alternativas em `<input type="radio">` + `<label>`; resultado "✓ Certo" / "✕ Errado" em `aria-live`. Um texto inicial diz quantas perguntas são; com JavaScript, só a primeira aparece e cada resposta revela a seguinte (animação `revelar` em `animacoes.css`) |
 | Título de seção | `<h2>` com traço amarelo embaixo (escuro na faixa amarela e no rodapé) (T-11) |
@@ -304,12 +306,13 @@ Regras comuns:
 | `secoes` | `src/content/secoes/*.md` | Markdown com frontmatter | **`titulo`**, **`ordem`** (inteiro), `publicada` (padrão `true`), `imagem`, `descricaoImagem` (**obrigatória se houver imagem**); corpo em Markdown | `Secao.astro` | Base | ✅ |
 | `links` | `src/content/links.json` | Lista | **`nome`**, **`tipo`** (`site`, `email` ou `whatsapp`), **`endereco`** (URL http(s), e-mail ou 12 a 13 dígitos, conforme o tipo) | `ListaLinks.astro` | Base | ✅ |
 | `guia` | `src/content/guia.json` | Lista | **`nome`**, **`classificacao`** (`pode` ou `nao-pode`), **`motivo`** | `GuiaPodeNaoPode.astro` | T-05 | ✅ |
-| `pontoColeta` | `src/content/ponto-coleta.json` | Objeto (`id` `atual`) | **`local`**, **`comoReconhecer`**, **`atualizadoEm`** (data `AAAA-MM-DD`) | `PontoColeta.astro` | T-06 | ✅ |
-| `ciclo` | `src/content/ciclo.json` | Lista ordenada | **`nome`**, `descricao` | `CicloResiduo.astro` | T-03 | ✅ |
+| `pontoColeta` | `src/content/ponto-coleta.json` | Objeto (`id` `atual`) | **`local`**, **`comoReconhecer`**, **`atualizadoEm`**, `imagem`, `descricaoImagem` | `PontoColeta.astro` | T-06, T-23 | ✅ |
+| `ciclo` | `src/content/ciclo.json` | Lista ordenada | **`nome`**, `descricao`, `imagem`, `descricaoImagem` | `CicloResiduo.astro` | T-03, T-21 | ✅ |
 | `avaliacao` | `src/content/avaliacao.json` | Objeto (`id` `formulario`) | **`texto`**, `endereco` (só `https://`) | `Avaliacao.astro` | T-07 | ✅ |
-| `impacto` | `src/content/impacto.json` | Lista | **`numero`**, **`descricao`**, **`fonte`** (todos texto) | `NumerosImpacto.astro` | T-13 | 🔨 |
-| `guiaOrientacao` | `src/content/guia-orientacao.json` | Objeto (`id` `atual`) | `naoListado` | `GuiaPodeNaoPode.astro` | T-14 | 🔨 |
-| `quiz` | `src/content/quiz.json` | Lista | **`pergunta`**, **`alternativas`** (2 a 4 textos), **`correta`** (número da alternativa certa, a partir de 1, que precisa existir), **`explicacao`** | `Quiz.astro` | T-15 | 🔨 |
+| `impacto` | `src/content/impacto.json` | Lista | **`numero`**, **`descricao`**, **`fonte`** (todos texto) | `NumerosImpacto.astro` | T-13 | ✅ |
+| `guiaOrientacao` | `src/content/guia-orientacao.json` | Objeto (`id` `atual`) | `naoListado` | `GuiaPodeNaoPode.astro` | T-14 | ✅ |
+| `quiz` | `src/content/quiz.json` | Lista | **`pergunta`**, **`alternativas`** (2 a 4 textos), **`correta`**, **`explicacao`** | `Quiz.astro` | T-15 | ✅ |
+| `duvidas` | `src/content/duvidas.json` | Lista | **`pergunta`**, **`resposta`** | `DuvidasComuns.astro` | T-31 | ✅ |
 
 Os schemas das três coleções novas estão no [plano da entrega final §1.3](sdd/05-plano-entrega-final.md#13-contrato-de-dados-novas-coleções), testados com `npm run verify` em 26/10/2026.
 
@@ -384,7 +387,7 @@ sequenceDiagram
   V->>C: aponta para o QR Code da lixeira
   C->>N: abre o endereço do QR (campanha lixeira, origem qr)
   N->>P: pede a página por HTTPS
-  P-->>N: HTML, CSS, logo e fontes (menos de 500 KB)
+  P-->>N: HTML, CSS, imagens e fontes (meta interna abaixo de 350 KB)
   N->>G: count.js registra a visita, sem cookie
   N-->>V: mostra o título e o guia logo no topo
   V->>N: procura o item na lista ou na busca
@@ -497,7 +500,8 @@ flowchart LR
 | Tipos e templates | `astro check` | Local e CI | RNF-14 |
 | Schema do conteúdo | `astro build` (zod) | Local, CI e deploy | RF-15, RNF-15 |
 | Links quebrados | lychee (`*.md`, `src/**/*.astro` e `src/content/**/*.json`) | CI em todo PR, em `push` na `develop` e na `main` (edições do painel) | T-16, T-19 |
-| Site gerado | `npm run verificar:site` (`scripts/verificar-site.mjs`, Node puro): página inicial < 500 KB, um único `<h1>`, `alt` em todo `<img>`, caminhos internos com `/SocialTech/` ou `#`, só o GoatCounter como script externo, `target="_blank"` com `rel="noopener"` | Local (`npm run verify`) e CI | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 (T-19) |
+| Site gerado | `npm run verificar:site` (`scripts/verificar-site.mjs`, Node puro): orçamento interno da página inicial < 350 KB (margem sobre o RNF-01 de 500 KB), um único `<h1>`, `alt` em todo `<img>`, caminhos internos com `/SocialTech/` ou `#`, só o GoatCounter como script externo, `target="_blank"` com `rel="noopener"` | Local (`npm run verify`) e CI | RNF-01, RNF-07, RNF-12, RNF-13, RN-10 (T-19, T-39) |
+| Comportamento no navegador | Playwright com Chromium: busca, lista compacta, ciclo, quiz, tema, movimento reduzido e modo sem JavaScript | Local (`npm run test:e2e`) e CI | RF-01, RF-02, RF-05, RF-11, RF-17; RNF-05, RNF-07, RNF-09, RNF-10, RNF-12 |
 | Layout em 360 px e 1366 px | Modo responsivo do navegador + capturas no PR | Toda tarefa visual (DoD) | RNF-05 |
 | Teclado, foco e leitor de tela | Tab/Enter/Espaço; TalkBack ou VoiceOver | Tarefas interativas e homologação | RNF-07 |
 | Sem JavaScript | Desativar o JavaScript no navegador | T-12, T-14, T-15 e homologação | RNF-10 |
@@ -505,7 +509,9 @@ flowchart LR
 | Desempenho e acessibilidade | Lighthouse em modo celular, na página publicada | H2 | RNF-01 a RNF-03 |
 | Celulares reais | 2 celulares (Android e iPhone, se possível), 4G | Antes de cada release e nas homologações | RNF-11 |
 
-Não há testes automatizados de comportamento (busca, ciclo, quiz): eles são verificados à mão pelos critérios de aceite (dívida DT-01). A estrutura do HTML gerado (peso, `<h1>`, `alt`, caminhos, terceiros e `noopener`) é conferida automaticamente desde a T-19.
+**Medição local da T-39:** o verificador registrou 327,1 KB no pior caso das imagens responsivas. O Lighthouse 12 sobre o build de produção local transferiu 276 KiB e obteve Desempenho 100, Acessibilidade 100, Boas práticas 100, SEO 100, LCP 1,6 s e CLS 0,023. A medição no site publicado será registrada depois do deploy.
+
+Os fluxos críticos têm regressão automatizada desde a T-38. Testes com leitor de tela e em celulares físicos continuam manuais porque dependem de tecnologia assistiva e hardware real.
 
 ### 10.2 Roteiro de homologação
 
@@ -517,18 +523,21 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 | RH-02 | Abrir o painel do GoatCounter | O acesso do RH-01 aparece com a campanha `lixeira` | RF-13 | H1-6 | H2-7 |
 | RH-03 | Teste de 10 s: 5 pessoas, cada uma com o nome de um item da lista; cronometrar da abertura do QR até dizer "pode" ou "não pode" | Pelo menos 4 de 5 decidem em até 10 s (S-05) | RF-01 | H1-1 | — |
 | RH-04 | Buscar "cítrica", "CITRICA" e "citrica"; buscar um item fora da lista | Os três acham "Frutas cítricas"; o item fora da lista mostra a orientação (ou o aviso de pendência) | RF-02, RF-03 | — | H2-2 |
-| RH-05 | Conferir as etapas do ciclo; navegar pelo toque e, no computador, só pelo teclado | Etapas e frases corretas; navegação funciona | RF-04, RF-05 | H1-3 | H2-3 |
+| RH-05 | Conferir as etapas do ciclo; no celular, arrastar as fotos e usar os botões; no computador, navegar só pelo teclado | Etapas e frases corretas; o encaixe lateral e os controles acompanham a etapa atual | RF-04, RF-05 | H1-3 | H2-3 |
 | RH-06 | Conferir o local da lixeira; o Prof. Marcus muda o local pelo painel | Local correto; a mudança aparece em até 5 minutos | RF-06, RF-15 | H1-4 | — |
 | RH-07 | O Prof. Marcus confere os números de impacto e as fontes | Números e fontes corretos | RF-10 | — | H2-4 |
 | RH-08 | Responder o quiz inteiro com a aba Rede aberta (computador) e tocar em "Refazer" | Gabarito e explicações validados; nenhuma requisição | RF-11, RN-06 | — | H2-5 |
 | RH-09 | Tocar em "Responder o formulário" | Abre o formulário certo em nova aba | RF-12 | H1-5 | — |
 | RH-10 | O Prof. Marcus edita pelo painel um número de impacto e uma pergunta do quiz (em rascunho), sem ajuda | Consegue sozinho | RF-15 | — | H2-8 |
 | RH-11 | Em 360 px e 1366 px: rolar a página toda, navegar com Tab e repetir com o JavaScript desativado | Sem rolagem horizontal; foco visível; conteúdo legível sem JavaScript | RNF-05, RNF-07, RNF-10 | H1-7 | H2-1 |
-| RH-12 | Rodar o Lighthouse (modo celular) e conferir os cookies | Acessibilidade ≥ 90; peso < 500 KB; nenhum cookie | RNF-01 a RNF-03, RNF-12 | — | H2-6 |
+| RH-12 | Rodar o Lighthouse (modo celular) e conferir os cookies | Acessibilidade ≥ 90; peso < 500 KB, com meta interna < 350 KB; nenhum cookie | RNF-01 a RNF-03, RNF-12 | — | H2-6 |
 
 **Validação de conteúdo:** a Enactus confere os itens do guia e os nomes do ciclo (H1-2, H1-3, H2-3); o Prof. Marcus confere os textos.
 
 **Registro:** na descrição do PR de release `develop` → `main`, anotar data, aprovadores, celulares usados (modelo e sistema), resultado de cada passo e problemas encontrados. Esse registro é evidência para o relatório (roteiro, item 2.9; E-10).
+
+O registro mais recente está em
+[`docs/homologacao-operacional.md`](homologacao-operacional.md).
 
 ## 11. Decisões de arquitetura (ADR)
 
@@ -542,6 +551,7 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 | [ADR-006](#adr-006--conteúdo-em-coleções-json-com-schema) | Conteúdo em coleções JSON com schema | Aceito | 22/10/2026 |
 | [ADR-007](#adr-007--layout-em-faixas-de-largura-total) | Layout em faixas de largura total | Aceito | 26/10/2026 |
 | [ADR-008](#adr-008--interatividade-com-aprimoramento-progressivo) | Interatividade com aprimoramento progressivo | Aceito | 26/10/2026 |
+| [ADR-009](#adr-009--playwright-para-regressão-no-navegador) | Playwright para regressão no navegador | Aceito | 12/11/2026 |
 
 ### ADR-001 · Stack: Astro + TypeScript + CSS puro, site estático
 
@@ -638,13 +648,22 @@ Roteiro previsto na [constituição §8](sdd/00-constituicao.md#8-homologação)
 - **Consequências:** sem JavaScript, o guia aparece completo, o ciclo mostra todas as etapas e o quiz mostra as perguntas com um aviso `<noscript>`; nenhuma dependência nova; o quiz não mede nada (RN-06, Q-12).
 - **Requisitos:** RF-02, RF-05, RF-11, RNF-07, RNF-10, RNF-12, RNF-16.
 
+### ADR-009 · Playwright para regressão no navegador
+
+- **Status:** Aceito em 12/11/2026 para a T-38.
+- **Contexto:** os fluxos críticos eram validados apenas manualmente, permitindo regressões na busca, no ciclo, no quiz, no tema e no funcionamento sem JavaScript.
+- **Opções:** manter apenas o roteiro manual; criar testes unitários sem navegador; usar Cypress; **usar Playwright com Chromium no desenvolvimento e no CI (escolhida)**.
+- **Decisão:** `@playwright/test` é dependência exclusiva de desenvolvimento. A suíte executa o build estático em Chromium com projetos de 360 px e 1366 px e retém trace, vídeo e captura somente em falhas.
+- **Consequências:** o pacote não entra no JavaScript entregue ao visitante; o CI baixa o Chromium e fica mais demorado; relatórios gerados são ignorados pelo Git e pelo ESLint; aparelhos reais e leitores de tela continuam no roteiro manual.
+- **Requisitos:** RF-01, RF-02, RF-05, RF-11, RF-17, RNF-05, RNF-07, RNF-09, RNF-10, RNF-12, RNF-14, RNF-16.
+
 ## 12. Riscos técnicos e dívidas aceitas
 
 | ID | Dívida ou risco | Consequência | Tratamento |
 |---|---|---|---|
-| DT-01 | Sem testes automatizados de comportamento (busca, ciclo, quiz) | Regressões só aparecem no teste manual | Aceito pelo prazo; critérios de aceite e roteiro de homologação cobrem os casos. Desde a T-19, o `npm run verificar:site` confere a estrutura do HTML gerado (`<h1>`, `alt`, caminhos, terceiros), mas não o comportamento |
+| DT-01 | Testes de leitor de tela e aparelhos reais continuam manuais | Diferenças específicas de TalkBack, VoiceOver ou navegador móvel podem escapar do CI | Playwright cobre os fluxos críticos; RH-05, RH-08 e RH-11 continuam obrigatórios em hardware real |
 | DT-02 | Edições do painel vão direto para a `main`, sem revisão (ADR-002) | A `develop` fica atrás da `main` | `git merge origin/main` na `develop` antes e depois de cada release |
-| DT-03 | Lighthouse não roda no CI | Desempenho e acessibilidade podem piorar sem aviso | Desde a T-19, o CI falha se a página inicial passar de 500 KB (RNF-01) ou perder o `<h1>` único ou o `alt`; as notas do Lighthouse (RNF-02, RNF-03) continuam medidas à mão (RH-12) |
+| DT-03 | Lighthouse não roda no CI | Desempenho e acessibilidade podem piorar sem aviso | Desde a T-39, o CI usa um orçamento interno de 350 KB, mais restritivo que o RNF-01, e continua conferindo `<h1>` e `alt`; as notas do Lighthouse (RNF-02, RNF-03) permanecem manuais (RH-12) |
 | DT-04 | O QR estático aponta para `blima-p.github.io/SocialTech` | Renomear o repositório ou trocar de domínio quebra o QR impresso | Não renomear o repositório; se mudar, reimprimir o adesivo |
 | DT-05 | Dependência de serviços gratuitos (GoatCounter, Pages CMS) | Se saírem do ar, a contagem ou a edição param; o site continua no ar | Aceito; o site não depende deles para funcionar |
 | DT-06 | `.pages.yml` e `content.config.ts` podem divergir se só um for alterado | O painel salva um dado que o build recusa | Regra do `AGENTS.md` §4.9 e revisão de PR |
