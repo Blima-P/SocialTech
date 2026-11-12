@@ -1,1 +1,8 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Relatar uma vulnerabilidade de segurança
+    url: https://github.com/Blima-P/SocialTech/security/advisories/new
+    about: Envie de forma privada (veja o SECURITY.md). Não abra uma issue pública para vulnerabilidades.
+  - name: Dúvida sobre o descarte na lixeira
+    url: https://blima-p.github.io/SocialTech/#guia
+    about: O guia do site mostra o que pode e o que não pode ir na lixeira de compostagem.
