@@ -5,32 +5,41 @@ import ListaLinks from "./ListaLinks.astro";
 ---
 
 <footer>
-  <div class="marca">
-    <Image src={logo} alt="Enactus Brasil" height={48} />
-    <p>Projeto de extensão da UCB em parceria com o Enactus UCB</p>
-    <p class="creditos">
-      Site feito pela equipe SocialTech, de estudantes da UCB
-    </p>
-    <p class="creditos">
-      <a href="https://github.com/Blima-P/SocialTech">
-        Código aberto (licença MIT)
-      </a>
-    </p>
+  <div class="principal">
+    <div class="marca">
+      <Image src={logo} alt="Enactus Brasil" height={48} />
+      <p>Projeto de extensão da UCB em parceria com o Enactus UCB.</p>
+    </div>
+    <ListaLinks />
   </div>
-  <ListaLinks />
-  <p class="topo">
-    <a href="#topo">Voltar ao topo</a>
-  </p>
+  <div class="base">
+    <p>Site feito pela equipe SocialTech, de estudantes da UCB</p>
+    {/* "#topo" (e não BASE_URL + "#topo") não recarrega a página de quem veio pelo QR
+        com ?campaign=..., o que contaria o acesso duas vezes no GoatCounter. */}
+    <a class="topo" href="#topo">
+      Voltar ao topo
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" />
+      </svg>
+    </a>
+  </div>
 </footer>
 
 <style>
   footer {
-    display: grid;
-    gap: calc(var(--espaco) * 1.5);
+    --cor-suave-escura: #c9cbd1;
+
     border-top: 0.25rem solid var(--cor-destaque);
-    padding: calc(var(--espaco) * 2.5) var(--recuo-lateral);
+    padding: calc(var(--espaco) * 3) var(--recuo-lateral)
+      calc(var(--espaco) * 1.5);
     background: var(--cor-faixa-escura);
     color: var(--cor-sobre-escura);
+  }
+
+  .principal {
+    display: grid;
+    gap: calc(var(--espaco) * 2);
+    padding-bottom: calc(var(--espaco) * 2);
   }
 
   img {
@@ -39,22 +48,18 @@ import ListaLinks from "./ListaLinks.astro";
   }
 
   .marca p {
-    max-width: 22rem;
-    margin: 0.75rem 0 0;
-    font-size: 0.9375rem;
-  }
-
-  .marca .creditos {
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
+    max-width: 24rem;
+    margin: 1rem 0 0;
+    color: var(--cor-suave-escura);
+    font-size: 1rem;
   }
 
   /* ListaLinks é de outro componente: :global() aplica o estilo só dentro do rodapé. */
   footer :global(h2) {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.75rem;
     color: var(--cor-destaque);
-    font-size: 1rem;
-    letter-spacing: 0.04em;
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
@@ -63,6 +68,8 @@ import ListaLinks from "./ListaLinks.astro";
   }
 
   footer :global(ul) {
+    display: grid;
+    gap: 0.25rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -70,31 +77,79 @@ import ListaLinks from "./ListaLinks.astro";
 
   footer :global(a) {
     display: inline-flex;
+    gap: 0.625rem;
     align-items: center;
     min-width: var(--alvo-toque);
     min-height: var(--alvo-toque);
     color: var(--cor-sobre-escura);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  /* Seta amarela antes de cada link (só decoração, feita em CSS para não ser lida). */
+  footer :global(li a)::before {
+    flex: none;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-top: 2px solid var(--cor-destaque);
+    border-right: 2px solid var(--cor-destaque);
+    transform: rotate(45deg);
+    content: "";
+  }
+
+  footer :global(a:hover) {
+    color: var(--cor-destaque);
     text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   footer :global(a:focus-visible) {
     outline-color: var(--cor-destaque);
   }
 
-  /* "#topo" (e não BASE_URL + "#topo") não recarrega a página de quem veio pelo QR
-     com ?campaign=..., o que contaria o acesso duas vezes no GoatCounter. */
-  .topo {
+  .base {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgb(255 255 255 / 0.18);
+    padding-top: calc(var(--espaco) * 1.25);
+  }
+
+  .base p {
     margin: 0;
+    color: var(--cor-suave-escura);
+    font-size: 0.875rem;
+  }
+
+  footer .topo {
+    gap: 0.5rem;
+    border: 1px solid rgb(255 255 255 / 0.4);
+    border-radius: 999px;
+    padding: 0 1.125rem;
+    font-size: 0.9375rem;
+  }
+
+  footer .topo:hover {
+    border-color: var(--cor-destaque);
+    text-decoration: none;
+  }
+
+  .topo svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   @media (min-width: 48rem) {
-    footer {
-      grid-template-columns: 1fr auto;
+    .principal {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
       align-items: start;
-    }
-
-    .topo {
-      grid-column: 1 / -1;
     }
   }
 </style>
