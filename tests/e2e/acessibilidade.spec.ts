@@ -81,3 +81,44 @@ test("atalhos da 404 são sublinhados, espaçados e com alvo de toque", async ({
     ).toBeGreaterThanOrEqual(8);
   }
 });
+
+for (const tema of ["light", "dark"] as const) {
+  test(`anel de foco do atalho da etapa atual contrasta com o fundo (tema ${tema})`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: tema });
+    await page.goto(`${paginaInicial}#ciclo`);
+    const atual = page.locator('[data-atalhos] button[aria-current="step"]');
+    await atual.focus();
+    // Seta e volta: o foco chega por teclado e ativa :focus-visible.
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowLeft");
+    await expect(atual).toBeFocused();
+
+    const contraste = await atual.evaluate((botao) => {
+      const rgb = (cor: string) => cor.match(/\d+(\.\d+)?/g)!.map(Number);
+      const luminancia = (cor: string) => {
+        const [r, g, b] = rgb(cor).map((canal) => {
+          const c = canal / 255;
+          return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      // O anel fica fora do botão, sobre o primeiro fundo opaco dos ancestrais.
+      let fundo = "rgb(255, 255, 255)";
+      for (let el = botao.parentElement; el; el = el.parentElement) {
+        const cor = getComputedStyle(el).backgroundColor;
+        if (rgb(cor)[3] !== 0) {
+          fundo = cor;
+          break;
+        }
+      }
+      const [a, b] = [
+        luminancia(getComputedStyle(botao).outlineColor),
+        luminancia(fundo),
+      ].sort((x, y) => y - x);
+      return (a + 0.05) / (b + 0.05);
+    });
+    expect(contraste).toBeGreaterThanOrEqual(3);
+  });
+}

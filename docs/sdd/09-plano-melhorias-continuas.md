@@ -116,6 +116,7 @@ Corrigir lacunas de WCAG 2.1 AA e de leitura rápida no celular, sem mudar o con
 | T-52 | #124 | Alterna o fundo de seções vizinhas | RNF-07, ADR-007 | ✅ #159 |
 | T-53 | #125 | Atalhos sublinhados, espaçados e com alvo de toque | RNF-05 | ✅ #161 |
 | T-54 | #126 | Versão para impressão com todo o conteúdo | RNF-10 | ✅ #163 |
+| T-71 | #176 | Anel de foco visível no atalho da etapa atual no tema escuro | RNF-05 | ✅ |
 
 **T-47 — critérios de aceite**
 
@@ -167,6 +168,11 @@ Corrigir lacunas de WCAG 2.1 AA e de leitura rápida no celular, sem mudar o con
 - [x] Tema, busca, "Ver mais", navegação do ciclo e quiz ficam ocultos.
 - [x] Fundos escuros viram texto escuro sobre branco.
 - [x] Teste Playwright com `emulateMedia({ media: "print" })`.
+
+**T-71 — critérios de aceite**
+
+- [x] No `:focus-visible` dos botões do ciclo, o anel usa `var(--cor-texto)`, com contraste ≥ 3:1 contra o fundo nos dois temas (era 1,39:1 no escuro).
+- [x] Teste Playwright mede o contraste do anel do atalho atual nos dois temas e falha sem a correção.
 
 ### M7 · Arquitetura e qualidade
 

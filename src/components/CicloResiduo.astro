@@ -383,6 +383,12 @@ const semDescricao = etapas.every(({ data }) => !data.descricao);
     color: var(--cor-sobre-destaque);
   }
 
+  /* O anel global usa currentcolor; no atalho atual seria a cor escura do texto
+     sobre o amarelo, invisível no fundo do tema escuro. */
+  button:focus-visible {
+    outline-color: var(--cor-texto);
+  }
+
   /* Desabilitado continua com cara de botão: contorno tracejado e fundo próprio. */
   button:disabled {
     border-style: dashed;
