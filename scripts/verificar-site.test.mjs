@@ -7,6 +7,13 @@ import { fileURLToPath } from "node:url";
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), "..");
 let sequencia = 0;
+const urlset = (...enderecos) =>
+  `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${enderecos.map((endereco) => `  <url><loc>${endereco}</loc></url>`).join("\n")}
+</urlset>
+`;
+const SITEMAP_VALIDO = urlset("https://blima-p.github.io/SocialTech/");
 
 function verificar({
   inicial = "",
@@ -14,6 +21,7 @@ function verificar({
   sem404 = false,
   paginas = {},
   guia = [],
+  sitemap = SITEMAP_VALIDO,
 }) {
   const pasta = join(
     raiz,
@@ -26,12 +34,16 @@ function verificar({
     writeFileSync(arquivo, texto);
   };
   try {
-    salvar("astro.config.mjs", 'export default { base: "/SocialTech/" };');
+    salvar(
+      "astro.config.mjs",
+      'export default { site: "https://blima-p.github.io", base: "/SocialTech/" };',
+    );
     salvar(join("src", "content", "duvidas.json"), "[]");
     salvar(join("src", "content", "links.json"), "[]");
     salvar(join("src", "content", "guia.json"), JSON.stringify(guia));
     salvar(join("dist", "index.html"), `<h1>Início</h1>${inicial}`);
     if (!sem404) salvar(join("dist", "404.html"), `<h1>Erro</h1>${erro}`);
+    if (sitemap !== null) salvar(join("dist", "sitemap.xml"), sitemap);
     for (const [nome, html] of Object.entries(paginas)) {
       salvar(join("dist", nome), html);
     }
@@ -118,4 +130,29 @@ test("cita todos os itens ausentes e não aceita nome apenas em comentário", ()
   assert.equal(resultado.status, 1);
   assert.match(resultado.saida, /index.html: o item "Cascas" \(guia.json\)/);
   assert.match(resultado.saida, /index.html: o item "Filtro" \(guia.json\)/);
+});
+
+test("exige o sitemap com a página inicial", () => {
+  for (const [sitemap, mensagem] of [
+    [null, /dist\/sitemap\.xml não existe/],
+    ["<urlset></urlset>", /protocolo Sitemaps 0\.9/],
+    [urlset("https://blima-p.github.io/outro/"), /não lista a página inicial/],
+  ]) {
+    const resultado = verificar({ sitemap });
+    assert.equal(resultado.status, 1);
+    assert.match(resultado.saida, mensagem);
+  }
+});
+
+test("recusa a 404 e endereços de outro site no sitemap", () => {
+  const resultado = verificar({
+    sitemap: urlset(
+      "https://blima-p.github.io/SocialTech/",
+      "https://blima-p.github.io/SocialTech/404.html",
+      "https://exemplo.com/SocialTech/",
+    ),
+  });
+  assert.equal(resultado.status, 1);
+  assert.match(resultado.saida, /404\.html: a página de erro não é indexada/);
+  assert.match(resultado.saida, /exemplo\.com\/SocialTech\/ está fora/);
 });
