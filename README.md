@@ -53,6 +53,7 @@ npm run verify   # formatação, lint, tipos, build e verificação do site gera
 - [Especificação e plano do MVP](docs/sdd/): o projeto segue Spec-Driven Development
 - [CONTRIBUTING.md](CONTRIBUTING.md): branches, commits e PRs
 - [AGENTS.md](AGENTS.md): regras para agentes de IA
+- [SECURITY.md](SECURITY.md): política e relato privado de vulnerabilidades
 - [Tarefas em aberto](https://github.com/Blima-P/SocialTech/issues)
 
 ## Equipe
