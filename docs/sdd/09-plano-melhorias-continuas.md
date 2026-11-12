@@ -41,6 +41,7 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 | T-45 | #117 | Verificador exige noreferrer, CSP e único script remoto | RNF-14 | ✅ #169 |
 | T-46 | #118 | Publica a política de segurança | RNF-14, RNF-15 | ✅ #153 |
 | T-67 | #142 | Deploy roda o verificador do site antes de publicar | RNF-13, RNF-14 | ✅ #144 |
+| T-68 | #171 | Dependabot de Actions também ignora versões major | RNF-14 | ✅ |
 
 **T-40 — critérios de aceite**
 
@@ -95,6 +96,11 @@ Reduzir o risco da cadeia de suprimentos (Actions, dependências) e limitar o qu
 
 - [x] O workflow de deploy roda `npm run verificar:site` depois do build e antes de enviar o artefato.
 - [x] Um site que falha no verificador não é publicado.
+
+**T-68 — critérios de aceite**
+
+- [x] O ecossistema `github-actions` ignora `version-update:semver-major`, como o npm.
+- [x] O #151 (upload-artifact 6 → 7) é fechado; a atualização major fica para revisão manual.
 
 ### M6 · Visual e acessibilidade
 
