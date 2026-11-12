@@ -172,6 +172,11 @@ h3 {
   outline-offset: 2px;
 }
 
+/* Destino do "Pular para o conteúdo": recebe foco por script, não é um controle. */
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+
 /* Botão principal do site (arquitetura, seção 5.5). */
 .botao {
   display: inline-flex;
