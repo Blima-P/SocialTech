@@ -469,6 +469,7 @@ flowchart LR
 - **Gatilho:** push na `main` (merge de release, `fix/*` ou edição do painel) ou execução manual do workflow.
 - **Passos:** `npm ci` → `npm run build` (gera `dist/`) → upload do artefato → `deploy-pages`. Tempo típico: cerca de 2 minutos.
 - **Contagem de acessos:** o script do GoatCounter só entra no build de produção (`import.meta.env.PROD`).
+- **Segurança da página (RNF-14):** o GitHub Pages não deixa configurar cabeçalhos, então a Content-Security-Policy vai numa `<meta>` gerada pelo `security.csp` do Astro (`astro.config.mjs`): `default-src 'self'`, sem `'unsafe-inline'`, liberando só o GoatCounter. Script inline novo precisa de hash: siga o padrão do `BaseLayout` (`Astro.csp.insertScriptHash`). A `<meta name="referrer">` usa `strict-origin-when-cross-origin`. O teste `tests/e2e/seguranca.spec.ts` falha se alguma interação violar a CSP.
 
 ### 9.3 QR Code
 
