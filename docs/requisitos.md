@@ -275,7 +275,7 @@ Funcionalidade: Ciclo passo a passo
 | Prioridade | **Must** |
 | Origem | OE-7, OE-5 · C-04 · Jornada J6 |
 | Conteúdo | RC-07, RC-08 |
-| Situação | ✅ Implementado (T-06, PR #21); local inicial validado: Clínica Escola de Nutrição (Q-04, T-29); foto da lixeira (T-23, PR #61; T-32, PR #86) |
+| Situação | ✅ Implementado (T-06, PR #21); local inicial validado: Clínica Escola de Nutrição (Q-04, T-29); foto da lixeira (T-23, PR #61; T-32, PR #86); desde 16/11/2026, a pedido do Prof. Marcus, o local mostra só "Campus UCB Taguatinga" |
 
 ```gherkin
 Funcionalidade: Local atual da lixeira
@@ -678,7 +678,7 @@ Situação em 12/11/2026. O conteúdo oficial está nos arquivos de `src/content
 | RC-04 | Nomes das etapas do ciclo | `ciclo.json` (RF-04, RF-05) | Prof. Marcus (Q-03) | E-07 | [CONFIRMADO] 31/10 (T-29): Coletor, Compostagem, Horto Botânico, Laboratório de Tecnologia de Alimentos, Gastronomia/Nutrição; nome do laboratório a confirmar (Q-24) |
 | RC-05 | Frase curta de cada etapa (até 20 palavras) | `ciclo.json` (RF-04, RF-05) | Infográfico v1 e respostas de 31/10 (Q-03) | E-07 | [CONFIRMADO] 31/10 (T-29) |
 | RC-06 | Fotos dos espaços do ciclo, com autorização | Ciclo (RF-05) | Prof. Marcus (Q-05) | E-07 | [CONFIRMADO] fotos recebidas em 31/10; publicadas na T-32 (PR #86) |
-| RC-07 | Local inicial da lixeira | `ponto-coleta.json` (RF-06) | Prof. Marcus (Q-04) | E-05 | [CONFIRMADO] 31/10 (T-29): Clínica Escola de Nutrição |
+| RC-07 | Local inicial da lixeira | `ponto-coleta.json` (RF-06) | Prof. Marcus (Q-04) | E-05 | [CONFIRMADO] 31/10 (T-29): Clínica Escola de Nutrição; 16/11: "Campus UCB Taguatinga", a pedido do Prof. Marcus |
 | RC-08 | Foto da lixeira | Ponto de coleta (RF-06) | Prof. Marcus (Q-04) | E-05 | [CONFIRMADO] foto recebida em 31/10; publicada na T-32 (PR #86) |
 | RC-09 | Texto "Sobre o projeto" | `secoes/sobre-o-projeto.md` (RF-07) | Prof. Marcus | — | [CONFIRMADO] reescrito com as respostas de 31/10 (T-29); "Como descartar" continua oculta |
 | RC-10 | Contatos e links | `links.json` (RF-08) | Prof. Marcus | — | [CONFIRMADO] UCB e Enactus Brasil publicados |
